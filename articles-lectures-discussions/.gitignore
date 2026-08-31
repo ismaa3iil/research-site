@@ -1,0 +1,5 @@
+# Source files are copied into sources/ by build_site.py for publication.
+/*.doc
+/*.docx
+/*.pdf
+__pycache__/
