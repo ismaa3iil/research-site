@@ -1,0 +1,1544 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=30mm}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,
+  citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\hypersetup{
+  pdftitle={Dihedral-Angle Sums in Orthocentric, Power-k, and Isodynamic Tetrahedra},
+  pdfauthor={Ismail Hammoudeh},
+  pdfsubject={Sharp ranges for orthocentric, Power-k, and isodynamic tetrahedra},
+  pdfkeywords={Power-k tetrahedron, orthocentric tetrahedron, 4-ball tetrahedron, balloon tetrahedron, isodynamic tetrahedron, dihedral angle, solid angle, kite}
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\atanTwo}{\operatorname{atan2}}
+
+\title{Dihedral-Angle Sums in Orthocentric, Power-$k$,\\
+and Isodynamic Tetrahedra}
+\author{Ismail Hammoudeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $\Sigma(T)$ denote the sum of the six internal dihedral angles of a
+nondegenerate Euclidean tetrahedron $T$.  We organize several special
+families around the \emph{Power-$k$ family}
+\[
+ d_{ij}^{\,k}=y_i+y_j,\qquad k\ne0,
+\]
+with positive pair sums and Euclidean realizability.  The case $k=2$ is
+precisely the full signed orthocentric family.  We prove that every
+orthocentric tetrahedron satisfies
+\[
+  \Sigma(T)\geq 6\arccos\frac13,
+\]
+with equality exactly for the regular tetrahedron, and that its exact range
+is
+\[
+ \left[6\arccos\frac13,\,3\pi\right).
+\]
+The positive branch of the Power-$2$ family has the smaller exact range
+\[
+ [6\arccos(1/3),5\pi/2).
+\]
+We prove that for every $k<1$, $k\ne0$, and every $k>2$, the full Power-$k$
+family instead has the universal exact range $(2\pi,3\pi)$.  For
+$1<k<2$ the global lower bound remains open.  We prove that the regular
+tetrahedron is a strict local minimum and reduce the conjectured global
+bound to an exponent-monotonicity inequality; Schoenberg's theorem ensures
+that every required intermediate metric is a nondegenerate Euclidean
+tetrahedron.
+The orthocentric proof combines the constant polar-measure sum with a new
+convex lower envelope for ordinary solid-angle content.  In the normalized
+positive power-mean parametrization, the limit $k\to0$ is the isodynamic
+metric; we prove that its exact range is again $(2\pi,3\pi)$.  Finally, as a
+matter of logical status, the regular lower bound recently stated for the
+$k=1$ (4-ball or balloon) family is not used as an input.
+\end{abstract}
+
+\noindent\textbf{Keywords.}
+Power-$k$ tetrahedron; orthocentric tetrahedron; 4-ball tetrahedron; balloon
+tetrahedron; isodynamic tetrahedron; isogonic tetrahedron; dihedral angle;
+solid angle; polar sine; kite.
+
+\noindent\textbf{2020 Mathematics Subject Classification.}
+Primary 51M04; Secondary 52B10, 52B11.
+
+\section{Introduction}
+
+For a nondegenerate Euclidean tetrahedron $T$, write $\Sigma(T)$ for the sum
+of its six internal dihedral angles.  The sharp universal bounds
+\begin{equation}\label{eq:gaddum}
+  2\pi<\Sigma(T)<3\pi
+\end{equation}
+were proved by Jarden (Juzuk) in 1941; see \cite{Jarden1941} and the later
+short treatment of Gaddum \cite{Gaddum1952}.  Neither endpoint is attained by
+a nondegenerate tetrahedron.
+
+The regular tetrahedron has six equal dihedral angles $\arccos(1/3)$ and
+therefore
+\begin{equation}\label{eq:regular-value}
+  \Sigma_{\rm reg}=6\arccos\frac13
+  =2.350959312\ldots\,\pi.
+\end{equation}
+The purpose of this article is to determine when this regular value remains
+the lower endpoint after one restricts the metric to natural tetrahedral
+families, and when the infimum falls all the way to the universal value
+$2\pi$.
+
+We use the terminology \emph{Power-$k$ tetrahedron} for the family described
+by
+\begin{equation}\label{eq:power-k-intro}
+ d_{ij}^{\,k}=y_i+y_j,\qquad k\in\mathbb R\setminus\{0\},
+\end{equation}
+subject to positive pair sums and Euclidean realizability.  This notation
+exposes two important members of the same family.  At $k=2$ one obtains the
+signed additive metric
+$d_{ij}^2=y_i+y_j$, which is exactly the orthocentric family
+\cite{EdmondsHajjaMartini2005,HajjaHammoudeh2014}.  At $k=1$ the metric is
+edge-additive.  The latter family is the classical 4-ball or balloon family;
+its equivalent characterizations are discussed, for example, by Katsuura
+\cite{Katsuura2021}.  Korotov and K\v{r}\'\i\v{z}ek recently stated that its
+dihedral-angle sum has the exact range
+$[6\arccos(1/3),3\pi)$ \cite[Theorem~9]{KorotovKrizek2026}.  The proof in
+that preprint gives the symmetric part of the required global maximization
+and refers to the nonsymmetric case as a calculation without displaying it.
+We therefore do not use the $k=1$ lower bound as an established input.
+
+Our main results and reductions are as follows.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=8mm]
+\item We prove the regular lower bound for the full orthocentric, hence
+Power-$2$, family, including the component with one negative additive
+parameter.  Equilateral-base kites then show that the exact range is
+$[6\arccos(1/3),3\pi)$.
+\item For the positive Power-$2$ branch we combine the new lower bound with
+the sharp nonobtuse upper bound to obtain the exact range
+$[6\arccos(1/3),5\pi/2)$.
+\item For every $k<1$, $k\ne0$, and every $k>2$, we construct convex-planar
+degenerations inside the full Power-$k$ family and prove that the exact range
+is the full universal interval $(2\pi,3\pi)$.  The interval $1<k<2$
+remains open.  We prove strict local minimality of the regular tetrahedron
+throughout this interval and give a rigorous reduction to exponent
+monotonicity using Schoenberg's snowflake theorem.
+\item In the normalized positive power-mean parametrization, the limit
+$k\to0$ is the isodynamic metric.  We determine its exact range to be
+$(2\pi,3\pi)$ by two explicit endpoint paths and continuity.
+\end{enumerate}
+
+The orthocentric lower bound is the conceptual core of the paper.  Hajja and
+Hammoudeh proved that the four polar measures of the corner angles of every
+orthocentric tetrahedron add to $\pi$ \cite[Theorem~1(b)]{HajjaHammoudeh2014}.
+We combine that identity with an elementary comparison between polar measure
+and ordinary solid-angle content.  The minimizing acute corner at fixed polar
+measure is equiangular, and its content is a strictly convex function of the
+polar measure.  Jensen's inequality then gives the regular lower bound in the
+all-acute case, while a separate estimate handles the possible right or
+obtuse corner.
+
+The following table summarizes the status proved or used in this paper.  The
+entry at $k=0$ is a normalized limiting family, not a literal substitution in
+\eqref{eq:power-k-intro}.
+\begin{center}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{ccc}
+\toprule
+parameter & family & exact range of $\Sigma$ \\
+\midrule
+$k<1$, $k\ne0$ & full $\mathcal P_k$ & $(2\pi,3\pi)$ \\
+$k=1$ & 4-ball/balloon $\mathcal P_1$ & $[\Sigma_{\rm reg},3\pi)$ stated in \cite{KorotovKrizek2026} \\
+$1<k<2$ & full $\mathcal P_k$ & $[\Sigma_{\rm reg},3\pi)$ conjectured \\
+$k=2$ & orthocentric $\mathcal P_2$ & $[\Sigma_{\rm reg},3\pi)$ \\
+$k=2$ & positive branch $\mathcal P_2^+$ & $[\Sigma_{\rm reg},5\pi/2)$ \\
+$k>2$ & full $\mathcal P_k$ & $(2\pi,3\pi)$ \\
+$k\to0$ & normalized positive limit: isodynamic & $(2\pi,3\pi)$
+\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The organization is as follows.  Section~\ref{sec:preliminaries} introduces
+the two angle measures, the Power-$k$ terminology and its special cases, and
+the constant polar-sum theorem.  Section~\ref{sec:acute-corner} proves the
+local comparison and its crucial convexity.  Section~\ref{sec:main-proof}
+proves the orthocentric lower bound, treating the all-acute and non-acute
+cases separately.  Section~\ref{sec:kites} uses kites to obtain the exact
+orthocentric range and the range of the positive Power-$2$ branch.
+Section~\ref{sec:power-family} proves the exterior Power-$k$ ranges and gives
+rigorous partial results for $1<k<2$.  Section~\ref{sec:isodynamic} proves the
+exact isodynamic range.  The final section puts the different proof
+mechanisms in perspective.
+
+\section{Preliminaries}\label{sec:preliminaries}
+
+\subsection{Content and the dihedral sum}
+
+Consider a trihedral angle with vertex at the origin and unit vectors
+$u_1,u_2,u_3$ along its three arms.  Set
+\[
+ a=u_2\mathbin{\cdot}u_3,\qquad
+ b=u_3\mathbin{\cdot}u_1,\qquad
+ c=u_1\mathbin{\cdot}u_2.
+\]
+Thus $a,b,c$ are the cosines of its three planar subangles.  Its polar sine is
+\begin{equation}\label{eq:polar-sine}
+ P=\sqrt{1-a^2-b^2-c^2+2abc}>0.
+\end{equation}
+The ordinary solid-angle content $\Omega\in(0,2\pi)$ is the area of the
+spherical triangle cut out by the three arms on the unit sphere.  The standard
+determinant formula is
+\begin{equation}\label{eq:content-formula}
+ \Omega=2\atanTwo\bigl(P,1+a+b+c\bigr),
+\end{equation}
+where $\atanTwo(y,x)\in(0,\pi)$ denotes the argument of $x+iy$ when $y>0$.
+This notation keeps the correct branch when $1+a+b+c$ is negative.
+
+Let $\Omega_1,\ldots,\Omega_4$ be the contents at the four vertices of a
+tetrahedron, and let $\theta_1,\ldots,\theta_6$ be its internal dihedral
+angles.  At each vertex, spherical excess gives
+\[
+ \Omega_i=(\text{sum of the three incident dihedral angles})-\pi.
+\]
+Summing over the four vertices counts each dihedral angle twice.  Hence
+\begin{equation}\label{eq:content-dihedral}
+ \sum_{i=1}^4\Omega_i=2\Sigma(T)-4\pi,
+ \qquad
+ \Sigma(T)=2\pi+\frac12\sum_{i=1}^4\Omega_i.
+\end{equation}
+
+\subsection{Pure corners and polar measure}
+
+A corner is called \emph{acute}, \emph{right}, or \emph{obtuse} when its
+three planar subangles are respectively all acute, all right, or all obtuse.
+These are the pure corners relevant here.  Following
+\cite{HajjaHammoudeh2014}, define their polar measure by
+\begin{equation}\label{eq:polar-measure}
+ \beta=
+ \begin{cases}
+  \arcsin P, & \text{for an acute corner},\\[1mm]
+  \pi/2, & \text{for a right corner},\\[1mm]
+  \pi-\arcsin P, & \text{for an obtuse corner}.
+ \end{cases}
+\end{equation}
+In every case $\sin\beta=P$.
+
+An orthocentric tetrahedron admits real additive parameters
+$a_1,\ldots,a_4$ such that
+\begin{equation}\label{eq:orthocentric-metric}
+ d_{ij}^2=a_i+a_j\qquad(i\ne j),
+\end{equation}
+and all pair sums are positive; see
+\cite{EdmondsHajjaMartini2005,HajjaHammoudeh2014}.  Consequently at most one
+$a_i$ can be nonpositive.  The cosine rule shows that all three planar
+subangles at vertex $i$ have the sign of $a_i$.  Thus every corner is pure,
+at least three corners are acute, and at most one is right or obtuse.
+
+\begin{definition}[Power-$k$ tetrahedron]\label{def:power-k}
+Let $k\in\R\setminus\{0\}$.  A nondegenerate Euclidean tetrahedron is a
+\emph{Power-$k$ tetrahedron} if its edge lengths satisfy
+\begin{equation}\label{eq:power-k-metric}
+ d_{ij}^{\,k}=y_i+y_j>0\qquad(i\ne j)
+\end{equation}
+for real parameters $y_1,\ldots,y_4$.  We denote the family by
+$\mathcal P_k$.  Its \emph{positive branch} $\mathcal P_k^+$ consists of the
+members admitting $y_i>0$ for all $i$.
+\end{definition}
+
+The requirement that all pair sums in \eqref{eq:power-k-metric} be positive
+already implies that at most one $y_i$ is negative.  Multiplying every $y_i$
+by the same positive constant changes only the scale of the tetrahedron, so
+the Power-$k$ family has three shape parameters.
+
+\begin{proposition}[Intrinsic Power-$k$ relation]\label{prop:power-opposite}
+For fixed $k\ne0$, six positive edge lengths belong to the Power-$k$ family
+if and only if
+\begin{equation}\label{eq:power-opposite}
+ d_{12}^k+d_{34}^k
+ =d_{13}^k+d_{24}^k
+ =d_{14}^k+d_{23}^k.
+\end{equation}
+Thus the definition is intrinsic and does not depend on a chosen set of
+parameters.
+\end{proposition}
+
+\begin{proof}
+If \eqref{eq:power-k-metric} holds, each expression in
+\eqref{eq:power-opposite} equals $y_1+y_2+y_3+y_4$.  Conversely, put
+$A_{ij}=d_{ij}^k$ and assume the three opposite-pair sums are equal.  Define
+\[
+ y_1=\frac{A_{12}+A_{13}-A_{23}}2,\quad
+ y_2=\frac{A_{12}+A_{23}-A_{13}}2,\quad
+ y_3=\frac{A_{13}+A_{23}-A_{12}}2,
+\]
+and $y_4=A_{14}-y_1$.  Then $y_i+y_j=A_{ij}$ for the three edges among
+$1,2,3$.  The two remaining equalities follow from
+$A_{14}+A_{23}=A_{13}+A_{24}=A_{12}+A_{34}$, proving
+\eqref{eq:power-k-metric} for every edge.
+\end{proof}
+
+The special exponents $1$ and $2$ deserve to be separated carefully.
+For $k=2$, \eqref{eq:power-k-metric} is exactly
+\eqref{eq:orthocentric-metric}; hence
+\begin{equation}\label{eq:p2-orthocentric}
+ \mathcal P_2=\{\text{orthocentric tetrahedra}\}.
+\end{equation}
+The positive branch $\mathcal P_2^+$ is the interior of the nonobtuse
+component of the orthocentric family; allowing zero parameters gives its
+right-corner boundary.  Indeed, writing $y_i=x_i^2$ gives
+\begin{equation}\label{eq:k2-family}
+ d_{ij}^2=x_i^2+x_j^2,
+ \qquad x_i>0,
+\end{equation}
+whereas an orthocentric tetrahedron with one pure obtuse corner requires one
+negative additive parameter.
+
+For $k=1$, the face inequalities remove the signed component automatically.
+If $d_{ij}=y_i+y_j$, then in any face containing vertex $i$,
+\[
+ d_{ij}+d_{ik}>d_{jk}
+ \quad\Longleftrightarrow\quad 2y_i>0.
+\]
+Hence every realizable Power-$1$ tetrahedron has $y_i>0$ for all $i$.  Thus
+$\mathcal P_1=\mathcal P_1^+$ and this family is exactly the classical
+edge-additive, balloon, or 4-ball family; see \cite{Katsuura2021} for these
+equivalent viewpoints.  The logical status of its proposed sharp range is
+discussed in Section~\ref{sec:power-family}.
+
+Finally, the positive branch has a natural normalized formulation.  For
+$x_i>0$ set
+\begin{equation}\label{eq:power-mean-family}
+ D_{ij}^{(k)}=\left(\frac{x_i^k+x_j^k}{2}\right)^{1/k}.
+\end{equation}
+For each fixed $k\ne0$ this parametrizes the same shapes as
+$\mathcal P_k^+$.  If instead the $x_i$ are held fixed while $k\to0$, then
+\begin{equation}\label{eq:k0-limit}
+ \lim_{k\to0}D_{ij}^{(k)}=\sqrt{x_ix_j}.
+\end{equation}
+Writing $p_i=\sqrt{x_i}$ gives $d_{ij}=p_ip_j$, the isodynamic metric.  Thus
+the isodynamic family is the normalized positive $k\to0$ limit, not a
+literal $k=0$ instance of \eqref{eq:power-k-metric}.
+
+We use the following established result as an external input.
+
+\begin{theorem}[Constant polar-measure sum]\label{thm:polar-sum}
+For every nondegenerate orthocentric tetrahedron, the polar measures of its
+four corner angles satisfy
+\begin{equation}\label{eq:polar-sum}
+ \beta_1+\beta_2+\beta_3+\beta_4=\pi.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+This is \cite[Theorem~1(b), Section~5]{HajjaHammoudeh2014}.  The branch
+choice in \eqref{eq:polar-measure} is essential in the obtuse case.
+\end{proof}
+
+\section{The least content of an acute corner}\label{sec:acute-corner}
+
+The key local problem is the following: if the polar measure of an acute
+corner is fixed, how small can its ordinary content be?  The minimizing
+corner is equiangular.
+
+Define
+\begin{equation}\label{eq:phi}
+ \phi(q)=(1-q)^2(1+2q)=1-3q^2+2q^3,
+ \qquad 0\leq q\leq1.
+\end{equation}
+The function $\phi$ decreases strictly from $1$ to $0$.  Given
+$\beta\in[0,\pi/2]$, let $q=q(\beta)\in[0,1]$ be the unique solution of
+\begin{equation}\label{eq:q-beta}
+ \sin^2\beta=\phi(q).
+\end{equation}
+Define
+\begin{equation}\label{eq:def-f}
+ f(\beta)=3\arccos\frac{q(\beta)}{1+q(\beta)}-\pi.
+\end{equation}
+Geometrically, $f(\beta)$ is the content of the equiangular trihedral angle
+whose three planar subangles have cosine $q(\beta)$.
+
+\begin{lemma}[Acute-corner comparison]\label{lem:acute-corner}
+If an acute trihedral angle has polar measure $\beta$ and content $\Omega$,
+then
+\begin{equation}\label{eq:acute-comparison}
+ \Omega\geq f(\beta).
+\end{equation}
+Equality holds if and only if its three planar subangles are equal.
+\end{lemma}
+
+\begin{proof}
+Use the notation $a,b,c>0$ from \eqref{eq:polar-sine}, and put
+$s=a+b+c$.  The elementary inequalities
+\[
+ a^2+b^2+c^2\geq\frac{s^2}{3},
+ \qquad
+ abc\leq\left(\frac{s}{3}\right)^3
+\]
+give
+\begin{align*}
+ P^2
+ &=1-a^2-b^2-c^2+2abc\\
+ &\leq1-\frac{s^2}{3}+\frac{2s^3}{27}
+ =\phi\left(\frac{s}{3}\right).
+\end{align*}
+By \eqref{eq:q-beta}, $P^2=\phi(q(\beta))$.  Since $\phi$ is decreasing,
+\[
+ q(\beta)\geq\frac{s}{3},
+ \qquad
+ 1+s\leq1+3q(\beta).
+\]
+For fixed $P>0$, the expression $2\atanTwo(P,X)$ decreases as $X$
+increases.  Formula \eqref{eq:content-formula} therefore yields
+\begin{equation}\label{eq:f-atan}
+ \Omega
+ \geq
+ 2\arctan\frac{\sin\beta}{1+3q(\beta)}.
+\end{equation}
+
+For an equiangular corner with $a=b=c=q$, the spherical cosine rule shows
+that each angle $\delta$ of the corresponding equilateral spherical triangle
+satisfies
+\[
+ \cos\delta=\frac{q}{1+q}.
+\]
+Its spherical excess is $3\delta-\pi$, so the right-hand side of
+\eqref{eq:f-atan} is precisely $f(\beta)$.  Equality in the two elementary
+inequalities above occurs simultaneously exactly when $a=b=c$.
+\end{proof}
+
+\begin{lemma}[Convexity]\label{lem:convexity}
+The function $f$ is strictly increasing and strictly convex on
+$[0,\pi/2]$.  Moreover,
+\begin{equation}\label{eq:linear-bound}
+ f(0)=0,\qquad f'_+(0)=\frac12,\qquad
+ f(\beta)\geq\frac{\beta}{2}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+It is convenient to regard both $\beta$ and $f$ as functions of
+$q\in[0,1]$:
+\[
+ \beta(q)=\arcsin\bigl((1-q)\sqrt{1+2q}\bigr),
+ \qquad
+ f(q)=3\arccos\frac{q}{1+q}-\pi.
+\]
+For $0<q<1$, direct differentiation gives
+\begin{equation}\label{eq:parameter-derivatives}
+ \frac{d\beta}{dq}
+ =-\frac{3}{\sqrt{(1+2q)(3-2q)}},
+ \qquad
+ \frac{df}{dq}
+ =-\frac{3}{(1+q)\sqrt{1+2q}}.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:f-prime}
+ f'(\beta)=\frac{\sqrt{3-2q}}{1+q}>0.
+\end{equation}
+Differentiating once more and using \eqref{eq:parameter-derivatives},
+\begin{equation}\label{eq:f-second}
+ f''(\beta)
+ =\frac{(4-q)\sqrt{1+2q}}{3(1+q)^2}>0.
+\end{equation}
+Thus $f$ is strictly increasing and strictly convex.  As $\beta\downarrow0$
+we have $q\uparrow1$, and \eqref{eq:f-prime} gives $f'_+(0)=1/2$.
+The graph of a convex function lies above every supporting tangent, which
+proves $f(\beta)\geq\beta/2$.
+\end{proof}
+
+At the regular value $\beta=\pi/4$, equation \eqref{eq:q-beta} gives
+$q=1/2$, and hence
+\begin{equation}\label{eq:f-regular}
+ f\left(\frac{\pi}{4}\right)
+ =3\arccos\frac13-\pi.
+\end{equation}
+
+\section{The lower bound}\label{sec:main-proof}
+
+We first treat orthocentric tetrahedra whose four corners are acute.
+
+\begin{proposition}[All-acute case]\label{prop:acute-case}
+If all four corners of an orthocentric tetrahedron $T$ are acute, then
+\begin{equation}\label{eq:acute-main}
+ \Sigma(T)\geq6\arccos\frac13.
+\end{equation}
+Equality holds if and only if $T$ is regular.
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:acute-corner}, Theorem~\ref{thm:polar-sum}, Jensen's
+inequality, and \eqref{eq:f-regular},
+\begin{align*}
+ \sum_{i=1}^4\Omega_i
+ &\geq\sum_{i=1}^4 f(\beta_i)\\
+ &\geq4f\left(\frac{\beta_1+\beta_2+\beta_3+\beta_4}{4}\right)\\
+ &=4f\left(\frac{\pi}{4}\right)\\
+ &=12\arccos\frac13-4\pi.
+\end{align*}
+Equation \eqref{eq:content-dihedral} now gives \eqref{eq:acute-main}.
+
+Suppose equality holds.  Strict convexity forces
+$\beta_1=\cdots=\beta_4=\pi/4$, and equality in
+Lemma~\ref{lem:acute-corner} forces each corner to be equiangular.  In
+particular, at any vertex the three planar subangles have cosine $1/2$.
+Using \eqref{eq:orthocentric-metric} at, say, vertex $4$, their cosines are
+\[
+ \frac{a_4}{\sqrt{(a_4+a_i)(a_4+a_j)}}
+ \qquad (1\leq i<j\leq3).
+\]
+Their equality implies $a_1=a_2=a_3$, and their common value $1/2$ then
+implies $a_4=a_1$.  Thus all $a_i$ are equal and all six edges are equal.
+Conversely, the regular tetrahedron plainly gives equality.
+\end{proof}
+
+It remains to ensure that the possible right or obtuse corner cannot lower
+the sum.  In fact it leads to a stronger estimate.
+
+\begin{lemma}[Obtuse-corner comparison]\label{lem:obtuse-corner}
+If a pure obtuse corner has polar measure $\beta\in(\pi/2,\pi)$ and content
+$\Omega$, then
+\begin{equation}\label{eq:obtuse-comparison}
+ \Omega\geq\beta.
+\end{equation}
+The same inequality holds with equality for a right corner, where
+$\Omega=\beta=\pi/2$.
+\end{lemma}
+
+\begin{proof}
+For an obtuse corner write
+\[
+ a=-A,\qquad b=-B,\qquad c=-C,
+ \qquad 0<A,B,C<1,
+\]
+and set $r=A+B+C$.  By \eqref{eq:polar-sine},
+\[
+ 1-P^2=A^2+B^2+C^2+2ABC.
+\]
+Since $AB+AC+BC\geq ABC$,
+\[
+ r^2=A^2+B^2+C^2+2(AB+AC+BC)\geq1-P^2.
+\]
+Because $\beta=\pi-\arcsin P$, this says
+\[
+ r\geq\sqrt{1-P^2}=-\cos\beta.
+\]
+Thus $1-r\leq1+\cos\beta$.  Using the monotonicity of
+$\atanTwo(P,X)$ in its second argument,
+\begin{align*}
+ \Omega
+ &=2\atanTwo(P,1-r)\\
+ &\geq2\atanTwo(\sin\beta,1+\cos\beta)
+ =\beta.
+\end{align*}
+For a right corner $a=b=c=0$, and the assertion follows immediately from
+\eqref{eq:content-formula} and \eqref{eq:polar-measure}.
+\end{proof}
+
+\begin{proposition}[Right and obtuse cases]\label{prop:nonacute-case}
+If an orthocentric tetrahedron has a right or obtuse corner, then
+\begin{equation}\label{eq:stronger-bound}
+ \Sigma(T)\geq\frac{19\pi}{8}
+ >6\arccos\frac13.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Let the exceptional corner be number $4$.  Then $\beta_4\geq\pi/2$, while
+the other three corners are acute.  Lemmas~\ref{lem:convexity} and
+\ref{lem:obtuse-corner}, together with Theorem~\ref{thm:polar-sum}, give
+\begin{align*}
+ \sum_{i=1}^4\Omega_i
+ &\geq \beta_4+\frac12(\beta_1+\beta_2+\beta_3)\\
+ &=\beta_4+\frac12(\pi-\beta_4)
+ =\frac{\pi+\beta_4}{2}
+ \geq\frac{3\pi}{4}.
+\end{align*}
+Equation \eqref{eq:content-dihedral} yields
+$\Sigma(T)\geq19\pi/8$.
+
+For completeness, $19\pi/8>6\arccos(1/3)$ is equivalent to
+$\cos(19\pi/48)<1/3$.  The latter follows from
+\[
+ \cos^2\frac{19\pi}{48}
+ =\frac{1-\cos(5\pi/24)}{2}<\frac19.
+\]
+Indeed,
+\[
+ \cos^2\frac{5\pi}{24}
+ =\frac12\left(1+\frac{\sqrt6-\sqrt2}{4}\right).
+\]
+Since $\sqrt3<7/4$, we have
+$(\sqrt6-\sqrt2)^2=8-4\sqrt3>1$.  Hence
+\[
+ \cos^2\frac{5\pi}{24}>\frac58>\frac{49}{81},
+\]
+which proves $\cos(5\pi/24)>7/9$.
+\end{proof}
+
+Combining the two cases proves the central theorem.
+
+\begin{theorem}[Sharp lower bound]\label{thm:lower-bound}
+Every nondegenerate orthocentric tetrahedron satisfies
+\begin{equation}\label{eq:main-lower-bound}
+ \boxed{\ \Sigma(T)\geq6\arccos\frac13\ }.
+\end{equation}
+Equality holds if and only if $T$ is regular.
+\end{theorem}
+
+\section{Kites and the exact range}\label{sec:kites}
+
+An equilateral-base kite has an equilateral base and three equal lateral
+edges.  Normalize the base edge to $1$ and denote the lateral edge by $t$.
+The nondegeneracy condition is
+\begin{equation}\label{eq:kite-domain}
+ t>\frac1{\sqrt3}.
+\end{equation}
+Every such kite is orthocentric.  In fact, in
+\eqref{eq:orthocentric-metric} take the three base parameters equal to
+$1/2$ and the apex parameter equal to $t^2-1/2$.
+
+The three base-edge dihedral angles and the three lateral-edge dihedral
+angles give the sum
+\begin{equation}\label{eq:kite-sum}
+ K(t)=3\left(
+ \arccos\frac{1}{\sqrt{3(4t^2-1)}}
+ +\arccos\frac{2t^2-1}{4t^2-1}
+ \right).
+\end{equation}
+This formula follows directly by placing the apex above the center of the
+equilateral base and taking scalar products of face normals.
+
+Differentiation simplifies completely:
+\begin{equation}\label{eq:kite-derivative}
+ K'(t)=
+ \frac{6(t-1)}{(4t^2-1)\sqrt{3t^2-1}}.
+\end{equation}
+Thus $K$ decreases on $(1/\sqrt3,1]$, reaches its unique minimum at the
+regular tetrahedron $t=1$, and increases for $t>1$.  Moreover,
+\begin{equation}\label{eq:kite-limits}
+ K(1)=6\arccos\frac13,
+ \qquad
+ \lim_{t\downarrow1/\sqrt3}K(t)=3\pi.
+\end{equation}
+Consequently the short-kite branch alone realizes every value in
+$[6\arccos(1/3),3\pi)$.
+
+\begin{theorem}[Exact range]\label{thm:range}
+The set of dihedral-angle sums of nondegenerate orthocentric tetrahedra is
+\begin{equation}\label{eq:exact-range}
+ \boxed{
+ \left\{\Sigma(T):T\text{ orthocentric}\right\}
+ =\left[6\arccos\frac13,\,3\pi\right).
+ }
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:lower-bound} gives the left endpoint and its equality case.
+The universal upper bound in \eqref{eq:gaddum} gives $\Sigma(T)<3\pi$.
+Finally, \eqref{eq:kite-sum}--\eqref{eq:kite-limits} show that the
+orthocentric kite subfamily realizes every value between these bounds.
+\end{proof}
+
+The distinction between signed and positive parameters can now be
+quantified exactly.  In the
+kite parametrization above, the signed apex parameter is $a_4=t^2-1/2$.
+The flattening branch $t\downarrow1/\sqrt3$ therefore enters the component
+$a_4<0$ once $t<1/\sqrt2$.  It belongs to the full orthocentric family but
+not to the positive Power-$2$ branch $\mathcal P_2^+$.
+
+\begin{corollary}[Exact range for the positive Power-$2$ branch]
+\label{cor:k2-range}
+For tetrahedra in $\mathcal P_2^+$,
+\begin{equation}\label{eq:k2-range}
+ \boxed{
+ \left\{\Sigma(T):T\in\mathcal P_2^+\right\}
+ =\left[6\arccos\frac13,\,\frac{5\pi}{2}\right).
+ }
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Every tetrahedron in $\mathcal P_2^+$ is orthocentric, so
+Theorem~\ref{thm:lower-bound} supplies the lower bound and its equality case.
+Its dihedral angles are nonobtuse; equivalently, this also follows from the
+positive formula \eqref{eq:y-dihedral} below.  The sharp general bound for a
+nonobtuse tetrahedron is
+\[
+ \Sigma(T)<\frac{5\pi}{2};
+\]
+see \cite[Theorem~3.1, $n=3$]{BrandtsCihangirKrizek2015}.
+
+It remains only to realize every intermediate value.  Take the kite branch
+$t\geq1$.  It lies in $\mathcal P_2^+$: take the three base parameters
+$y_1=y_2=y_3=1/2$ and the apex parameter
+\[
+ y_4=t^2-\frac12>0.
+\]
+By \eqref{eq:kite-derivative}, $K(t)$ increases strictly from
+$K(1)=6\arccos(1/3)$, and formula \eqref{eq:kite-sum} gives
+\[
+ \lim_{t\to\infty}K(t)
+ =3\left(\frac\pi2+\frac\pi3\right)=\frac{5\pi}{2}.
+\]
+Thus this one-parameter positive Power-$2$ subfamily realizes the entire interval in
+\eqref{eq:k2-range}.
+\end{proof}
+
+\section{\texorpdfstring{The Power-$k$ family}{The Power-k family}}\label{sec:power-family}
+
+We now vary the exponent in the Power-$k$ family $\mathcal P_k$ of
+Definition~\ref{def:power-k}.  The signed parameters $y_i$ are kept directly;
+for even or nonintegral $k$, a negative $y_i$ need not be represented as a
+real $k$th power.  We first record two simple geometric facts used at both
+ends of the range.
+
+\begin{lemma}[Kites occur for every exponent]\label{lem:all-k-kites}
+For every $k\ne0$, $\mathcal P_k$ contains every equilateral-base
+kite.
+\end{lemma}
+
+\begin{proof}
+Take $y_1=y_2=y_3=u>0$ and $y_4=v$.  The base edge and the three lateral
+edges are
+\[
+ b=(2u)^{1/k},\qquad \ell=(u+v)^{1/k}.
+\]
+Given an arbitrary ratio $t=\ell/b>0$, put
+\begin{equation}\label{eq:kite-power-parameter}
+ \frac vu=2t^k-1.
+\end{equation}
+Then $v>-u$, so all pair sums are positive and at most $v$ is negative.
+For $t>1/\sqrt3$ the resulting kite is nondegenerate.  Hence all kites in
+Section~\ref{sec:kites} occur.
+\end{proof}
+
+\begin{lemma}[Convex planar degeneration]\label{lem:convex-planar}
+Suppose a continuous family of nondegenerate tetrahedra tends to four
+distinct coplanar points in convex position.  Then the dihedral angles at
+the two diagonals of the limiting quadrilateral tend to $\pi$, the other
+four dihedral angles tend to $0$, and consequently
+\begin{equation}\label{eq:convex-planar-limit}
+ \Sigma(T)\longrightarrow2\pi.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Orient the limiting plane horizontally.  Along a boundary edge, the two
+incident faces approach the plane from opposite normal orientations, so the
+internal dihedral angle tends to $0$.  Along a diagonal, the third vertices
+lie on opposite sides of the diagonal in the limiting plane; the two face
+normals therefore approach the same orientation and the internal dihedral
+angle tends to $\pi$.  There are four boundary edges and two diagonals.
+Equivalently, the statement follows by taking scalar products of the face
+normals before passing to the limit.
+\end{proof}
+
+\subsection{\texorpdfstring{The exact range for $k<1$, $k\ne0$}
+{The exact range for k below 1, excluding 0}}
+
+\begin{theorem}\label{thm:k-below-one}
+For every $k<1$, $k\ne0$, the dihedral-angle sums of Power-$k$
+tetrahedra have the exact range
+\begin{equation}\label{eq:k-below-one-range}
+ \boxed{\{\Sigma(T):T\in\mathcal P_k\}=(2\pi,3\pi).}
+\end{equation}
+The lower endpoint is already approached with all four parameters positive.
+\end{theorem}
+
+\begin{proof}
+The universal bounds \eqref{eq:gaddum} give containment in $(2\pi,3\pi)$.
+Lemma~\ref{lem:all-k-kites} and the short-kite branch give every value in
+$[6\arccos(1/3),3\pi)$.
+
+It remains to reach the lower endpoint.  Put
+\begin{equation}\label{eq:two-pair-path}
+ (y_1,y_2,y_3,y_4)=(r,r,1,1),\qquad r>0,
+\end{equation}
+and set $q=2/k$.  The two distinguished opposite edges and the four equal
+cross-edges are
+\[
+ a=(2r)^{1/k},\qquad c=2^{1/k},\qquad
+ \ell=(1+r)^{1/k}.
+\]
+They are realized by
+\begin{equation}\label{eq:two-pair-coordinates}
+ \begin{aligned}
+ A&=(-a/2,0,0),&B&=(a/2,0,0),\\
+ C&=(0,h,c/2),&D&=(0,h,-c/2),
+ \end{aligned}
+ \qquad
+ h=\frac12\sqrt{F_k(r)},
+\end{equation}
+where
+\begin{equation}\label{eq:two-pair-feasibility}
+ F_k(r)=4(1+r)^q-(2r)^q-2^q.
+\end{equation}
+At $r=1$ all six edges are equal and $F_k(1)>0$.  If $0<k<1$, then
+$q>2$ and
+\[
+ F_k(0)=4-2^q<0.
+\]
+If $k<0$, then $q<0$ and $F_k(r)\to-\infty$ as $r\downarrow0$.
+In either case, the component of $\{r:F_k(r)>0\}$ containing $r=1$ has a
+lower endpoint $r_0\in(0,1)$ with $F_k(r_0)=0$.
+
+As $r\downarrow r_0$, the height in
+\eqref{eq:two-pair-coordinates} tends to zero.  The segments $AB$ and $CD$
+remain nonzero, meet orthogonally at their common midpoint, and are the two
+diagonals of the limiting convex quadrilateral.  Lemma~\ref{lem:convex-planar}
+therefore gives
+\[
+ \Sigma(r)\longrightarrow2\pi,
+ \qquad
+ \Sigma(1)=6\arccos\frac13.
+\]
+The sum is continuous on $(r_0,1]$.  The intermediate value theorem supplies
+every value in $(2\pi,6\arccos(1/3)]$; monotonicity is unnecessary.  Combining
+this path with the kite path proves \eqref{eq:k-below-one-range}.
+\end{proof}
+
+\subsection{\texorpdfstring{The exact range for $k>2$}
+{The exact range for k above 2}}
+
+Fix $k>2$ and put $p=1/k\in(0,1/2)$.  Consider the signed Power-$k$ path
+\begin{equation}\label{eq:signed-thin-path}
+ (y_1,y_2,y_3,y_4)=(1,t,t,-rt),
+ \qquad t>0,\qquad0\leq r<1.
+\end{equation}
+Set
+\begin{equation}\label{eq:signed-thin-lengths}
+ L=(1+t)^p,\quad M=(1-rt)^p,\quad
+ a=(2t)^p,\quad b=((1-r)t)^p.
+\end{equation}
+The face on vertices $2,3,4$ is isosceles with sides $a,b,b$ and is
+nondegenerate precisely when
+\begin{equation}\label{eq:rc}
+ r<r_c:=1-2^{1-k}.
+\end{equation}
+For $r<r_c$ use the coordinates
+\begin{equation}\label{eq:signed-thin-coordinates}
+ \begin{aligned}
+ B&=(-a/2,0,0),& C&=(a/2,0,0),\\
+ D&=(0,\eta,0),& A&=(0,z,h),
+ \end{aligned}
+\end{equation}
+where
+\begin{equation}\label{eq:signed-thin-height}
+ \eta=\sqrt{b^2-a^2/4},\qquad
+ z=\frac{L^2-M^2+b^2-a^2/2}{2\eta},\qquad
+ h^2=L^2-a^2/4-z^2.
+\end{equation}
+These formulas impose $AB=AC=L$ and $AD=M$.
+
+\begin{lemma}[Boundary layer of the signed path]\label{lem:signed-boundary}
+Let $k>2$ and use \eqref{eq:signed-thin-path}--\eqref{eq:signed-thin-height}.
+For every sufficiently small $t>0$ there is a first value
+$r_*(t)\in(0,r_c)$ such that
+\[
+ h^2>0\quad(0\le r<r_*(t)),\qquad h(r_*(t))=0.
+\]
+Moreover, if $c_0=1-r_c=2^{1-k}$, then
+\begin{equation}\label{eq:rstar-asymptotic}
+ r_*(t)=r_c-\bigl(\lambda_*+o(1)\bigr)t^{2p},
+ \qquad
+ \lambda_*=
+ \frac{2^{4p-6}}{2p\,c_0^{\,2p-1}}>0.
+\end{equation}
+At the limiting planar configuration one has $z<0<\eta$, so the four points
+are in convex position.  Consequently
+\begin{equation}\label{eq:signed-lower-limit}
+ \Sigma(t,r)\longrightarrow2\pi
+ \quad\text{as }r\uparrow r_*(t).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+At $r=0$,
+\[
+ \eta=t^p\sqrt{1-2^{2p-2}},\qquad z=O(t^p),\qquad h^2\longrightarrow1
+ \quad(t\downarrow0),
+\]
+so the path begins in the nondegenerate region for small $t$.
+
+Write $\delta=r_c-r$ and $c_0=1-r_c$.  Since
+$c_0^{2p}=2^{2p-2}$, the first expression in
+\eqref{eq:signed-thin-height} gives the exact identity
+\begin{equation}\label{eq:eta-delta}
+ \eta^2=t^{2p}\bigl((c_0+\delta)^{2p}-c_0^{2p}\bigr).
+\end{equation}
+Let
+\[
+ N(t,r)=L^2-M^2+b^2-a^2/2
+\]
+be the numerator of $z$.  In the critical layer
+$\delta=\lambda t^{2p}$, with fixed $\lambda>0$, Taylor expansion yields
+\begin{align}
+ \eta
+ &\sim t^{2p}\sqrt{2p\,c_0^{\,2p-1}\lambda},\label{eq:eta-layer}\\
+ N(t,r)
+ &\sim-2^{2p-2}t^{2p},\label{eq:n-layer}
+\end{align}
+because $L^2-M^2=O(t)=o(t^{2p})$ when $2p<1$.  Therefore
+\begin{equation}\label{eq:z-layer}
+ z\longrightarrow
+ -\frac{2^{2p-3}}
+ {\sqrt{2p\,c_0^{\,2p-1}\lambda}},
+ \qquad
+ h^2\longrightarrow1-\frac{\lambda_*}{\lambda}.
+\end{equation}
+In particular, the limiting sign of $h^2$ is positive for
+$\lambda>\lambda_*$ and negative for $0<\lambda<\lambda_*$.
+
+It remains to rule out an earlier loss of feasibility.  Suppose
+$t_n\downarrow0$, $r_n<r_c$, and put
+$\delta_n=r_c-r_n$.  If
+$\delta_n/t_n^{2p}\to\infty$, then
+\eqref{eq:eta-delta} and the expression for $N$ give
+$z(t_n,r_n)\to0$, hence $h^2(t_n,r_n)\to1$.  If instead
+$\delta_n/t_n^{2p}$ stays bounded away from zero and infinity, a subsequence
+lies in a critical layer and \eqref{eq:z-layer} applies.  Consequently, for
+any fixed $\lambda_+>\lambda_*$ and all sufficiently small $t$,
+$h^2(t,r)>0$ throughout
+$0\le r\le r_c-\lambda_+t^{2p}$, whereas for any
+$0<\lambda_-<\lambda_*$,
+\[
+ h^2\bigl(t,r_c-\lambda_-t^{2p}\bigr)<0.
+\]
+By continuity there is a first zero $r_*(t)$ between these two values.
+Letting $\lambda_\pm\to\lambda_*$ proves
+\eqref{eq:rstar-asymptotic}.
+
+At this first zero, \eqref{eq:z-layer} shows $z<0$ for small $t$, while
+$\eta>0$ because $r_*(t)<r_c$.  In the plane $h=0$, the segment $AD$ therefore
+crosses $BC$ at an interior point, so $A,B,D,C$ are four distinct points in
+convex position and $AD,BC$ are their diagonals.  Lemma~\ref{lem:convex-planar}
+then proves \eqref{eq:signed-lower-limit}.
+\end{proof}
+
+\begin{theorem}\label{thm:k-above-two}
+For every $k>2$, the dihedral-angle sums of Power-$k$ tetrahedra have the
+exact range
+\begin{equation}\label{eq:k-above-two-range}
+ \boxed{\{\Sigma(T):T\in\mathcal P_k\}=(2\pi,3\pi).}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The universal bounds \eqref{eq:gaddum} give containment in $(2\pi,3\pi)$.
+At $r=0$ the base triangle $BCD$ shrinks as $t\downarrow0$ while its shape
+remains fixed, whereas the three edges from $A$ tend to $1$.  The three
+base-edge dihedral angles tend to $\pi/2$, and the three lateral-edge
+dihedral angles tend to the three angles of the base triangle.  Hence
+\begin{equation}\label{eq:tall-limit}
+ \Sigma(t,0)\longrightarrow\frac{5\pi}{2}
+ \quad(t\downarrow0).
+\end{equation}
+Choose $t$ so small that
+$\Sigma(t,0)>6\arccos(1/3)$.  By Lemma~\ref{lem:signed-boundary}, the same
+connected feasible path has $\Sigma(t,r)\to2\pi$ as
+$r\uparrow r_*(t)$.  Continuity therefore supplies every value from $2\pi$
+through the regular value.  Lemma~\ref{lem:all-k-kites} supplies every value
+from the regular value to $3\pi$.  The universal strict bounds complete the
+proof.
+\end{proof}
+
+\subsection{\texorpdfstring{The remaining interval $1<k<2$}
+{The remaining interval between 1 and 2}}
+
+\begin{remark}[Status of the Power-$1$ case]\label{rem:power-one-status}
+By the discussion after Definition~\ref{def:power-k}, $\mathcal P_1$ is
+exactly the 4-ball (balloon) family.  Theorem~9 of
+\cite{KorotovKrizek2026} states that its exact range is
+$[6\arccos(1/3),3\pi)$.  Its kite subfamily rigorously realizes that whole
+interval, so the only unresolved logical step is exclusion of values below
+the regular value.  The cited proof treats an isosceles spherical triangle
+and says that the nonsymmetric case follows by a ``tedious calculation,''
+but the calculation or a certificate for the global maximization is not
+given.  We do not use that lower bound in any proof below.
+\end{remark}
+
+Theorems~\ref{thm:k-below-one}, \ref{thm:range}, and
+\ref{thm:k-above-two} suggest the following conjecture.
+
+\begin{conjecture}[Power-$k$ window]\label{conj:power-window}
+For every $1<k<2$, every Power-$k$ tetrahedron satisfies
+\begin{equation}\label{eq:power-window-bound}
+ \Sigma(T)\geq6\arccos\frac13,
+\end{equation}
+with equality only for the regular tetrahedron.  Consequently its exact
+range is
+\[
+ \left[6\arccos\frac13,3\pi\right).
+\]
+\end{conjecture}
+
+It is convenient to put $q=2/k$, so $1<q<2$, and to write the squared
+edges as
+\begin{equation}\label{eq:q-metric}
+ D_{ij}=d_{ij}^2=(y_i+y_j)^q.
+\end{equation}
+The following observation removes a potential feasibility obstruction from
+any attempt to deform the exponent down to the orthocentric value $q=1$.
+
+\begin{proposition}[Downward feasibility]\label{prop:snowflake-feasibility}
+Fix real parameters $y_1,\ldots,y_4$ with $y_i+y_j>0$ for $i\ne j$.  If,
+for some $q_0>0$, the six numbers
+\[
+ d_{ij}(q_0)=(y_i+y_j)^{q_0/2}
+\]
+are the edge lengths of a nondegenerate Euclidean tetrahedron, then the same
+is true for $d_{ij}(q)=(y_i+y_j)^{q/2}$ for every $0<q\le q_0$.
+\end{proposition}
+
+\begin{proof}
+For $0<q<q_0$ put $\alpha=q/q_0\in(0,1)$.  Then
+\[
+ d_{ij}(q)=d_{ij}(q_0)^\alpha.
+\]
+Schoenberg's snowflake theorem says that a Euclidean metric raised to a
+power $\alpha\in(0,1)$ is again Euclidean \cite{Schoenberg1938}.  Its strict
+finite form says that for distinct points and nonzero coefficients $c_i$
+with $\sum_i c_i=0$,
+\[
+ \sum_{i,j}c_ic_jd_{ij}(q_0)^{2\alpha}<0.
+\]
+Equivalently, the centered Gram matrix of the four new points is positive
+definite on the three-dimensional zero-sum subspace.  Hence the four points
+are affinely independent and form a nondegenerate tetrahedron.  The case
+$q=q_0$ is the hypothesis.
+\end{proof}
+
+Whenever the metric is feasible, let $\Sigma_y(q)$ denote its dihedral-angle
+sum.  Proposition~\ref{prop:snowflake-feasibility} makes the following
+inequality meaningful on the whole interval from a given $q$ down to $1$.
+
+\begin{conjecture}[Exponent monotonicity]\label{conj:q-monotonicity}
+For every fixed admissible parameter vector $y$, the function
+$q\mapsto\Sigma_y(q)$ is nondecreasing on every feasible subinterval of
+$[1,2]$.
+\end{conjecture}
+
+\begin{proposition}[Conditional reduction]\label{prop:conditional-window}
+Conjecture~\ref{conj:q-monotonicity} implies the Power-$k$ window
+Conjecture~\ref{conj:power-window}.  It also supplies the missing lower-bound
+step in Remark~\ref{rem:power-one-status}.
+\end{proposition}
+
+\begin{proof}
+Let $1\le k<2$, put $q=2/k\in(1,2]$, and suppose that the corresponding
+Power-$k$ metric is feasible.  Proposition~\ref{prop:snowflake-feasibility}
+shows that the same parameters at $q=1$ define a nondegenerate
+orthocentric tetrahedron.  Therefore Theorem~\ref{thm:lower-bound} and the
+conjectured monotonicity give
+\[
+ \Sigma_y(q)\ge\Sigma_y(1)\ge6\arccos\frac13.
+\]
+If equality holds, the orthocentric equality case forces all four parameters
+to be equal, and hence the original tetrahedron is regular.  Finally,
+Lemma~\ref{lem:all-k-kites} and the short-kite branch realize every value
+from the regular value up to $3\pi$, while the universal upper bound is
+strict.
+\end{proof}
+
+The next proposition proves unconditionally that the proposed equality case
+is a strict local minimum throughout the entire interval.
+
+\begin{proposition}[Strict local minimality]\label{prop:k-local-min}
+Let $q>0$.  Subject to a normalization of scale, the regular point
+$y_1=y_2=y_3=y_4$ is a strict local minimum of the dihedral sum.  More
+precisely, if $\sum_i v_i=0$, then
+\begin{equation}\label{eq:regular-expansion}
+ \Sigma_q(1+\varepsilon v_1,\ldots,1+\varepsilon v_4)
+ =6\arccos\frac13
+ +\frac{q^2}{12\sqrt2}\varepsilon^2\sum_{i=1}^4v_i^2
+ +O(\varepsilon^3).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Base the vertex Gram matrix at vertex $1$:
+\[
+ G_{ab}=\frac{D_{1,a+1}+D_{1,b+1}-D_{a+1,b+1}}2,
+ \qquad1\leq a,b\leq3,
+\]
+where $D_{ii}=0$, and put $H=G^{-1}$ and ${\bf e}=(1,1,1)^T$.  The six
+dihedral cosines are
+\begin{equation}\label{eq:inverse-gram-dihedrals}
+ \frac{(H{\bf e})_a}{\sqrt{H_{aa}{\bf e}^TH{\bf e}}}
+ \quad(1\leq a\leq3),
+ \qquad
+ -\frac{H_{ab}}{\sqrt{H_{aa}H_{bb}}}
+ \quad(1\leq a<b\leq3).
+\end{equation}
+Substitute \eqref{eq:q-metric} and differentiate at $y_i=1$.  Scale
+invariance makes the all-ones direction null.  Permutation invariance makes
+the Hessian a scalar on the irreducible subspace $\sum_i v_i=0$.  It is
+therefore enough to compute along $v=(1,-1,0,0)$.
+
+After dividing all squared edge lengths by the irrelevant common factor
+$2^q$, one has
+\[
+ D_{12}=D_{34}=1,\qquad
+ D_{13}=D_{14}=\left(1+\frac\varepsilon2\right)^q,\qquad
+ D_{23}=D_{24}=\left(1-\frac\varepsilon2\right)^q.
+\]
+Expanding the inverse-Gram formulas \eqref{eq:inverse-gram-dihedrals}, the six
+dihedral cosines, in a suitable order, are
+\begin{align*}
+ c_1&=\frac13+\left(\frac{5q^2}{27}-\frac q9\right)\varepsilon^2
+       +O(\varepsilon^3),\\
+ c_2=c_3&=\frac13-\frac{2q}{9}\varepsilon
+       +\frac{q-q^2}{18}\varepsilon^2+O(\varepsilon^3),\\
+ c_4=c_5&=\frac13+\frac{2q}{9}\varepsilon
+       +\frac{q-q^2}{18}\varepsilon^2+O(\varepsilon^3),\\
+ c_6&=\frac13-\frac{q^2+q}{9}\varepsilon^2+O(\varepsilon^3).
+\end{align*}
+Since
+\[
+ \arccos\left(\frac13+u\right)
+ =\arccos\frac13-\frac{3}{2\sqrt2}u
+  -\frac{9}{32\sqrt2}u^2+O(u^3),
+\]
+summing the six expansions cancels the linear terms and gives
+\[
+ \Sigma_q(1+\varepsilon,1-\varepsilon,1,1)
+ =6\arccos\frac13+\frac{q^2}{6\sqrt2}\varepsilon^2
+ +O(\varepsilon^3).
+\]
+Thus the second derivative in this direction is $q^2/(3\sqrt2)$.  Since
+$\sum_i v_i^2=2$, permutation symmetry on $\sum_i v_i=0$ yields precisely
+\eqref{eq:regular-expansion}.
+\end{proof}
+
+The two exterior constructions change character inside the open interval.
+For the positive two-pair path \eqref{eq:two-pair-path}, if $1<q<2$, then
+for every $r>0$,
+\begin{equation}\label{eq:middle-two-pair-positive}
+ (2r)^q+2^q=2^q(1+r^q)<4(1+r)^q.
+\end{equation}
+Thus this disphenoid path never reaches a convex planar boundary.  For the
+signed path \eqref{eq:signed-thin-path}, now $p=1/k>1/2$.  At the face
+boundary $r=r_c$, the numerator of $z$ is
+\[
+ N(t,r_c)=(1+t)^{2p}-(1-r_ct)^{2p}-2^{2p-2}t^{2p}.
+\]
+Here the first difference is $2p(1+r_c)t+O(t^2)$, whereas
+$t^{2p}=o(t)$; hence $N(t,r_c)>0$ for small $t$.  This reverses the sign that
+created the convex crossing in Lemma~\ref{lem:signed-boundary}, so that
+particular boundary-layer proof no longer applies.  These observations rule
+out two proposed counterexample mechanisms, but do not classify all boundary
+strata and are not a global proof.
+
+The remaining task has therefore been reduced to a clean analytic question:
+prove Conjecture~\ref{conj:q-monotonicity}, or replace it by a boundary and
+critical-point classification after a scale normalization.  Opposite-edge
+ordering, Regge transformations, and elementary averaging do not by
+themselves control the sum of six arccosines.  Any future proof using those
+ideas still needs a displayed sign decomposition, a sequence of stated
+inequalities, or a formally checkable symbolic certificate.
+
+\section{The isodynamic family: the full universal range}
+\label{sec:isodynamic}
+
+A tetrahedron is \emph{isodynamic} precisely when its six edge lengths admit
+positive parameters $p_1,p_2,p_3,p_4$ such that
+\begin{equation}\label{eq:isodynamic-metric}
+ d_{ij}=p_i p_j \qquad (i\ne j).
+\end{equation}
+Equivalently, the products of the lengths in the three pairs of opposite
+edges are equal.  This is the multiplicative metric characterization in
+\cite[Theorem~4]{HajjaHammoudeh2014}.  The following result settles the
+range completely.
+
+\begin{theorem}[Exact isodynamic range]\label{thm:isodynamic-range}
+The set of dihedral-angle sums of nondegenerate isodynamic tetrahedra is
+\begin{equation}\label{eq:isodynamic-range}
+ \boxed{
+ \left\{\Sigma(T):T\text{ isodynamic}\right\}=(2\pi,3\pi).
+ }
+\end{equation}
+Neither endpoint is attained.
+\end{theorem}
+
+\begin{proof}
+The universal inequalities \eqref{eq:gaddum} show at once that the range is
+contained in $(2\pi,3\pi)$.  We prove the reverse inclusion by joining the
+regular tetrahedron to each endpoint through explicit isodynamic
+subfamilies.
+
+For the upper endpoint, take
+\[
+ (p_1,p_2,p_3,p_4)=(s,1,1,1).
+\]
+The three edges among vertices $2,3,4$ have length $1$, and the remaining
+three have length $s$.  Thus this is exactly the kite of
+Section~\ref{sec:kites}, with $s>1/\sqrt3$.  On the branch
+$1/\sqrt3<s\leq1$, formula \eqref{eq:kite-sum} realizes every value in
+\[
+ \left[6\arccos\frac13,3\pi\right).
+\]
+
+For the lower endpoint, take
+\begin{equation}\label{eq:isodynamic-lower-path}
+ (p_1,p_2,p_3,p_4)=(t,t,1,1)
+\end{equation}
+and label the vertices $A,B,C,D$ in this order.  Its edge lengths are
+\[
+ AB=t^2,\qquad CD=1,\qquad
+ AC=AD=BC=BD=t.
+\]
+Put
+\[
+ h=\frac12\sqrt{4t^2-t^4-1}.
+\]
+The coordinates
+\begin{equation}\label{eq:isodynamic-coordinates}
+ \begin{aligned}
+ A&=(-t^2/2,0,0),& B&=(t^2/2,0,0),\\
+ C&=(0,h,1/2),& D&=(0,h,-1/2)
+ \end{aligned}
+\end{equation}
+realize the required lengths whenever
+\begin{equation}\label{eq:isodynamic-domain}
+ \sqrt{2-\sqrt3}<t<\sqrt{2+\sqrt3}.
+\end{equation}
+There are three types of internal dihedral angles: one at $AB$, one at
+$CD$, and four equal angles at the cross-edges.  Direct scalar products of
+the inward face normals in \eqref{eq:isodynamic-coordinates} give
+\begin{align}
+ \cos\theta_{AB}
+ &=\frac{4t^2-t^4-2}{4t^2-t^4},\label{eq:iso-cos-ab}\\
+ \cos\theta_{CD}
+ &=\frac{4t^2-2t^4-1}{4t^2-1},\label{eq:iso-cos-cd}\\
+ \cos\theta_{\times}
+ &=\frac{t}{\sqrt{(4-t^2)(4t^2-1)}}.\label{eq:iso-cos-cross}
+\end{align}
+Hence
+\begin{equation}\label{eq:isodynamic-path-sum}
+ L(t)=\theta_{AB}(t)+\theta_{CD}(t)+4\theta_{\times}(t)
+\end{equation}
+is continuous throughout \eqref{eq:isodynamic-domain}.  At $t=1$ the
+tetrahedron is regular, so $L(1)=6\arccos(1/3)$.  If
+$t_0=\sqrt{2+\sqrt3}$, then \eqref{eq:iso-cos-ab}--\eqref{eq:iso-cos-cross}
+give
+\[
+ \theta_{AB}\longrightarrow\pi,\qquad
+ \theta_{CD}\longrightarrow\pi,\qquad
+ \theta_{\times}\longrightarrow0
+ \quad\text{as }t\uparrow t_0.
+\]
+Therefore $L(t)\to2\pi$.  The intermediate value theorem shows that this
+path realizes every value in
+$(2\pi,6\arccos(1/3)]$.  Monotonicity is not needed: for any number strictly
+between the limit and the value at $t=1$, continuity on a sufficiently long
+closed subinterval already supplies a preimage.  Together with the kite
+branch, this proves that every number in $(2\pi,3\pi)$ occurs.  The strict
+universal inequalities show that the endpoints do not occur.
+\end{proof}
+
+\begin{remark}
+Thus the isodynamic theorem really does reduce to ``examples at the two
+boundaries,'' but only after three points are checked carefully: both paths
+must remain inside the isodynamic family, their tetrahedra must remain
+nondegenerate before the limiting parameter, and the dihedral sum must vary
+continuously.  Equations \eqref{eq:isodynamic-metric},
+\eqref{eq:isodynamic-coordinates}, and \eqref{eq:isodynamic-path-sum} supply
+exactly these checks.
+\end{remark}
+
+\section{A comparison family: isogonic tetrahedra}
+\label{sec:isogonic}
+
+The isogonic family is included here for comparison, not as another member of
+the Power-$k$ chain.  The exact formulas below are proved, but the regular
+lower bound remains conditional on Conjecture~\ref{conj:isogonic-reduction}.
+This section should therefore be read as a self-contained open problem rather
+than as part of the completed Power-$k$ classification.
+
+A tetrahedron is \emph{isogonic} precisely when its squared edge lengths can
+be written
+\begin{equation}\label{eq:isogonic-metric}
+ d_{ij}^2=p_i^2+p_i p_j+p_j^2,
+ \qquad p_1,p_2,p_3,p_4>0;
+\end{equation}
+see \cite[Theorem~4]{HajjaHammoudeh2014}.  In contrast with the
+orthocentric case, the following calculation exposes the whole dihedral sum
+without a choice of branches or auxiliary solid-angle measures.
+
+For complementary indices $\{i,j,k,l\}=\{1,2,3,4\}$, set
+\begin{equation}\label{eq:isogonic-notation}
+ q_{ij}=p_i^2+p_i p_j+p_j^2,
+ \quad
+ E=\sum_{1\leq r<s\leq4}p_rp_s,
+ \quad
+ h_i=p_jp_k+p_jp_l+p_kp_l.
+\end{equation}
+
+\begin{proposition}[Isogonic half-angle formula]
+\label{prop:isogonic-formula}
+Let $\theta_{ij}$ be the internal dihedral angle between the faces opposite
+vertices $i$ and $j$; equivalently, it is the angle at edge $kl$.  Then
+\begin{align}
+ \sin^2\frac{\theta_{ij}}2
+ &=\frac{p_i p_j q_{kl}}{h_i h_j},
+ \label{eq:isogonic-sin-half}\\
+ \tan^2\frac{\theta_{ij}}2
+ &=\frac{p_i p_j q_{kl}}{p_kp_l E}.
+ \label{eq:isogonic-tan-half}
+\end{align}
+Consequently
+\begin{equation}\label{eq:isogonic-sum}
+ \boxed{
+ \Sigma_{\rm igo}(p_1,p_2,p_3,p_4)
+ =2\sum_{1\leq i<j\leq4}
+ \arctan\sqrt{\frac{p_i p_j q_{kl}}{p_kp_lE}} .
+ }
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Heron's formula applied to the face opposite vertex $i$ simplifies to
+\begin{equation}\label{eq:isogonic-face-area}
+ A_i=\frac{\sqrt3}{4}h_i.
+\end{equation}
+The determinant of the edge Gram matrix based at any vertex simplifies to
+\begin{equation}\label{eq:isogonic-volume}
+ 36V^2=\frac94p_1p_2p_3p_4E,
+ \qquad
+ V^2=\frac1{16}p_1p_2p_3p_4E.
+\end{equation}
+A direct cofactor calculation for the angle between two face normals then
+gives
+\begin{equation}\label{eq:isogonic-cos}
+ \cos\theta_{ij}
+ =1-\frac{2p_ip_jq_{kl}}{h_ih_j}.
+\end{equation}
+Using $\sin^2(\theta/2)=(1-\cos\theta)/2$ proves
+\eqref{eq:isogonic-sin-half}.  Finally, direct expansion gives the useful
+identity
+\begin{equation}\label{eq:isogonic-identity}
+ h_ih_j-p_ip_jq_{kl}=p_kp_lE.
+\end{equation}
+Dividing \eqref{eq:isogonic-sin-half} by its complementary cosine-square
+proves \eqref{eq:isogonic-tan-half}, and summing the six principal
+half-angles proves \eqref{eq:isogonic-sum}.
+\end{proof}
+
+The formula immediately explains why kites are central here.  If
+$(p_1,p_2,p_3,p_4)=(a,b,b,b)$, then the base edges have squared length
+$3b^2$ and the three lateral edges have squared length $a^2+ab+b^2$.
+Writing $s=a/b$, the squared lateral-to-base ratio is
+\begin{equation}\label{eq:isogonic-kite-ratio}
+ t^2=\frac{s^2+s+1}{3}.
+\end{equation}
+As $s$ runs over $(0,\infty)$, $t$ runs over $(1/\sqrt3,\infty)$.
+Therefore the isogonic family contains every equilateral-base kite, and in
+particular it realizes
+\begin{equation}\label{eq:isogonic-known-half}
+ \left[6\arccos\frac13,3\pi\right).
+\end{equation}
+The unresolved direction is to prove that no isogonic tetrahedron lies below
+the regular value.
+
+Formula \eqref{eq:isogonic-sum} suggests the following precise reduction.
+
+\begin{conjecture}[Ordered kite-reduction inequality]
+\label{conj:isogonic-reduction}
+Suppose $0<p_1\leq p_2\leq p_3\leq p_4$ and put
+\[
+ m=\frac{p_1+p_2+p_3}{3}.
+\]
+Then
+\begin{equation}\label{eq:isogonic-reduction}
+ \Sigma_{\rm igo}(p_1,p_2,p_3,p_4)
+ \geq \Sigma_{\rm igo}(m,m,m,p_4).
+\end{equation}
+Equality should hold only when $p_1=p_2=p_3$.
+\end{conjecture}
+
+\begin{theorem}[Conditional exact isogonic range]
+\label{thm:conditional-isogonic}
+If Conjecture~\ref{conj:isogonic-reduction} holds, then
+\begin{equation}\label{eq:conditional-isogonic-range}
+ \left\{\Sigma(T):T\text{ isogonic}\right\}
+ =\left[6\arccos\frac13,3\pi\right),
+\end{equation}
+and equality at the lower endpoint occurs only for the regular tetrahedron.
+\end{theorem}
+
+\begin{proof}
+After relabelling, the parameters may be ordered.  The right-hand side of
+\eqref{eq:isogonic-reduction} is the sum of an equilateral-base kite and is
+therefore at least its regular value by \eqref{eq:kite-derivative}.  Equality
+in the conjecture first forces $p_1=p_2=p_3$; equality in the kite bound then
+forces $p_4=m$, so all four parameters are equal and the tetrahedron is
+regular.  The upper bound is universal, and \eqref{eq:isogonic-known-half}
+already supplies every value from the regular value to $3\pi$.
+\end{proof}
+
+The ordering in Conjecture~\ref{conj:isogonic-reduction} is essential to its
+formulation.  Neither the half-angle formula nor ordinary pairwise averaging
+provides the required sign.  We therefore record the reduction only as an
+open problem: a proof must exhibit a readable chain of inequalities or a
+formally checkable symbolic certificate.
+
+\section{Discussion: why the kite coincidence is useful}
+
+The equality of the orthocentric range and the kite range has
+two distinct consequences.
+
+First, because kites are a subfamily, their one-parameter calculation proves
+sharpness, the unattained upper endpoint, and the realization of all
+intermediate values.  It does \emph{not} prove the lower bound for the larger
+family; that logical direction is supplied by Theorem~\ref{thm:lower-bound}.
+
+Second, the coincidence suggests a stronger comparison statement: perhaps
+each orthocentric tetrahedron can be symmetrized to a kite without increasing
+its dihedral sum.  The signed metric parametrization
+$d_{ij}^2=a_i+a_j$ makes this plausible.  If all $a_i\ne0$ and
+\[
+ S=\sum_{i=1}^4\frac1{a_i},
+\]
+then an inverse-Gram calculation gives, for the dihedral angle between the
+faces opposite vertices $i$ and $j$,
+\begin{equation}\label{eq:direct-dihedral}
+ \cos\theta_{ij}
+ =\frac{\operatorname{sgn}(Sa_ia_j)}
+ {\sqrt{(Sa_i-1)(Sa_j-1)}}.
+\end{equation}
+When all $a_i$ are positive, the variables
+\[
+ y_i=\frac1{Sa_i},
+ \qquad y_i>0,
+ \qquad \sum_{i=1}^4y_i=1,
+\]
+reduce this to the symmetric formula
+\begin{equation}\label{eq:y-dihedral}
+ \cos\theta_{ij}
+ =\sqrt{\frac{y_i y_j}{(1-y_i)(1-y_j)}}.
+\end{equation}
+Right-corner cases, for which one additive parameter vanishes, are obtained
+from these formulas by a limiting argument.  A direct symmetrization theorem
+would be stronger than the range result, but it is unnecessary here: the
+constant polar sum converts the lower-bound problem into Jensen's inequality
+for the one-variable function $f$.
+
+The proof also separates the potentially troublesome obtuse component rather
+efficiently.  Instead of carrying the branch signs through a lengthy
+six-dihedral calculation, Lemma~\ref{lem:obtuse-corner} gives
+$\Omega\geq\beta$ at the exceptional corner, while convexity gives the simple
+supporting-line estimate $\Omega\geq\beta/2$ at each acute corner.  This yields
+the stronger non-acute bound $19\pi/8$ and leaves equality possible only in
+the all-acute component.
+
+The Power-$k$ family exhibits two rigorously different exterior regimes.
+The regular lower bound is proved here at $k=2$, while explicit convex-planar
+degenerations lower the infimum to $2\pi$ for $k<1$ and for $k>2$.  In the
+first regime the degeneration already occurs in the positive branch; in the
+second it requires one negative Power-$k$ parameter.  The interval
+$1<k<2$ remains open, as does the unexpanded global step at $k=1$ noted in
+Remark~\ref{rem:power-one-status}.  Proposition~\ref{prop:snowflake-feasibility}
+and Conjecture~\ref{conj:q-monotonicity} isolate a unified route to both
+questions.
+
+The families studied here illustrate several genuinely different proof
+mechanisms.
+For orthocentric tetrahedra, a constant sum for a secondary angle measure
+creates the decisive convexity argument.  For isodynamic tetrahedra, the
+universal theorem plus explicit endpoint paths settles the range, even
+though the sum need not be monotone along the lower path.  For isogonic
+tetrahedra, exact formulas and the kite subfamily settle sharpness and the
+upper part of the range, but they do not yet exclude a hidden value below the
+regular one.  Conjecture~\ref{conj:isogonic-reduction} isolates that missing
+step in a form suitable for either a human factorization or a formally
+checkable symbolic certificate.
+
+\section*{Acknowledgements}
+The author thanks Mowaffaq Hajja for his support and encouragement.
+ AI tools assisted with limited editorial and computational work; they are
+ not coauthors.  The author bears full responsibility for the mathematical
+ content and final wording of this article.
+
+\begin{thebibliography}{99}
+\small
+\setlength{\itemsep}{4pt}
+
+\bibitem{BrandtsCihangirKrizek2015}
+J.~Brandts, A.~Cihangir, and M.~K\v{r}\'\i\v{z}ek,
+\newblock Tight bounds on angle sums of nonobtuse simplices,
+\newblock \emph{Appl. Math. Comput.} \textbf{267} (2015), 397--408,
+\newblock \href{https://doi.org/10.1016/j.amc.2015.02.035}
+{doi:10.1016/j.amc.2015.02.035}.
+
+\bibitem{EdmondsHajjaMartini2005}
+A.~L. Edmonds, M.~Hajja, and H.~Martini,
+\newblock Orthocentric simplices and their centers,
+\newblock \emph{Results Math.} \textbf{47} (2005), 266--295;
+\newblock \href{https://doi.org/10.1007/BF03323029}
+{doi:10.1007/BF03323029}.
+
+\bibitem{Gaddum1952}
+J.~W. Gaddum,
+\newblock The sums of the dihedral and trihedral angles in a tetrahedron,
+\newblock \emph{Amer. Math. Monthly} \textbf{59} (1952), 370--371,
+\newblock \href{https://doi.org/10.1080/00029890.1952.11988143}
+{doi:10.1080/00029890.1952.11988143}.
+
+\bibitem{HajjaHammoudeh2014}
+M.~Hajja and I.~Hammoudeh,
+\newblock The sum of measures of the angles of a simplex,
+\newblock \emph{Beitr. Algebra Geom.} \textbf{55} (2014), 453--470,
+\newblock \href{https://doi.org/10.1007/s13366-013-0160-8}
+{doi:10.1007/s13366-013-0160-8}.
+
+\bibitem{Jarden1941}
+D.~Jarden (D.~Juzuk),
+\newblock On the sum of the dihedral and trihedral angles in a tetrahedron
+(in Hebrew),
+\newblock \emph{Technika Umada (Technics and Science)} \textbf{4} (1941),
+no.~5 (26), 8--9.
+
+\bibitem{Katsuura2021}
+H.~Katsuura,
+\newblock Dihedral angles of 4-ball tetrahedra,
+\newblock \emph{J. Geom. Graph.} \textbf{25} (2021), no.~2, 197--204.
+
+\bibitem{KorotovKrizek2026}
+S.~Korotov and M.~K\v{r}\'\i\v{z}ek,
+\newblock Two-sided bounds for dihedral angle sums of path and 4-ball
+tetrahedra,
+\newblock arXiv:2601.08304 [math.MG] (2026),
+\newblock \href{https://doi.org/10.48550/arXiv.2601.08304}
+{doi:10.48550/arXiv.2601.08304}.
+
+\bibitem{Schoenberg1938}
+I.~J. Schoenberg,
+\newblock Metric spaces and positive definite functions,
+\newblock \emph{Trans. Amer. Math. Soc.} \textbf{44} (1938), 522--536,
+\newblock \href{https://doi.org/10.1090/S0002-9947-1938-1501980-0}
+{doi:10.1090/S0002-9947-1938-1501980-0}.
+
+\end{thebibliography}
+
+\end{document}
