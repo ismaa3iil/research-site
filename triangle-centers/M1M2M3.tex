@@ -1,0 +1,1053 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,tabularx,array,float,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{titlesec}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,
+  citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\ETC}{\mathrm{ETC}}
+\newcommand{\Cev}{\mathcal T_1}
+\newcommand{\Circ}{\mathcal T_2}
+\newcommand{\Ped}{\mathcal T_3}
+\titlespacing*{\section}{0pt}{2.5ex plus .7ex minus .2ex}{1.1ex}
+
+\title{Triangle Centers Relative to Their Cevian, Circumcevian,\\
+and Pedal Triangles}
+\author{Ismail Hammoudeh}
+\date{August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a triangle center $P=X_i(ABC)$, we ask whether the same Euclidean point is
+classified as $X_j$ relative to the cevian, circumcevian, or pedal triangle
+of $P$.  Circumcevian--pedal similarity and its isogonal transfer principle
+are classical; we give a self-contained coordinate proof and use them as the
+organizing mechanism.  The new algebraic contribution is an oriented
+parameter-reversal theorem for the family $F_\lambda$, including an explicit
+branch discriminator.  It yields a general near-equilateral obstruction to
+positive-Heron fixed-point claims and explains seven numerical candidates
+that survive broad generic testing but fail near the equilateral locus.  We
+also prove the newly identified fixed relation
+$M_2:X_{67371}\mapsto X_{67371}$ by affine covariance of two symmetric
+polynomials.  Classical relations involving the Steiner-inellipse foci and
+$X_{187}$ are recovered by short intrinsic proofs rather than claimed as new.
+
+Using a local snapshot of the \emph{Encyclopedia of Triangle Centers} (ETC)
+contiguous through $X_{72807}$, we enumerate every diagonal index and the two
+directed off-diagonal strips $\min(i,j)\leq1000$.  Of 161 discoveries, 54
+pass a 60-digit audit on 36 labelled instances of six scalene shapes.  A
+70-digit test on 40 additional shapes rejects 13, and the exact
+near-equilateral analysis rejects seven more, leaving 34 rows not eliminated
+by these tests.  Exact arguments in this paper prove 15 of these rows, while
+three further rows are classical; the remaining 16 are unresolved
+computational candidates.
+Among the rejected relations are
+$M_2:X_{485}\mapsto X_{61083}$ and
+$M_3:X_{485}\mapsto X_{61084}$.  Finally, $X_{795}$ is proved to lie on the
+circumcircle, so its circumcevian triple is degenerate.  The remaining rows
+not covered by the exact theorems are explicitly retained only as
+computational candidates.
+\end{abstract}
+
+\noindent\textbf{Keywords.} triangle center; cevian triangle; circumcevian
+triangle; pedal triangle; experimental geometry; Encyclopedia of Triangle
+Centers.
+
+\section{The geometric question}
+
+Let $ABC$ be a labelled, nondegenerate scalene triangle and let $P$ be a
+finite point distinct from the vertices.  Denote by
+\begin{itemize}
+\item $\Cev(P)=A_1B_1C_1$ the cevian triangle, with
+  $A_1=AP\cap BC$ and cyclically;
+\item $\Circ(P)=A_2B_2C_2$ the circumcevian triangle, where $A_2$ is the
+  second intersection of $AP$ with the circumcircle and cyclically;
+\item $\Ped(P)=A_3B_3C_3$ the pedal triangle, whose vertices are the
+  perpendicular projections of $P$ on $BC,CA,AB$.
+\end{itemize}
+Only noncollinear derived triples are admitted.  We write
+\begin{equation}\label{eq:coincidence}
+ \mathcal C_k(i,j;ABC):\qquad
+ X_i(ABC)=X_j\bigl(\mathcal T_k(X_i(ABC))\bigr).
+\end{equation}
+Thus $M_k:X_i\mapsto X_j$ records a reclassification of the \emph{same
+Euclidean point in the ambient plane}; it is not an ordinary point map.
+The case $i=j$ is called a fixed-point candidate.
+
+Figure~\ref{fig:three-constructions} summarizes the three changes of
+reference triangle.  It is schematic rather than metrically exact.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=.86,every node/.style={font=\small},
+  point/.style={circle,fill=black,inner sep=1.2pt}]
+\begin{scope}[xshift=0cm]
+  \coordinate (A) at (0,2.15); \coordinate (B) at (-1.55,0);
+  \coordinate (C) at (1.75,0); \coordinate (P) at (.22,.78);
+  \coordinate (A1) at (.345,0); \coordinate (B1) at (.879,1.070);
+  \coordinate (C1) at (-.663,1.230);
+  \draw (A)--(B)--(C)--cycle;
+  \draw[blue!65!black] (A)--(A1) (B)--(B1) (C)--(C1);
+  \node[point,label=right:$P$] at (P) {};
+  \foreach \Q/\pos/\lab in {A/above/$A$,B/below/$B$,C/below/$C$,
+    A1/below/$A_1$,B1/right/$B_1$,C1/left/$C_1$}
+    \node[point,label=\pos:\lab] at (\Q) {};
+  \node at (.1,-.88) {cevian};
+\end{scope}
+\begin{scope}[xshift=5.1cm]
+  \coordinate (O) at (0,.58); \coordinate (A) at (0,2.08);
+  \coordinate (B) at (-1.299,-.17); \coordinate (C) at (1.299,-.17);
+  \coordinate (P) at (.20,.67);
+  \draw[gray!70] (O) circle (1.5);
+  \draw (A)--(B)--(C)--cycle;
+  \draw[blue!65!black] (A)--(.417,-.861) (B)--(1.318,1.296)
+    (C)--(-1.065,1.637);
+  \node[point,label=right:$P$] at (P) {};
+  \node[point,label=above:$A$] at (A) {};
+  \node[point,label=below left:$B$] at (B) {};
+  \node[point,label=below right:$C$] at (C) {};
+  \node[point,label=below:$A_2$] at (.417,-.861) {};
+  \node[point,label=right:$B_2$] at (1.318,1.296) {};
+  \node[point,label=left:$C_2$] at (-1.065,1.637) {};
+  \node at (0,-1.48) {circumcevian};
+\end{scope}
+\begin{scope}[xshift=10.2cm]
+  \coordinate (A) at (0,2.15); \coordinate (B) at (-1.55,0);
+  \coordinate (C) at (1.75,0); \coordinate (P) at (.22,.78);
+  \coordinate (A3) at ($(B)!(P)!(C)$);
+  \coordinate (B3) at ($(C)!(P)!(A)$);
+  \coordinate (C3) at ($(A)!(P)!(B)$);
+  \draw (A)--(B)--(C)--cycle;
+  \draw[blue!65!black] (P)--(A3) (P)--(B3) (P)--(C3);
+  \draw[red!65!black] (A3)--(B3)--(C3)--cycle;
+  \node[point,label=right:$P$] at (P) {};
+  \foreach \Q/\pos/\lab in {A/above/$A$,B/below/$B$,C/below/$C$,
+    A3/below/$A_3$,B3/right/$B_3$,C3/left/$C_3$}
+    \node[point,label=\pos:\lab] at (\Q) {};
+  \node at (.1,-.88) {pedal};
+\end{scope}
+\end{tikzpicture}
+\caption{The three derived reference triangles in
+\eqref{eq:coincidence}.}
+\label{fig:three-constructions}
+\end{figure}
+
+If $P$ is on the circumcircle, $\Circ(P)$ collapses to $P,P,P$, while
+$\Ped(P)$ is collinear by the Simson theorem.  Neither configuration admits
+an ETC target center.  Selected-root definitions may also change branch as
+the triangle shape or its labelling changes.  These facts motivate the
+degeneracy checks and multiple-shape audits below.
+
+\section{Classical transfer principle and exact construction}
+
+Let $P=(u:v:w)$ in barycentric coordinates of $ABC$, with side lengths
+$a=BC$, $b=CA$, $c=AB$.  The cevian traces are
+\[
+ A_1=(0:v:w),\qquad B_1=(u:0:w),\qquad C_1=(u:v:0).
+\]
+The circumcircle has barycentric equation
+\[
+ a^2yz+b^2zx+c^2xy=0.
+\]
+Intersecting this equation with $AP$ and removing the known root $A$ gives
+\begin{equation}\label{eq:circumcevian}
+ A_2=\bigl(a^2vw:-v(b^2w+c^2v):-w(b^2w+c^2v)\bigr),
+\end{equation}
+with $B_2,C_2$ obtained cyclically.  The implementation constructs all three
+derived triangles independently in Cartesian coordinates; equation
+\eqref{eq:circumcevian} is an exact audit of the line-circle calculation.
+
+The circumcevian and pedal problems are not independent.  The following
+theorem provides the algebraic bridge between them.
+
+\begin{theorem}[Circumcevian--pedal isogonal transfer]
+\label{thm:isogonal-transfer}
+Let $P=(u:v:w)$ be admissible, with $uvw(u+v+w)\ne0$, and suppose that
+$\Circ(P)$ and $\Ped(P)$ are nondegenerate.  Under the correspondence
+$A_2\leftrightarrow A_3$, $B_2\leftrightarrow B_3$,
+$C_2\leftrightarrow C_3$, the two derived triangles have proportional
+corresponding squared side lengths.  Moreover, the barycentric coordinate
+triples of the same point $P$ in these triangles are isogonal conjugates.
+Consequently, for every side-defined center function $X_j$ on a consistent
+branch,
+\begin{equation}\label{eq:isogonal-transfer}
+ P=X_j(\Circ(P))
+ \quad\Longleftrightarrow\quad
+ P=\iota(X_j)(\Ped(P)).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Put $A=a^2$, $B=b^2$, $C=c^2$ and $t=u+v+w$.  Let $R_A,R_B,R_C$ denote
+the three raw triples supplied by \eqref{eq:circumcevian}, and let
+$s_A,s_B,s_C$ be their coordinate sums.  Direct multiplication gives
+\[
+ uR_A+vR_B+wR_C
+ =-(Avw+Bwu+Cuv)(u,v,w).
+\]
+Since $A_2=R_A/s_A$ and cyclically, the coordinates of $P$ relative to its
+circumcevian triangle are therefore
+\begin{equation}\label{eq:P-in-circ}
+ P_{\Circ}=(us_A:vs_B:ws_C).
+\end{equation}
+The barycentric distance formula also gives
+\[
+ PA^2=-\frac{s_A}{t^2},\qquad
+ PB^2=-\frac{s_B}{t^2},\qquad
+ PC^2=-\frac{s_C}{t^2}.
+\]
+Thus \eqref{eq:P-in-circ} may be written
+\begin{equation}\label{eq:P-in-circ-distance}
+ P_{\Circ}=(uPA^2:vPB^2:wPC^2).
+\end{equation}
+
+For comparison, the foot on $BC$ is
+\[
+ A_3=\frac{1}{2At}
+ \bigl(0,\ u(A+B-C)+2Av,\ u(A+C-B)+2Aw\bigr),
+\]
+with the other feet obtained cyclically.  Inverting this affine matrix gives
+the particularly simple triple
+\begin{equation}\label{eq:P-in-pedal}
+ P_{\Ped}=\left(\frac A u:\frac B v:\frac C w\right).
+\end{equation}
+
+Let $a_2=B_2C_2$, $a_3=B_3C_3$, let $\mathcal R$ be the circumradius of
+$ABC$, and let $\Pi_P$ be the signed power of $P$ with respect to its
+circumcircle.  The projection formula and the power-of-a-point theorem give
+\[
+ a_3^2=\frac{a^2PA^2}{4\mathcal R^2},
+ \qquad
+ a_2^2=\frac{\Pi_P^2a^2}{PB^2PC^2}.
+\]
+Hence
+\[
+ \frac{a_2^2}{a_3^2}
+ =\frac{4\mathcal R^2\Pi_P^2}{PA^2PB^2PC^2},
+\]
+and the same factor occurs cyclically.  The corresponding side triples are
+therefore proportional.  Isogonal conjugation of
+\eqref{eq:P-in-circ-distance} inside $A_2B_2C_2$ yields
+\[
+ \left(\frac{a_2^2}{uPA^2}:
+       \frac{b_2^2}{vPB^2}:
+       \frac{c_2^2}{wPC^2}\right)
+ \sim\left(\frac A u:\frac B v:\frac C w\right),
+\]
+which is exactly \eqref{eq:P-in-pedal}.  This proves the assertion.
+\end{proof}
+
+\section{Relation to previous circumcevian theory}
+\label{sec:previous-theory}
+
+The similarity of the circumcevian and pedal triangles under the natural
+vertex correspondence is classical; it appears in Kimberling's treatment of
+central triangles \cite{Kimberling1998}.  Stothers gave the corresponding
+coordinate transfer theorem and tables of circumcevian classes
+\cite{StothersPedal,StothersCircum}.  In particular, those tables already
+contain the reciprocal centroid--Steiner-focus class, the invariant centers
+$X_3,X_6,X_{187}$, the class $X_{36}\leftrightarrow X_{186}$, and the
+one-parameter extraversion class
+\[
+ \{Q(\phi),Q(-\phi)\},\qquad
+ Q(\phi)=(\sin A\sin(A+\phi):\sin B\sin(B+\phi):
+ \sin C\sin(C+\phi)).
+\]
+Up to a projective scalar this is the present $F_\lambda$ family with
+$\lambda=-\cot\phi$.  Gibert's related tables also organize centers with
+trilinears of the form $\tan(A+t)$ and associated Brocard-axis families
+\cite{GibertTable38}.
+
+Accordingly, Theorem~\ref{thm:isogonal-transfer}, the Steiner-focus result,
+and the $X_{187}$ relations below are included as self-contained recoveries
+and as checks on notation.  The contribution developed here is more
+specific: it distinguishes the signed, oriented identity from the usual
+positive-Heron convention, gives an exact formula for the branch change,
+uses it to disprove apparent global fixed points, proves the high-index fixed
+point $X_{67371}$, and audits a modern ETC snapshot far beyond the classical
+tables.
+
+\section{\texorpdfstring{The exact $F_\lambda$ family and its branch locus}
+{The exact F-lambda family and its branch locus}}
+\label{sec:families}
+
+\subsection{The oriented parameter-reversal law}
+
+Put
+\[
+ H=\sqrt{(a+b-c)(a-b+c)(-a+b+c)(a+b+c)}=4[ABC]
+\]
+and
+\[
+ D_a=a^2-b^2-c^2,\qquad D_b=b^2-c^2-a^2,\qquad
+ D_c=c^2-a^2-b^2.
+\]
+Define
+\begin{equation}\label{eq:F-lambda}
+ F_\lambda=
+ \bigl(a^2(D_a+\lambda H):b^2(D_b+\lambda H):
+ c^2(D_c+\lambda H)\bigr).
+\end{equation}
+Its trilinears are
+\[
+ (-\cos A+\lambda\sin A:-\cos B+\lambda\sin B:
+ -\cos C+\lambda\sin C).
+\]
+For an oriented labelled triangle $T=UVW$, write
+$H_T^{\mathrm{or}}=2\det(V-U,W-U)$, and use a superscript ``or'' when this
+signed radical replaces the positive Heron radical.
+
+\begin{theorem}[Circumcevian parameter reversal]
+\label{thm:F-reversal}
+On the generic nondegenerate domain,
+\begin{equation}\label{eq:F-circ-law}
+ F_\lambda(ABC)=F_{-\lambda}^{\mathrm{or}}
+ \bigl(\Circ(F_\lambda(ABC))\bigr).
+\end{equation}
+The identity extends after cancellation wherever both sides remain defined.
+The exceptional loci include $3\lambda^2=1$ and the vanishing factors
+displayed in the proof.
+\end{theorem}
+
+\begin{proof}
+Set $A=a^2$, $B=b^2$, $C=c^2$, $S=A+B+C$; then
+\[
+ H^2=2AB+2BC+2CA-A^2-B^2-C^2,\qquad D_a=2A-S.
+\]
+Define cyclically
+\begin{equation}\label{eq:q-family}
+ q_a=(3\lambda^2-1)A-2\lambda^2S+2\lambda H,\qquad
+ Q=(3\lambda^2+1)H-2\lambda S.
+\end{equation}
+Substitution of $u=A(D_a+\lambda H)$ and its cyclic companions into
+\eqref{eq:circumcevian} shows that the coordinate sums of the raw
+circumcevian triples are
+\[
+ s_A=BCH^2q_a,\qquad s_B=CAH^2q_b,\qquad s_C=ABH^2q_c.
+\]
+By \eqref{eq:P-in-circ}, the original point relative to its circumcevian
+triangle therefore has coordinates
+\begin{equation}\label{eq:F-relative-coordinates}
+ \bigl((D_a+\lambda H)q_a:
+       (D_b+\lambda H)q_b:
+       (D_c+\lambda H)q_c\bigr).
+\end{equation}
+
+Let $A'=a_2^2$, $B'=b_2^2$, $C'=c_2^2$.  Exact reduction of the
+barycentric distance formula gives
+\begin{equation}\label{eq:derived-sides-q}
+ A'=\delta q_a,\qquad B'=\delta q_b,\qquad C'=\delta q_c,\qquad
+ \delta=\frac{ABCQ^2}{H^2q_aq_bq_c}.
+\end{equation}
+The determinant of the normalized circumcevian triples gives
+\begin{equation}\label{eq:derived-oriented-H}
+ H_2^{\mathrm{or}}=-\delta Q.
+\end{equation}
+Equivalently, its square follows from the factorization
+\[
+ 2(q_aq_b+q_bq_c+q_cq_a)-q_a^2-q_b^2-q_c^2=Q^2.
+\]
+Finally,
+\begin{equation}\label{eq:key-family-factor}
+ q_a-q_b-q_c+\lambda Q
+ =(3\lambda^2-1)(D_a+\lambda H),
+\end{equation}
+cyclically.  The first coordinate of $F_{-\lambda}^{\mathrm{or}}$ in the
+derived triangle is, by \eqref{eq:derived-sides-q}--
+\eqref{eq:derived-oriented-H},
+\[
+ A'(A'-B'-C'-\lambda H_2^{\mathrm{or}})
+ =\delta^2q_a(q_a-q_b-q_c+\lambda Q).
+\]
+Equation \eqref{eq:key-family-factor} makes this proportional to the first
+coordinate in \eqref{eq:F-relative-coordinates}; the other two coordinates
+follow cyclically.
+\end{proof}
+
+The theorem contains, on the corresponding oriented ETC branches,
+\[
+ X_3=F_0,\quad X_{61}=F_{-\sqrt3},\quad X_{62}=F_{\sqrt3},\quad
+ X_{371}=F_{-1},\quad X_{372}=F_1,
+\]
+and the limiting member $F_\infty=X_6$.  It therefore explains the
+circumcevian rows $X_3\mapsto X_3$, $X_6\mapsto X_6$,
+$X_{61}\mapsto X_{62}$, and $X_{371}\mapsto X_{372}$.
+
+Let $\iota$ denote isogonal conjugation and put
+\begin{equation}\label{eq:G-lambda}
+ G_\lambda=\iota(F_\lambda)
+ =\left(\frac1{D_a+\lambda H}:\frac1{D_b+\lambda H}:
+ \frac1{D_c+\lambda H}\right).
+\end{equation}
+
+\begin{corollary}[Pedal parameter law]\label{cor:pedal-family}
+On the same generic oriented domain,
+\begin{equation}\label{eq:F-pedal-law}
+ F_{-\lambda}(ABC)=G_\lambda^{\mathrm{or}}
+ \bigl(\Ped(F_{-\lambda}(ABC))\bigr).
+\end{equation}
+\end{corollary}
+\begin{proof}
+Apply Theorem~\ref{thm:F-reversal} to $P=F_{-\lambda}$ and then apply
+Theorem~\ref{thm:isogonal-transfer}.
+\end{proof}
+This proves the corresponding pedal rows $X_3\mapsto X_4$,
+$X_6\mapsto X_2$, $X_{61}\mapsto X_{18}$, and
+$X_{371}\mapsto X_{486}$ on their stated branches.
+
+\begin{corollary}[Recovery of the classical $X_{187}$ relations]\label{cor:x187}
+Where the constructions are defined,
+\[
+ M_2:X_{187}\mapsto X_{187},\qquad
+ M_3:X_{187}\mapsto X_{671}.
+\]
+\end{corollary}
+\begin{proof}
+The ETC formula reduces exactly to
+$X_{187}=F_\lambda$ with $\lambda=S/(3H)$.  From
+\eqref{eq:q-family},
+\[
+ S_q=q_a+q_b+q_c=6\lambda H-(3\lambda^2+1)S,
+\]
+and direct subtraction gives
+\[
+ HS_q-SQ=2(H-\lambda S)(3H\lambda-S).
+\]
+Thus $S_q/Q=S/H$ at $\lambda=S/(3H)$.  Equations
+\eqref{eq:derived-sides-q} and \eqref{eq:derived-oriented-H} show that the
+oriented parameter of the derived triangle is $-\lambda$; after returning
+to the positive-Heron convention, the center is again $X_{187}$.
+The pedal result follows from Theorem~\ref{thm:isogonal-transfer} and the
+ETC identity $\iota(X_{187})=X_{671}$.
+\end{proof}
+
+\subsection{Branch locus and constant-family obstruction}
+
+The positive-Heron convention can hide the parameter reversal.  From
+\eqref{eq:derived-oriented-H},
+\begin{equation}\label{eq:orientation-sign}
+ H_2^{\mathrm{or}}
+ =-\frac{ABCQ^3}{H^2q_aq_bq_c}.
+\end{equation}
+If this quantity is negative, $F_{-\lambda}^{\mathrm{or}}$ is represented
+as $F_\lambda$ in the positive-Heron convention, producing an apparent
+fixed point.  If it is positive, the positive-Heron target is instead
+$F_{-\lambda}$.
+
+The phenomenon is systematic, rather than peculiar to the seven ETC
+entries found by the search.  At the equilateral point $A=B=C=x$,
+\eqref{eq:q-family} reduces to
+\begin{equation}\label{eq:equilateral-q-limit}
+ q_a=q_b=q_c=-(\sqrt3\lambda-1)^2x,
+ \qquad Q=\sqrt3x(\sqrt3\lambda-1)^2.
+\end{equation}
+Consequently, for every finite real
+$\lambda\ne1/\sqrt3$, equation \eqref{eq:orientation-sign} is positive at
+the equilateral limit and remains positive throughout a sufficiently small
+scalene neighbourhood.
+
+Moreover, if $\lambda\ne0$ and a generic scalene triangle satisfied
+$F_\lambda=F_{-\lambda}$, comparison of the first two projective
+coordinates would give
+\[
+ (D_a+\lambda H)(D_b-\lambda H)
+ =(D_b+\lambda H)(D_a-\lambda H),
+\]
+and hence $D_a=D_b$.  Cyclic comparison gives
+$D_a=D_b=D_c$, which forces $a=b=c$.  Thus in the scalene neighbourhood
+the positive-Heron target $F_{-\lambda}$ is genuinely different from the
+source $F_\lambda$.
+
+The omitted value $\lambda=1/\sqrt3$ is not a hidden global fixed point.
+Here $3\lambda^2-1=0$, so $q_a=q_b=q_c$ for every triangle on the regular
+part of the construction.  Equation \eqref{eq:derived-sides-q} makes the
+circumcevian triangle equilateral, while the positive-Heron formula for
+$F_{1/\sqrt3}$ on that triangle is $(0:0:0)$ and therefore defines no
+target center.  We have proved the following global obstruction.
+
+\begin{corollary}[Constant-family obstruction]
+No finite nonzero constant member $F_\lambda$ defines an unrestricted
+fixed point under the standard positive-Heron convention.  Within the
+oriented parameter-reversal law, $F_0=X_3$ is fixed, and
+$F_\infty=X_6$ is the corresponding limiting fixed member.
+\end{corollary}
+
+Exact substitution in \eqref{eq:orientation-sign} is negative for $(4,6,7)$
+but positive for the scalene near-equilateral triangle
+$(100000,100001,100002)$ for every row in Table~\ref{tab:near-equilateral}.
+The ETC formulas in the table reduce exactly to the displayed constant
+$F_\lambda$.  Hence all seven former fixed-point candidates fail on the
+near-equilateral component as immediate instances of the corollary.
+
+\begin{table}[H]
+\centering
+\caption{Additional $M_2$ fixed-point candidates rejected exactly by the
+near-equilateral branch test.}
+\label{tab:near-equilateral}
+\small
+\begin{tabular}{@{}rrrrrrr@{}}
+\toprule
+$X_{6408}$&$X_{6454}$&$X_{6469}$&$X_{6481}$&$X_{10140}$&$X_{10144}$&$X_{10146}$\\
+\midrule
+$4/7$&$3/5$&$7/12$&$5/9$&$25/44$&$120/209$&$16/29$\\
+\bottomrule
+\end{tabular}
+\end{table}
+For example, $F_{4/7}=X_{6408}$ is classified there as
+$F_{-4/7}=X_{6407}$, not as $X_{6408}$.  These parameters cluster near
+$1/\sqrt3$, where the branch boundary approaches the equilateral point;
+this explains why broad random tests can miss the thin component.
+
+\subsection{\texorpdfstring{The fixed point $X_{67371}$}
+{The fixed point X67371}}
+
+\begin{theorem}[The $X_{67371}$ fixed point]\label{thm:x67371}
+Subject to the usual nondegeneracy and definition qualifications,
+\[
+ M_2:X_{67371}\mapsto X_{67371}
+\]
+is an exact identity.
+\end{theorem}
+\begin{proof}
+Write
+\[
+ \sigma_1=A+B+C,\qquad \sigma_2=AB+BC+CA,
+ \qquad \sigma_3=ABC.
+\]
+Define
+\[
+ U=\frac32(3A-\sigma_1)(3B-\sigma_1)(3C-\sigma_1)
+   =\frac32(2\sigma_1^3-9\sigma_1\sigma_2+27\sigma_3)
+\]
+and
+\[
+ W=-\sigma_1^4+\frac{15}{2}\sigma_1^2\sigma_2
+   +\frac{27}{2}\sigma_1\sigma_3-18\sigma_2^2.
+\]
+If $P_a$ is the degree-four factor multiplying $a^2=A$ in the ETC
+barycentrics of $X_{67371}$, exact expansion gives
+\[
+ P_a=U(2A-\sigma_1)+W,
+\]
+cyclically.  Hence
+\begin{equation}\label{eq:x67371-lambda}
+ X_{67371}=F_\Lambda,\qquad \Lambda=\frac{W}{UH}.
+\end{equation}
+
+The mechanism is affine covariance, not a fortuitous large
+factorization.  Put
+\[
+ k=3\lambda^2-1,\qquad n=2\lambda(H-\lambda\sigma_1).
+\]
+Equation \eqref{eq:q-family} is simply $q_i=kA_i+n$.  Let $U_q,W_q$
+denote the same symmetric polynomials evaluated on $(q_a,q_b,q_c)$.
+Because
+\[
+ 3q_a-(q_a+q_b+q_c)=k(3A-\sigma_1),
+\]
+and cyclically, one immediately obtains
+\begin{equation}\label{eq:x67371-affine-U}
+ U_q=k^3U.
+\end{equation}
+Substitution in the symmetric expression for $W$ (or direct collection by
+degree in the translation $n$) gives the companion covariance
+\begin{equation}\label{eq:x67371-affine-W}
+ W_q=k^3(kW+nU).
+\end{equation}
+Now set $\lambda=\Lambda=W/(UH)$.  Then
+\[
+ \frac{W_q}{U_q}=k\frac WU+n=k\lambda H+n
+ =\lambda\bigl((3\lambda^2+1)H-2\lambda\sigma_1\bigr)
+ =\lambda Q.
+\]
+Homogeneity, together with \eqref{eq:derived-sides-q} and
+\eqref{eq:derived-oriented-H}, therefore gives
+\[
+ \Lambda(\Circ(P))
+ =-\frac{W_q}{U_qQ}=-\lambda.
+\]
+Thus $X_{67371}$ evaluated in the circumcevian triangle is precisely
+$F_{-\lambda}^{\mathrm{or}}$, which equals the original point by
+Theorem~\ref{thm:F-reversal}.
+\end{proof}
+
+\section{Centroid preimages and an exact degeneracy theorem}
+
+\begin{theorem}[Steiner-inellipse focus characterization; classical]
+\label{thm:steiner-foci}
+Let $P$ lie off the circumcircle and suppose its circumcevian triangle is
+nondegenerate.  Then
+\[
+ P\text{ is the centroid of }\Circ(P)
+ \quad\Longleftrightarrow\quad
+ P\text{ is a focus of the Steiner inellipse of }ABC.
+\]
+Consequently,
+\[
+ M_2:X_{39162}\mapsto X_2,\qquad
+ M_2:X_{39163}\mapsto X_2,
+\]
+and, by Theorem~\ref{thm:isogonal-transfer},
+\[
+ M_3:X_{39162}\mapsto X_6,\qquad
+ M_3:X_{39163}\mapsto X_6.
+\]
+\end{theorem}
+
+This equivalence, including the ETC labels of the two foci, belongs to the
+classical circumcevian class table \cite{StothersCircum}.  The proof below is
+included because it is short, intrinsic, and independently validates the
+coordinate pipeline used in the census.
+
+\begin{proof}
+Normalize the circumcircle to the complex unit circle, with vertex affixes
+$a,b,c$, and let $p$ be the affix of $P$, $q=\overline p$.  The second
+intersection of $AP$ with the circle is
+\[
+ a_2=\frac{p-a}{1-qa}
+ =p+\frac{a(pq-1)}{1-qa},
+\]
+cyclically.  Since $pq\ne1$, the centroid condition
+$a_2+b_2+c_2=3p$ is equivalent to
+\[
+ \frac{a}{1-qa}+\frac{b}{1-qb}+\frac{c}{1-qc}=0.
+\]
+Writing
+\[
+ \Phi(q)=(1-aq)(1-bq)(1-cq)
+ =1-s_1q+s_2q^2-s_3q^3,
+\]
+this equation is $\Phi'(q)=0$.  Conjugation, using
+$|a|=|b|=|c|=1$, gives
+\[
+ 3p^2-2s_1p+s_2=0.
+\]
+This is precisely the derivative of
+$(z-a)(z-b)(z-c)$.  The Siebeck--Marden theorem identifies its two roots
+with the foci of the Steiner inellipse \cite{Marden,Kalman}.  The ETC labels
+of these foci are $X_{39162}$ and $X_{39163}$; the final two relations follow
+because $\iota(X_2)=X_6$.
+\end{proof}
+
+Together with the classical cevian and pedal cases, the nondegenerate
+centroid-preimage list found by the scan is therefore
+\[
+ \mathcal C_1(2,2),\qquad
+ \mathcal C_2(39162,2),\quad \mathcal C_2(39163,2),\qquad
+ \mathcal C_3(6,2),
+\]
+and the two nonclassical circumcevian rows are now proved intrinsically.
+
+\begin{proposition}[The exact $X_{795}$ degeneracy]\label{prop:x795}
+Where its barycentric formula is finite, $X_{795}$ lies on the circumcircle
+of $ABC$.  If it differs from $A,B,C$, then
+$\Circ(X_{795})=(X_{795},X_{795},X_{795})$.  Hence the formal relation
+$M_2:X_{795}\mapsto X_2$ is degenerate and inadmissible.
+\end{proposition}
+\begin{proof}
+Put $A_0=a^3$, $B_0=b^3$, $C_0=c^3$.  The ETC formula is cyclically
+\[
+ X_{795}=(f_a:f_b:f_c),\qquad
+ f_a=\frac{a^2}{(B_0-C_0)(A_0^2-B_0C_0)}.
+\]
+This is the published factorization because
+$(b-c)(b^2+bc+c^2)=b^3-c^3$ and
+$(a^2-bc)(a^4+a^2bc+b^2c^2)=a^6-b^3c^3$.
+Substitution into the circumcircle equation and clearing the common
+denominator leaves
+\[
+ (B_0-C_0)(A_0^2-B_0C_0)
+ +(C_0-A_0)(B_0^2-C_0A_0)
+ +(A_0-B_0)(C_0^2-A_0B_0)=0.
+\]
+Thus $a^2f_bf_c+b^2f_cf_a+c^2f_af_b=0$ identically.  Every second
+intersection is therefore $X_{795}$, and the derived triple has zero area.
+\end{proof}
+
+\section{Computational protocol}
+
+The high-speed discovery comparison uses normalized barycentric triples
+$q,r$ and the projective residual
+\begin{equation}\label{eq:projective-residual}
+ \rho(q,r)=\frac{\lVert q\times r\rVert}{\lVert q\rVert\lVert r\rVert},
+\end{equation}
+with threshold $10^{-9}$.  Discovery candidates are recomputed from the
+symbolic ETC definitions.  For a Cartesian source point $Q$ and its proposed
+target $X_j(UVW)$, the audit residual is
+\begin{equation}\label{eq:cartesian-residual}
+ \varepsilon(Q;U,V,W,j)
+ =\frac{\lVert Q-X_j(UVW)\rVert}{\operatorname{per}(ABC)}.
+\end{equation}
+The primary audit uses 60-digit working precision and accepts only
+$\varepsilon<10^{-30}$.  The independent generic-shape stress test uses
+70-digit precision and the stricter threshold $10^{-40}$.  These are the only
+validation protocols used for the results stated in this article.
+
+The primary audit uses all six labellings of the acute shapes
+\[
+ (4,6,7),\quad(13,20,21),\quad(29,30,31)
+\]
+and of the obtuse shapes
+\[
+ (5,6,8),\quad(4,11,13),\quad(5,7,10).
+\]
+Thus a candidate receives 36 labelled tests but only six geometrically
+independent shapes.  A row passing this stage is therefore called a
+\emph{six-shape audit survivor}, not a universal identity.
+
+\section{Dataset, enumerated region, and evaluable coverage}
+
+The formula and barycentric-fingerprint snapshots each contain exactly 72807
+entries, indexed consecutively from 1 to 72807.  The cache builder found no
+index gap and no symbolic expansion failure.  This database completeness is
+not the same as numerical evaluability: on a particular triangle a formula
+may be complex, infinite, indeterminate, branch-incompatible, or may produce
+a degenerate derived triple.  An unavailable comparison is excluded from
+evaluable coverage and is never recorded as a disproved equality.
+
+The nominal index region is
+\begin{equation}\label{eq:scope}
+ \begin{split}
+ &i=j,\quad 1\leq i\leq72807,\\
+ &1\leq i,j\leq72807,\quad i\ne j,\quad \min(i,j)\leq1000.
+ \end{split}
+\end{equation}
+The off-diagonal part is the union of two directed strips, not a rectangle.
+It contains
+\[
+ 3\{1000(72807-1)+(72807-1000)1000\}=433839000
+\]
+nominal comparisons per discovery seed; the diagonal contains
+$3\cdot72807=218421$.  Discovery was performed independently on the obtuse
+triangle $(6,9,13)$ and the acute triangle $(4,6,7)$.
+
+\begin{table}[H]
+\centering
+\caption{Evaluable coverage of the nominal region \eqref{eq:scope}.}
+\label{tab:coverage}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+seed & strip valid & strip coverage & diagonal valid & diagonal coverage\\
+\midrule
+obtuse $(6,9,13)$ & 388166091 & $89.4724\%$ & 210351 & $96.3053\%$\\
+acute $(4,6,7)$  & 388285438 & $89.4999\%$ & 210448 & $96.3497\%$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two discovery seeds produced 161 distinct rows: 113 diagonal and 48
+off-diagonal.  The exclusions represented by Table~\ref{tab:coverage} are a
+substantive limitation.  The calculation exhaustively enumerates the stated
+indices, but it does not assign a true or false value to every nominal pair.
+
+\section{Results of the six-shape audit}
+
+Exactly 54 of the 161 discoveries pass all 36 labelled instances: 29 are
+diagonal and 25 off-diagonal.  The diagonal list is
+\begin{equation}\label{eq:diagonal-six-shape}
+\begin{aligned}
+M_1:\quad &X_2,\ X_{13};\\
+M_2:\quad &X_3,X_6,X_{13},X_{187},X_{368},X_{3513},X_{3514},X_{5467},X_{6104},\\
+&X_{6408},X_{6440},X_{6454},X_{6469},X_{6477},X_{6481},X_{6522},
+ X_{8456},X_{9181},\\
+&X_{10138},X_{10140},X_{10142},X_{10144},X_{10146},X_{17851},X_{17852},
+ X_{21906},X_{67371};\\
+M_3:\quad &\text{none}.
+\end{aligned}
+\end{equation}
+Here a displayed center under $M_k$ means the diagonal candidate
+$M_k:X_i\mapsto X_i$.  The off-diagonal list is
+\begin{equation}\label{eq:offdiagonal-six-shape}
+\begin{aligned}
+M_1:\quad &X_7\mapsto X_6;\\[2pt]
+M_2:\quad &X_1\mapsto X_4,\ X_{36}\mapsto X_{186},\ X_{61}\mapsto X_{62},
+ X_{202}\mapsto X_{34321},\\
+&X_{203}\mapsto X_{34322},\ X_{371}\mapsto X_{372},
+ X_{485}\mapsto X_{61083},\\
+&X_{34321}\mapsto X_{202},\ X_{39162}\mapsto X_2,
+ X_{39163}\mapsto X_2;\\[2pt]
+M_3:\quad &X_1\mapsto X_3,\ X_3\mapsto X_4,\ X_6\mapsto X_2,
+ X_{13}\mapsto X_{15},\\
+&X_{36}\mapsto X_{265},\ X_{61}\mapsto X_{18},
+ X_{187}\mapsto X_{671},\\
+&X_{202}\mapsto X_{6671},\ X_{203}\mapsto X_{6672},
+ X_{371}\mapsto X_{486},\\
+&X_{485}\mapsto X_{61084},\ X_{30335}\mapsto X_{175},
+ X_{39162}\mapsto X_6,\ X_{39163}\mapsto X_6.
+\end{aligned}
+\end{equation}
+Equations \eqref{eq:diagonal-six-shape} and
+\eqref{eq:offdiagonal-six-shape} report a finite numerical audit.  They are
+not theorem statements.
+
+The $M_2$ and $M_3$ rows in \eqref{eq:offdiagonal-six-shape} must not be
+counted as independent discoveries.  The classical transfer principle pairs
+an $M_2$ target $X_j$ with the isogonal target $\iota(X_j)$ under $M_3$.
+Thus, for example,
+\[
+ \begin{array}{c@{\qquad\Longleftrightarrow\qquad}c}
+ M_2:X_{36}\mapsto X_{186}&M_3:X_{36}\mapsto X_{265},\\
+ M_2:X_{61}\mapsto X_{62}&M_3:X_{61}\mapsto X_{18},\\
+ M_2:X_{202}\mapsto X_{34321}&M_3:X_{202}\mapsto X_{6671},\\
+ M_2:X_{203}\mapsto X_{34322}&M_3:X_{203}\mapsto X_{6672},\\
+ M_2:X_{371}\mapsto X_{372}&M_3:X_{371}\mapsto X_{486},\\
+ M_2:X_{485}\mapsto X_{61083}&M_3:X_{485}\mapsto X_{61084},\\
+ M_2:X_{39162},X_{39163}\mapsto X_2&
+ M_3:X_{39162},X_{39163}\mapsto X_6.
+ \end{array}
+\]
+Both manifestations are retained in the numerical census for
+reproducibility, but each line represents one structural coincidence.
+
+The new high-index diagonal relation $M_2:X_{67371}\mapsto X_{67371}$ and
+the two forward candidates from $X_{485}$ first appear when the opposite or
+diagonal bound is extended beyond 53700.  Four reverse rows show a sharp
+split in the primary audit:
+\begin{equation}\label{eq:reverse-high}
+\begin{aligned}
+M_2:&\quad X_{61083}\mapsto X_{485},\qquad
+             X_{61084}\mapsto X_{486},\\
+M_3:&\quad X_{61083}\mapsto X_{371},\qquad
+             X_{61084}\mapsto X_{372}.
+\end{aligned}
+\end{equation}
+Each passes all 18 acute labelled instances and none of the 18 obtuse
+instances.  This is branch evidence, not an acute-triangle theorem.
+
+\section{Independent generic-shape stress test}
+\label{sec:generic-stress}
+
+To probe the two-dimensional triangle-shape domain more broadly, the 54
+six-shape survivors were tested, without further discovery, on 40 additional
+integer-sided scalene shapes.  A fixed Mersenne-Twister seed, 20260831,
+generated 20 acute and 20 obtuse shapes; the exact ordered triples are stored
+with the output.  All $54\cdot40=2160$ comparisons were evaluable.  There
+were 2111 passes and 49 failures.  Thus 41 candidates pass all 40 additional
+shapes and 13 do not.
+
+\begin{table}[H]
+\centering
+\caption{Six-shape survivors rejected by the 40-shape stress test.  A and O
+denote acute and obtuse additional shapes.}
+\label{tab:stress-failures}
+\small
+\begin{tabular}{@{}clrrl@{}}
+\toprule
+map & candidate & passes & failures & location of failures\\
+\midrule
+$M_1$ & $X_{13}\mapsto X_{13}$       & 32 & 8 & 8 O\\
+$M_2$ & $X_{13}\mapsto X_{13}$       & 32 & 8 & 8 O\\
+$M_2$ & $X_{485}\mapsto X_{61083}$   & 38 & 2 & 2 O\\
+$M_2$ & $X_{6104}\mapsto X_{6104}$   & 32 & 8 & 8 O\\
+$M_2$ & $X_{6440}\mapsto X_{6440}$   & 39 & 1 & 1 A\\
+$M_2$ & $X_{6477}\mapsto X_{6477}$   & 39 & 1 & 1 A\\
+$M_2$ & $X_{6522}\mapsto X_{6522}$   & 39 & 1 & 1 A\\
+$M_2$ & $X_{8456}\mapsto X_{8456}$   & 33 & 7 & 4 A, 3 O\\
+$M_2$ & $X_{10138}\mapsto X_{10138}$ & 39 & 1 & 1 A\\
+$M_2$ & $X_{10142}\mapsto X_{10142}$ & 39 & 1 & 1 A\\
+$M_2$ & $X_{34321}\mapsto X_{202}$   & 39 & 1 & 1 O\\
+$M_3$ & $X_{13}\mapsto X_{15}$       & 32 & 8 & 8 O\\
+$M_3$ & $X_{485}\mapsto X_{61084}$   & 38 & 2 & 2 O\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both $X_{485}$ candidates fail on the ordered obtuse shapes $(60,33,90)$ and
+$(83,34,50)$.  Including the primary audit, each therefore passes 74 of 76
+labelled instances, but neither may be advertised as an unrestricted
+identity.  By contrast, $M_2:X_{67371}\mapsto X_{67371}$ passes all 76 stated
+instances and is proved exactly by Theorem~\ref{thm:x67371}.
+
+The 41 random-test survivors are not the final unrestricted list.  The exact
+family analysis in Section~\ref{sec:families} supplies near-equilateral
+counterexamples to seven more fixed-point candidates.  Thus 20 of the 54
+six-shape survivors are now rejected and 34 rows remain after all stated
+tests.  The exact arguments in this paper prove 15 of these rows, while the
+classical cevian-centroid identity and Stothers's $X_{36}$ class account for
+three more.  Specifically, the 15 consist of the eight $F_\lambda$ family
+rows for $X_3,X_6,X_{61},X_{371}$, the two $X_{187}$ rows, the
+$X_{67371}$ fixed row, and the four Steiner-focus rows.  The remaining 16
+rows are unresolved computational candidates.
+
+Table~\ref{tab:stress-failures} also shows that ``acute versus obtuse'' is not
+a sufficient branch classification: several candidates fail on only one of
+20 additional acute shapes, while passing the other 19.  Any definitive
+statement must identify discriminant curves and connected components in
+triangle-shape space.
+
+\section{Limits of the search}
+
+For $N=72807$, testing all three maps on every ordered source-target pair
+would require
+\[
+ 3N^2=15{,}902{,}577{,}747
+\]
+comparisons on one discovery triangle.  The present computation exhaustively
+enumerates the diagonal and the two strips in \eqref{eq:scope}; it does not
+classify off-diagonal pairs with both indices above 1000.  Moreover, the
+coverage in Table~\ref{tab:coverage} prevents a claim of complete
+classification even inside the nominal strips.  A full search should first
+develop an indexed invariant, a nearest-neighbour structure for derived
+fingerprints, or a family-level symbolic reduction.  Before merely enlarging
+the quadratic source--target search, the next stage should also compare every
+surviving class systematically with Kimberling's central-triangle theory,
+Stothers's circumcevian and pedal tables, and Gibert's parameter families.
+That comparison is mathematically more informative than increasing the raw
+index bound without a structural invariant.
+
+\section{Reproducibility and logical status}
+
+The calculation used Wolfram 15.0.0 for Microsoft Windows (64-bit), dated
+May 19, 2026, and an ETC snapshot written on August 22, 2026.  The complete
+reproducibility bundle contains the database snapshots, unified search and
+validation scripts, all ordered test triangles and residuals, and independent
+exact checks for the symbolic theorems.  The machine-readable exact-check
+report has Boolean field \path{allChecksTrue} equal to \path{true}.  Appendix
+A records local filenames and SHA-256 checksums; these implementation details
+are kept out of the geometric narrative.
+
+Before submission, these files and the database snapshot should be deposited
+in a permanent public archive with a stable identifier.  Local filenames and
+checksums improve traceability but do not replace archival access.
+
+Theorems~\ref{thm:isogonal-transfer}, \ref{thm:F-reversal},
+\ref{thm:x67371}, and \ref{thm:steiner-foci}, their corollaries, and
+Proposition~\ref{prop:x795} are exact.  A row not explicitly covered by
+these or by a cited classical argument remains a computational candidate,
+even if it belongs to the final set of 34 rows not eliminated by the stated
+tests.
+
+\section*{Acknowledgements}
+
+This problem was initially posed by Mowaffaq Hajja in unpublished work and
+was communicated personally to the author.  Professor Hajja generously
+provided collected material and conjectures concerning the problem,
+encouraged the investigation, and granted permission for that material to be
+used.  The author gratefully acknowledges his generosity and sustained
+support.
+
+\section*{Declaration on the use of generative AI}
+
+During the preparation of this article, the author used ChatGPT, a
+generative-AI system developed by OpenAI, to assist with drafting symbolic
+computation code, checking algebraic manipulations computationally, editing
+language, and preparing \LaTeX.  The author independently reviewed and
+verified the mathematical arguments, computations, references, and final
+text, and accepts full responsibility for the contents of the article.  The
+AI system did not determine the research conclusions, does not meet the
+criteria for authorship, and is not a coauthor.
+
+\appendix
+\section{Relation to the preliminary computations}
+
+The search was originally run in a first-500 block through $X_{53700}$ and a
+supplementary 501--1000 block.  Those checkpointed computations remain in
+\path{output/m1m2m3/offdiagonal_first500} and
+\path{output/m1m2m3/offdiagonal_501_1000}.  The final counts and lists in the
+main text are obtained from the unified $X_{72807}$ aggregation, with overlaps
+subtracted.  This appendix records provenance without asking the reader to
+follow superseded search scopes as part of the main argument.
+
+\subsection{Local reproducibility record}
+
+The ETC formula and normalized-barycentric snapshots have respective
+SHA-256 checksums
+\begin{center}
+\small\ttfamily
+B10F8A7FBF545F25DB2FCCC99D94022EA8325088BE15C9B06858610CE473F5C0\\
+2DFD39CB60A600B2E06750462F6187C9B8C03F647C5F08B8EEC7E69A9C8F2D67,
+\end{center}
+and the expanded 72807-entry cache has checksum
+\begin{center}
+\small\ttfamily
+ADD5F1F1686FB8EBC67942BA0052087CED2BA0EA0CEE4955703F705ACC622027.
+\end{center}
+
+The unified calculation is driven by
+\begin{center}
+\small
+\path{m1m2m3_unified_build_cache.wls},\quad
+\path{m1m2m3_unified_worker.wls},\\
+\path{run_m1m2m3_unified_workers.ps1},\\
+\path{m1m2m3_unified_validate.wls},\quad
+\path{m1m2m3_unified_aggregate.wls}.
+\end{center}
+Canonical outputs are in \path{output/m1m2m3/unified}.  The historical filename
+\path{universal_candidates.csv} means only ``passed the six-shape audit.''
+
+The exact $X_{795}$ check is
+\path{m1m2m3_referee_exact_checks.wls}.  The 40-shape audit and its residuals
+are stored under \path{output/m1m2m3/referee_revision}.  The exact reductions
+for the family and $X_{67371}$ theorems are checked by
+\path{m1m2m3_algebraic_revision_checks.wls}; its report is
+\path{output/m1m2m3/algebraic_revision/algebraic_revision_checks.json}.
+The root of the local \path{LeJean-Kimberling} data tree is supplied to that
+script as its first command-line argument or through
+\path{LEJEAN_KIMBERLING_ROOT}.
+
+\begin{thebibliography}{12}
+\footnotesize
+\setlength{\itemsep}{0pt}
+\bibitem{ETC}
+C. Kimberling, \emph{Encyclopedia of Triangle Centers}, University of
+Evansville, \url{https://faculty.evansville.edu/ck6/encyclopedia/}.
+
+\bibitem{Kimberling1998}
+C. Kimberling, Triangle centers and central triangles,
+\emph{Congressus Numerantium} \textbf{129} (1998), 1--295.
+
+\bibitem{StothersPedal}
+W. W. Stothers, \emph{The Pedal Triangle}, University of Glasgow,
+\url{https://www.maths.gla.ac.uk/wws/cabripages/triangle/ninepoint/pedal1.htm}
+(accessed 31 August 2026).
+
+\bibitem{StothersCircum}
+W. W. Stothers, \emph{The Circumcevian Triangle}, University of Glasgow,
+\url{https://www.maths.gla.ac.uk/wws/cabripages/triangle/ninepoint/circumcevian1.htm}
+(accessed 31 August 2026).
+
+\bibitem{GibertTable38}
+B. Gibert, \emph{Table 38: Points with trilinears $\tan(A+t)$},
+\url{https://bernard-gibert.fr/Tables/table38.html}
+(accessed 31 August 2026).
+
+\bibitem{Hajja2006}
+M. Hajja, The arbitrariness of the cevian triangle,
+\emph{Amer. Math. Monthly} \textbf{113} (2006), 443--447.
+
+\bibitem{Marden}
+M. Marden, \emph{Geometry of Polynomials}, 2nd ed., Mathematical Surveys
+No.~3, American Mathematical Society, Providence, 1966.
+
+\bibitem{Kalman}
+D. Kalman, An elementary proof of Marden's theorem,
+\emph{Amer. Math. Monthly} \textbf{115} (2008), 330--338.
+
+\bibitem{Honsberger}
+R. Honsberger, \emph{Episodes in Nineteenth and Twentieth Century Euclidean
+Geometry}, Mathematical Association of America, 1995.
+
+\bibitem{Johnson}
+R. A. Johnson, \emph{Advanced Euclidean Geometry}, Dover, 1960 reprint.
+
+\bibitem{Yiu}
+P. Yiu, \emph{Introduction to the Geometry of the Triangle}, Florida
+Atlantic University lecture notes, 2001.
+\end{thebibliography}
+
+\end{document}
