@@ -1,0 +1,4891 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,longtable,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{hidelinks,hypertexnames=false}
+\usepackage{microtype}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\rad}{\operatorname{rad}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\Eset}{\mathcal E}
+\newcommand{\Pset}{\mathcal P}
+
+\title{\textbf{Reciprocal Periods and Primality}\\
+\large A period--primality toolbox and the rarity of small-index pseudoprimes}
+\author{Extended arXiv version}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Suppose that the exact reciprocal period
+\[
+L=L_b(n)=\ord_n(b)
+\]
+is known for an odd integer $n$ and a base $b$ coprime to $n$.  How much
+information about the primality of $n$ is already contained in $L$?  This
+expository question is the starting point of the present extended version.  We
+assemble a period--primality toolbox connecting multiplicative order with
+Lucas' criterion, Fermat and strong pseudoprimality, Midy's property,
+overpseudoprimes, prime-only tests for total Midy, $q$-Midy congruence
+forcing, cyclotomic factors, and $N\pm1$ certificates of Pocklington and
+Brillhart--Lehmer--Selfridge type.  The toolbox assumes that the exact order is
+already available; it is not proposed as a general-purpose primality algorithm.
+
+The particularly important case $L\mid n-1$ leads to the reciprocal-period
+index
+\[
+d=\frac{n-1}{L}.
+\]
+For composite $n$ this is Somer's Fermat $d$-pseudoprime condition; for
+prime moduli the same $d$ is the standard residual index.  The special
+$\kappa=1$ composite stratum is the prescribed Carmichael-index problem.
+Somer proved fixed-$d$ finiteness and classified the nontrivial-base cases for
+$1\le d\le8$.  Our spectral investigation gives two direct primality
+consequences.  First, for $d\le64$ an odd integer with
+$L=(n-1)/d$ is prime except for the explicitly certified composite table,
+which contains $234$ distinct integers.  Second, if
+\[
+S(d)=1+\lfloor\log_2(d-1)\rfloor,\qquad
+M(d)=2^{S(d)-1},
+\]
+then every composite spectral point satisfies
+\[
+n<(dS(d))^{2M(d)}.
+\]
+Consequently, for every fixed $\varepsilon>0$, all sufficiently large $n$
+with
+\[
+d\le\left(\frac12-\varepsilon\right)
+       \frac{\log n}{\log\log n}
+\]
+are prime.
+
+The base-independent genuine spectrum is also shown to be a partition of all
+odd composite integers: each odd composite appears exactly once at its genuine
+index
+\[
+d_\lambda(n)=\frac{n-1}{\gcd(n-1,\lambda(n))},
+\]
+while all later appearances are inherited.  We certify the complete inclusive
+spectrum through $d=64$, study the fixed-base prime spectrum via the
+Wagstaff--Moree near-primitive-root densities, and prove under GRH that the
+same range contains at least $98.2709160681865\ldots\%$ of the prime mass for
+every positive non-perfect-power integer base.  We also introduce the counting functions $e(d)$ and $g(d)$.  The
+$\kappa$--$H$ search decomposition has
+$\frac12d(\log d)^2+O(d\log d)$ overlap-resolved branches, while collapsing to the Diophantine master equation gives a relaxed parameter count of only
+$d\log d+O(d)$ candidate pairs.  A divisor-pair identity for the
+last two prime factors then yields the uniform counting estimate
+\[
+\log e(d)\le
+\frac d2\bigl(\log d+\log\log d+O(1)\bigr).
+\]
+In particular the one-, two-, and three-distinct-prime strata satisfy
+$e_1(d)\le d^{o(1)}$ and $e_2(d),e_3(d)\le d^{1+o(1)}$.
+Under a natural uniform sampling model on a spectral line, for fixed $d$ we
+prove
+\[
+\Pr_X(n\text{ prime}\mid d)
+=1-e(d)\phi(d)\frac{\log X}{X}
++o\!\left(\frac{\log X}{X}\right).
+\]
+More strongly, for every fixed $0<\varepsilon<2$ this probability tends to
+$1$ uniformly throughout
+\[
+1\le d\le(2-\varepsilon)\frac{\log X}{\log\log X}.
+\]
+Thus the deterministic certainty range with leading constant $1/2$ is
+complemented by a substantially wider high-probability range, in the stated
+sampling model, with leading constant $2$.  Four proposed OEIS sequences are
+printed in full through $d=64$.
+\end{abstract}
+
+\noindent\textbf{Keywords.} Fermat $d$-pseudoprimes; residual index;
+near-primitive roots; Carmichael index; reciprocal periods; Carmichael function;
+Miller--Rabin; computer-assisted proof.
+
+\medskip
+\tableofcontents
+\bigskip
+
+
+\section{Introduction}
+\label{sec:introduction}
+
+The elementary decimal identity
+\[
+\frac17=0.\overline{142857}
+\]
+contains a surprisingly strong arithmetic statement.  The six-digit period
+means
+\[
+\ord_7(10)=6=7-1,
+\]
+and the classical Lucas criterion immediately proves that $7$ is prime.  More
+generally, if the exact period
+\[
+L=L_b(n)=\ord_n(b)
+\]
+is known, then the natural question is:
+
+\begin{center}
+\fbox{\parbox{0.88\textwidth}{
+\centering
+\textbf{How much information about primality is encoded in the exact period
+$L$?}
+}}
+\end{center}
+
+This question, rather than a pre-existing pseudoprime classification, was the
+motivation that led to the present project.  The first goal was to collect in
+one place the most useful consequences of knowing $L$: direct Lucas-type
+criteria, Fermat and strong-pseudoprime implications, Midy decompositions,
+overpseudoprimes, cyclotomic information, and positive $N-1$ certificates of
+Pocklington and Brillhart--Lehmer--Selfridge type.  The resulting toolbox is
+given in Sections~\ref{sec:toolbox-prelim} and~\ref{sec:toolbox} with explicit
+examples.
+
+A second question emerged naturally.  When
+\[
+L\mid n-1,
+\]
+write
+\begin{equation}
+ n-1=dL,
+ \qquad d=\frac{n-1}{L}.
+ \label{eq:indexdef-intro}
+\end{equation}
+For a prime $p$, $d$ is the index of the cyclic subgroup generated by $b$ in
+$(\mathbb Z/p\mathbb Z)^\times$.  A small value of $d$ therefore says that the
+known period is close to the maximal prime value $p-1$.  It is natural to ask
+whether sufficiently small $d$ forces primality.
+
+For example,
+\[
+91=7\cdot13,\qquad \ord_{91}(10)=6,
+\]
+so $91-1=15\cdot6$.  Thus a composite can have $L\mid n-1$, but here the
+index is already $d=15$.  The present paper studies systematically how small
+such an index can be for a composite.
+
+\subsection*{The rediscovery of Somer's $d$-pseudoprimes}
+
+During the development of this project, after the reciprocal index
+\eqref{eq:indexdef-intro} and the first small-index arguments had already been
+obtained independently, an AI-assisted literature search located Lawrence
+Somer's 1985 dissertation and his 1989 paper \emph{On Fermat
+$d$-pseudoprimes} \cite{Somer1985,Somer1989}.  Somer had introduced precisely
+the composite condition
+\[
+\ord_N(a)=\frac{N-1}{d},
+\]
+proved that for each fixed $d$ only finitely many such composites exist, and
+classified the nontrivial-base cases for $1\le d\le8$.  Our parameter $d$
+is therefore Somer's parameter.
+
+Somer's work was not wholly forgotten, but the independent uptake that we
+have been able to locate is surprisingly concentrated.  Two examples are
+particularly clear.  Ribenboim did more than cite the paper: he devoted
+Section~VIII.E, entitled ``Somer Pseudoprimes,'' of \emph{The New Book of Prime
+Number Records} to the subject \cite[p.~117]{Ribenboim1996}.  A decade later,
+Pinch's extended abstract \emph{Carmichael numbers with small index} opens by
+stating that Somer had proved a result implying that the Carmichael index
+$(N-1)/\lambda(N)$ tends to infinity, then gives a new proof and an enumeration
+algorithm for bounded Carmichael index \cite{PinchSmallIndex}.  Pinch's 2006
+tabulation through $10^{18}$ also cites Somer's Fermat $d$-pseudoprime paper
+\cite{Pinch2006e18}.
+
+A separate line of continuation came from Somer and his collaborators.  Somer
+developed the analogous Lucas $d$-pseudoprime theory \cite{SomerLucas1998};
+Carlip, Jacobson and Somer connected the same methods with Lehmer's problem and
+multiperfect numbers \cite{CarlipJacobsonSomer1998}; and later work developed
+Lucas $d$-pseudoprimes and Carmichael--Lucas numbers further
+\cite{CarlipSomer2007}.
+
+The Carlip--Jacobson--Somer paper is particularly relevant to the Fermat side
+of the present work.  It develops Somer's methods in a unified setting and,
+for a Fermat $d$-pseudoprime with $t$ distinct prime factors, proves the
+factor-count restriction
+\[
+ t<\log_2 d+1,
+\]
+together with an explicit bound on repeated prime powers.  These are direct
+antecedents of part of the structural theory below.  Our refinement retains the
+additional overlap parameter $\kappa=\lambda(n)/L$: the exact divisibilities
+$K\mid\kappa$ and $2^{s-1}\kappa\mid j$ sharpen the factor-count and
+repeated-power restrictions, while the uniform closed size bound, the
+last-two-prime divisor-pair identity, and the counting estimate for $e(d)$ are
+additional quantitative consequences developed here.
+
+Our targeted literature search has not revealed a comparably sustained
+independent literature using the \emph{variable-base Fermat} $d$-spectrum as a
+primary organizing framework.  We therefore describe Somer's Fermat theory as
+under-recognized rather than forgotten.  This is not a bibliometric census or
+a numerical citation claim: database coverage of an older conference chapter
+is imperfect, and absence from a search is not evidence of absence.  What is
+relevant for the present paper is that the same reciprocal index arose
+independently here from a different motivation, namely the information content
+of a known period.
+
+This convergence of two routes is mathematically useful.  Somer's viewpoint
+starts from generalized Fermat pseudoprimes.  Our route starts from reciprocal
+periods and primality.  Both single out
+\[
+d=\frac{n-1}{L}
+\]
+as the natural coordinate measuring the deficiency of the period from the
+Lucas extremal value $L=n-1$.
+
+\subsection*{Two primality theorems produced by the spectral investigation}
+
+The spectral part of the paper yields two answers to the motivating primality
+question.
+
+\begin{enumerate}[label=\textbf{P\arabic*.},leftmargin=2.4em]
+\item \textbf{Exact low-index criterion.}
+If $n$ is odd, $\gcd(b,n)=1$, $L=\ord_n(b)$, and
+\[
+L=\frac{n-1}{d},\qquad d\le64,
+\]
+then $n$ is prime unless it occurs in the certified exceptional table of
+Section~\ref{sec:certified-search}.  Across all $64$ rows there are $234$ distinct composite exceptions in $351$ spectral incidences.
+
+\item \textbf{Uniform size criterion.}
+For $d\ge2$ put
+\[
+S(d)=1+\lfloor\log_2(d-1)\rfloor,
+\qquad
+M(d)=2^{S(d)-1}.
+\]
+Theorem~\ref{thm:uniform-U} proves that every composite spectral point obeys
+\[
+n<(dS(d))^{2M(d)}.
+\]
+Hence
+\[
+n\ge(dS(d))^{2M(d)},\qquad L=(n-1)/d
+\quad\Longrightarrow\quad n\text{ is prime}.
+\]
+Asymptotically, for each fixed $\varepsilon>0$,
+\[
+d\le\left(\frac12-\varepsilon\right)
+\frac{\log n}{\log\log n}
+\]
+forces primality for all sufficiently large $n$.
+\end{enumerate}
+
+The first statement is finite and exact; the second is uniform in $d$.  The
+coefficient $1/2$ in the asymptotic statement is the worst leading coefficient
+of our uniform bound, not a claim about the true optimal boundary.
+
+They are complemented by a statistical consequence once a sampling model is
+specified.  If one samples uniformly from all integers up to $X$ lying on one
+fixed existential line $d$, Theorem~\ref{thm:conditional-prime-prob} gives
+\[
+\Pr_X(n\text{ prime}\mid d)
+=1-e(d)\phi(d)\frac{\log X}{X}
++o\!\left(\frac{\log X}{X}\right).
+\]
+Thus fixed small index is not merely compatible with primality: in this precise
+line-sampling sense it becomes asymptotically overwhelming.  This probability
+statement is not one of the two deterministic primality theorems above and is
+not an intrinsic Bayesian probability attached to a single integer.
+
+\subsection*{Prime--pseudoprime spectral separation}
+
+When the base is allowed to vary, the prime line at a fixed $d$ is simply
+\[
+\mathcal P(d)=\{p\text{ prime}:p\equiv1\pmod d\},
+\]
+and is therefore infinite.  Somer's theorem says that the corresponding
+composite line is finite.  The present work strengthens the comparison in two
+directions.  On the composite side we derive explicit structural bounds and
+certify the complete spectrum through $d=64$.  On the prime side we compare
+the same index range with the fixed-base near-primitive-root densities of
+Wagstaff and Moree.  Under GRH, at least
+$98.2709160681865\ldots\%$ of the prime mass lies in $d\le64$ for every
+positive integer base that is not a perfect power, while the inclusive
+composite union through $64$ contains $234$ integers.
+
+A second structural point is equally important.  Allowing the trivial orders
+$1$ and $2$ gives an inclusive group-theoretic spectrum in which \emph{every
+odd composite integer appears at a unique genuine index}.  Thus the genuine
+spectrum is not merely a collection of exceptional examples: it is a
+partition of the odd composites.  Later spectral occurrences are inherited
+from the genuine one.
+
+\subsection*{Guide to the extended version}
+
+This arXiv version is deliberately more expository than the compact working
+paper.  Section~\ref{sec:period-groups} introduces multiplicative order,
+group exponent, the Carmichael function, Chinese-remainder decomposition and
+Sylow components.  Sections~\ref{sec:toolbox-prelim} and~\ref{sec:toolbox}
+then develop the period--primality toolbox with examples.  The spectral
+structure, genuine spectrum and uniform bounds follow next.  Somer's
+small-index classification is reproved uniformly, and the exact computation through $d=64$ is tied to a frozen supplement combining the original Julia certification through $33$ with the exact extension through $64$.
+The final sections treat counting functions, conditional primality
+probabilities, Artin's constant and fixed-base prime spectra, and four natural
+OEIS sequences.
+
+\subsection*{Notation at a glance}
+
+The following symbols recur throughout the paper.
+\begin{center}
+\small
+\begin{tabularx}{0.94\textwidth}{@{}lX@{}}
+\toprule
+symbol & meaning\\
+\midrule
+$n$ & an odd integer under primality investigation\\
+$b$ & a base with $\gcd(b,n)=1$\\
+$L=L_b(n)=\ord_n(b)$ & the exact multiplicative order of $b$ modulo $n$, equivalently the reciprocal period\\
+$\phi(n)$ & Euler's totient, the order of $(\mathbb Z/n\mathbb Z)^\times$\\
+$\lambda(n)$ & Carmichael's function, the exponent of $(\mathbb Z/n\mathbb Z)^\times$\\
+$d=(n-1)/L$ & the spectral or reciprocal-period index, when $L\mid n-1$\\
+$L_{\max}(n)$ & $\gcd(n-1,\lambda(n))$, the largest element order compatible with $n-1$\\
+$d_\lambda(n)$ & $(n-1)/L_{\max}(n)$, the unique genuine spectral index of a composite\\
+$\mathcal E(d)$ & odd composites occurring on the inclusive existential line $d$\\
+$\mathcal G(d)$ & odd composites whose genuine index equals $d$\\
+$e(d),g(d)$ & $|\mathcal E(d)|$ and $|\mathcal G(d)|$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Reciprocal periods and finite unit groups}
+\label{sec:period-groups}
+
+\subsection{Period length as multiplicative order}
+
+Let $n>1$, $b\ge2$ and $\gcd(b,n)=1$.  The residue class of $b$ is then a
+unit modulo $n$.  Its \emph{multiplicative order}
+\[
+\ord_n(b)
+\]
+is the least positive integer $L$ for which $b^L\equiv1\pmod n$.
+Equivalently, $L$ is the period length of the purely recurring base-$b$
+expansion of $1/n$.  We write
+\[
+L_b(n)=\ord_n(b).
+\]
+
+The units modulo $n$ form the finite abelian group
+\[
+U(n)=(\mathbb Z/n\mathbb Z)^\times.
+\]
+Its order is Euler's totient
+\[
+|U(n)|=\phi(n).
+\]
+Thus Lagrange's theorem already gives
+\[
+L_b(n)\mid\phi(n).
+\]
+The sharper universal divisor is the Carmichael function $\lambda(n)$.
+
+\subsection{Exponent of a finite group and the Carmichael function}
+
+\begin{definition}[Exponent]
+If $G$ is a finite group, its \emph{exponent} is
+\[
+\exp(G)=\operatorname{lcm}\{\ord(g):g\in G\}.
+\]
+Equivalently, it is the least positive integer $e$ such that $g^e=1$ for every
+$g\in G$.
+\end{definition}
+
+The Carmichael function is precisely the exponent of the unit group:
+\[
+\boxed{\lambda(n)=\exp U(n).}
+\]
+Consequently
+\begin{equation}
+L_b(n)\mid\lambda(n)\mid\phi(n).
+\label{eq:ord-chain}
+\end{equation}
+The first divisibility says that every individual reciprocal period divides a
+single base-independent invariant of $n$.
+
+For later calculations it is useful to recall the explicit prime-power
+formula.  If $p$ is odd, then
+\[
+\lambda(p^a)=\phi(p^a)=p^{a-1}(p-1).
+\]
+For powers of $2$,
+\[
+\lambda(2)=1,\qquad \lambda(4)=2,\qquad
+\lambda(2^a)=2^{a-2}\quad(a\ge3).
+\]
+If $n=\prod_i p_i^{a_i}$, the Chinese remainder theorem gives
+\[
+U(n)\cong\prod_i U(p_i^{a_i}),
+\]
+and therefore
+\[
+\lambda(n)=\operatorname{lcm}_i\lambda(p_i^{a_i}).
+\]
+
+\subsection{Sylow components and attainable element orders}
+
+A finite abelian group separates prime by prime.  Its \emph{Sylow
+$q$-component} $G_q$ consists of the elements whose orders are powers of the
+prime $q$, and
+\[
+G\cong\prod_{q\mid |G|}G_q.
+\]
+This simple decomposition is the reason that, in a finite abelian group,
+there are no gaps among the divisors of the exponent.
+
+\begin{lemma}[Orders dividing the exponent]
+\label{lem:divisor-exponent}
+Let $G$ be a finite abelian group of exponent $e$.  Every positive divisor of
+$e$ occurs as the order of an element of $G$.
+Consequently, for every $n>1$ and every $L\ge1$,
+\[
+\exists b:\ord_n(b)=L
+\quad\Longleftrightarrow\quad
+L\mid\lambda(n).
+\]
+\end{lemma}
+
+\begin{proof}
+Write
+\[
+e=\prod_q q^{a_q}.
+\]
+Because the exponent of the $q$-Sylow component is $q^{a_q}$, that component
+contains an element of order $q^{a_q}$; taking powers produces elements of
+every order $q^j$ with $0\le j\le a_q$.  If
+$m=\prod_q q^{j_q}\mid e$, choose in each $G_q$ an element of order
+$q^{j_q}$.  Their product, under the direct-product decomposition, has order
+$m$.  Applying this to the abelian group $U(n)$ proves the second statement.
+\end{proof}
+
+\begin{remark}
+This lemma is stronger than Lagrange's theorem.  In an arbitrary finite group,
+a divisor of $|G|$ need not occur as an element order.  What matters here is
+that the unit group is abelian and that we use divisors of its exponent, not
+arbitrary divisors of its cardinality.
+\end{remark}
+
+\subsection{Spectral lines}
+
+Whenever $L_b(n)\mid n-1$ we define
+\[
+d=\frac{n-1}{L_b(n)}.
+\]
+For primes, $U(p)$ is cyclic of order $p-1$, and $d$ is literally the index
+of the subgroup generated by $b$:
+\[
+d=[U(p):\langle b\rangle].
+\]
+For this reason we call $d$ the \emph{reciprocal-period index} or
+\emph{spectral index}.
+
+\begin{definition}[Existential prime and composite spectra]
+For $d\ge1$, define
+\[
+\Pset(d)
+=
+\left\{
+p\text{ prime}:
+\exists b\ge2,\ \gcd(b,p)=1,\
+\ord_p(b)=\frac{p-1}{d}
+\right\},
+\]
+and
+\[
+\Eset(d)
+=
+\left\{
+n\text{ odd composite}:
+\exists b\ge2,\ \gcd(b,n)=1,\
+\ord_n(b)=\frac{n-1}{d}
+\right\}.
+\]
+\end{definition}
+
+For comparison with Somer's convention we also write
+\[
+\Eset^\ast(d)
+=
+\left\{
+n\in\Eset(d):
+\exists b\not\equiv\pm1\pmod n,\
+\ord_n(b)=\frac{n-1}{d}
+\right\}.
+\]
+Thus $\Eset^\ast(d)$ is the nontrivial-base Fermat $d$-pseudoprime line,
+whereas $\Eset(d)$ is the inclusive group-theoretic spectral line.  The base
+is allowed to depend on $n$.
+
+\begin{theorem}[Prime spectral line]
+\label{thm:prime-spectrum}
+For every $d\ge1$,
+\[
+\Pset(d)=\{p\text{ prime}:p\equiv1\pmod d\}.
+\]
+Hence $\Pset(d)$ is infinite.  Its relative density among primes is
+$1/\phi(d)$.
+\end{theorem}
+
+\begin{proof}
+The cyclic group $U(p)$ contains an element of order $(p-1)/d$ if and only if
+$d\mid p-1$.  Dirichlet's theorem gives infinitude and the prime number theorem
+for arithmetic progressions gives the relative density.
+\end{proof}
+
+\begin{proposition}[Composite spectral line]
+\label{prop:composite-spectrum}
+For an odd composite $n$,
+\[
+n\in\Eset(d)
+\quad\Longleftrightarrow\quad
+d\mid n-1
+\quad\text{and}\quad
+\frac{n-1}{d}\mid\lambda(n).
+\]
+\end{proposition}
+
+\begin{proof}
+Apply Lemma~\ref{lem:divisor-exponent} with $L=(n-1)/d$.
+\end{proof}
+
+\section{Genuine and inherited spectral indices}
+
+For a fixed composite $n$, one integer may occur on more than one
+spectral line.  The natural distinguished line is determined by the
+largest order compatible with $n-1$.
+
+\begin{definition}
+Define
+\[
+L_{\max}(n)=\gcd(n-1,\lambda(n)),
+\qquad
+d_\lambda(n)=\frac{n-1}{L_{\max}(n)}.
+\]
+We call $d_\lambda(n)$ the \emph{genuine spectral index} of $n$.
+\end{definition}
+
+\begin{theorem}[Spectral inheritance]
+\label{thm:inheritance}
+For an odd composite $n$,
+\[
+\Spec_L(n)
+:=
+\{D:n\in\Eset(D)\}
+=
+\{d_\lambda(n)r:r\mid L_{\max}(n)\}.
+\]
+In particular, every composite has one unique genuine spectral index,
+namely the least index at which it occurs.
+\end{theorem}
+
+\begin{proof}
+Every admissible order is a positive divisor of
+$L_{\max}(n)$.  If
+\[
+L=\frac{L_{\max}(n)}r,
+\qquad r\mid L_{\max}(n),
+\]
+then
+\[
+\frac{n-1}{L}
+=
+d_\lambda(n)r.
+\]
+Conversely, Lemma~\ref{lem:divisor-exponent} shows that every divisor
+$L$ of $L_{\max}(n)$ occurs as the order of some unit modulo $n$.
+\end{proof}
+
+This theorem explains why the same pseudoprime reappears at higher
+spectral indices.  The later occurrences are inherited from its genuine
+line.
+
+\begin{corollary}[The genuine spectrum partitions the odd composites]
+\label{cor:genuine-partition}
+Let
+\[
+\mathcal G(d)=\{n\text{ odd composite}:d_\lambda(n)=d\}.
+\]
+Then
+\[
+\boxed{
+\{n\ge3:n\text{ odd composite}\}
+=\bigsqcup_{d\ge1}\mathcal G(d).
+}
+\]
+Thus every odd composite occurs somewhere in the genuine spectrum and occurs
+there exactly once.
+\end{corollary}
+
+\begin{proof}
+For every odd composite $n$, the integer $L_{\max}(n)=\gcd(n-1,\lambda(n))$
+is positive and divides $n-1$, so $d_\lambda(n)$ is a positive integer.
+Theorem~\ref{thm:inheritance} shows that it is the unique least spectral index
+of $n$.  Hence $n$ belongs to exactly one set $\mathcal G(d)$.
+\end{proof}
+
+This partition property is one reason the genuine spectrum is more than a
+list of exceptional pseudoprimes.  It supplies a canonical base-independent
+coordinate to every odd composite integer.  The inclusive convention is
+essential: the genuine witnessing order can be $1$ or $2$.
+
+\section{A hierarchy of $L$-, $\lambda$-, and $\phi$-spectra}
+
+The same denominator viewpoint can be applied directly to arithmetic
+functions.
+
+\begin{definition}
+For $f\in\{\lambda,\phi\}$ define
+\[
+d_f(n)=\frac{n-1}{\gcd(n-1,f(n))}.
+\]
+Equivalently, $d_f(n)$ is the denominator of
+$f(n)/(n-1)$ when written in lowest terms.
+\end{definition}
+
+Then
+\[
+d_\lambda(n)=\frac{n-1}{L_{\max}(n)}.
+\]
+Thus the genuine $L$-spectrum is the $\lambda$-spectrum.
+
+Since $\lambda(n)\mid\phi(n)$,
+\[
+d_\phi(n)\mid d_\lambda(n).
+\]
+Writing
+\[
+H(n)=\frac{\phi(n)}{\lambda(n)},
+\]
+one also has
+\[
+\frac{d_\lambda(n)}{d_\phi(n)}\mid H(n).
+\]
+
+The classical Lehmer problem is the extreme $\phi$-spectral question
+\[
+\phi(n)\mid n-1.
+\]
+The original problem and classical restrictions on a hypothetical composite
+solution are discussed in \cite{Lehmer1932,Pomerance1977}.  The more general
+$\phi$-spectrum therefore contains Lehmer-type
+questions as a special case.  In contrast, the $L$- and
+$\lambda$-spectra considered here admit finite spectral lines by the
+bounds proved below.
+
+\section{Preliminaries for the period--primality toolbox}
+\label{sec:toolbox-prelim}
+
+This section records several elementary reductions that will be used both in
+the proofs and in the extended toolbox.  They are stated in a form adapted to an
+exact period $L=\ord_n(b)$.
+
+\subsection{The repetend as an integer}
+
+Suppose $\gcd(b,n)=1$ and $L=\ord_n(b)$.  If the repetend of $1/n$ in
+base $b$ is regarded as an $L$-digit integer $R$ (allowing leading zeroes),
+then
+\begin{equation}
+R=\frac{b^L-1}{n}.
+\label{eq:repetend-integer}
+\end{equation}
+Indeed,
+\[
+\frac1n=0.\overline{R}_b=\frac{R}{b^L-1}.
+\]
+This simple identity is the bridge between multiplicative order and Midy's
+block-sum phenomena.
+
+\subsection{A reduction of Somer}
+
+For
+\[
+n=\prod_{i=1}^s p_i^{a_i},
+\]
+define
+\begin{equation}
+\lambda_0(n):=\operatorname{lcm}_{p\mid n}(p-1)
+ =\operatorname{lcm}(p_1-1,\ldots,p_s-1).
+\label{eq:lambda0}
+\end{equation}
+This is Somer's $\lambda'(n)$.
+
+\begin{lemma}[Somer's order reduction]
+\label{lem:somer-lambda0}
+If
+\[
+L=\ord_n(b)\mid n-1,
+\]
+then
+\[
+\gcd(n,L)=1,
+\qquad
+L\mid\lambda_0(n).
+\]
+In particular, if $n-1=dL$, then also $\gcd(n,d)=1$.
+\end{lemma}
+
+\begin{proof}
+The coprimality assertions follow from $L\mid n-1$ and $d\mid n-1$.
+For each prime power $p_i^{a_i}\Vert n$, the local order
+$\ord_{p_i^{a_i}}(b)$ divides $p_i^{a_i-1}(p_i-1)$ and also divides $L$.
+Since $L$ is coprime to $p_i$, the local order actually divides $p_i-1$.
+Taking the least common multiple over $i$ gives
+$L\mid\lambda_0(n)$.  This is essentially Lemma~1 of Somer
+\cite{Somer1989}.
+\end{proof}
+
+\begin{remark}
+The standard relation $L\mid\lambda(n)$ is valid without the assumption
+$L\mid n-1$.  Lemma~\ref{lem:somer-lambda0} is stronger precisely in the
+spectral situation: prime-power factors coming from $p_i^{a_i-1}$ cannot
+contribute to $L$ because $L$ is coprime to $n$.
+\end{remark}
+
+\subsection{Block splitting and a cyclotomic criterion}
+
+Let $r>1$ divide $L$ and put $h=L/r$.  Split the $L$ digits of the
+repetend into $r$ consecutive blocks of $h$ digits, represented by integers
+$A_0,\ldots,A_{r-1}$ with $0\le A_i<b^h$.  Since $b^h\equiv1\pmod{b^h-1}$,
+\[
+R\equiv A_0+\cdots+A_{r-1}\pmod{b^h-1}.
+\]
+Combining this with \eqref{eq:repetend-integer} gives the following useful
+special form of Midy's property.  For broader treatments of Midy-type block
+criteria and their order-theoretic formulations, see
+\cite{GuptaSury2005,Lewittes2007,Martin2007,GarciaGiraldo2009}.
+
+\begin{proposition}[Midy block criterion for $1/n$]
+\label{prop:midy-block}
+Let $r\mid L$, $r>1$, and $h=L/r$.  The sum of the $r$ equal-length
+blocks is divisible by $b^h-1$ if and only if
+\begin{equation}
+n\mid 1+b^h+b^{2h}+\cdots+b^{(r-1)h}.
+\label{eq:midy-geometric}
+\end{equation}
+If $r=q$ is prime, this is
+\[
+n\mid\Phi_q(b^h).
+\]
+For prime $n=p$, condition \eqref{eq:midy-geometric} holds for every
+$r>1$ dividing $L$.
+\end{proposition}
+
+\begin{proof}
+By \eqref{eq:repetend-integer},
+\[
+R=\frac{(b^h-1)(1+b^h+\cdots+b^{(r-1)h})}{n}.
+\]
+Thus $b^h-1\mid R$ exactly when $n$ divides the geometric sum.  If $n=p$
+is prime, then $b^h$ has exact order $r$ modulo $p$; hence the geometric
+sum vanishes modulo $p$.
+\end{proof}
+
+For $r=2$, the two blocks have sum exactly $b^h-1$ whenever the Midy
+condition holds, because their sum is a positive multiple of $b^h-1$ but
+is strictly less than $2(b^h-1)$.  Moreover,
+\begin{equation}
+\text{two-block Midy property}
+\quad\Longleftrightarrow\quad
+b^{L/2}\equiv-1\pmod n.
+\label{eq:midy-minus1}
+\end{equation}
+
+\subsection{Two prime-only tests for the total Midy property}
+
+The phrase \emph{total Midy property} means that the block condition of
+Proposition~\ref{prop:midy-block} holds for every divisor $r>1$ of the exact
+period $L$.  At first sight this asks for many block divisors and, in the
+order-theoretic formulation, for every nontrivial divisor of the modulus.
+Both requirements admit a prime-only reduction.
+
+\begin{proposition}[Prime-only characterizations of total Midy]
+\label{prop:total-midy-prime-only}
+Let $N>1$ be odd, $\gcd(N,b)=1$, and $L=\ord_N(b)$.  The following are
+equivalent.
+\begin{enumerate}[label=(\roman*)]
+\item the Midy block condition holds for every $r>1$ dividing $L$;
+\item it is enough to check the block condition only for every \emph{prime}
+      $q\mid L$;
+\item
+\[
+\ord_p(b)=L\qquad\text{for every prime }p\mid N;
+\]
+\item
+\[
+\ord_D(b)=L\qquad\text{for every divisor }D>1\text{ of }N.
+\]
+\end{enumerate}
+Thus total Midy can be checked on the prime divisors of the period, or,
+equivalently, on the prime divisors of the modulus; there is no need to check
+all divisors in either family.
+\end{proposition}
+
+\begin{proof}
+The upward-closure property of the Midy set says that if $r_1\mid r_2\mid L$
+and the property holds for $r_1$, then it holds for $r_2$.  Hence checking
+all prime $q\mid L$ already checks every divisor $r>1$ of $L$.  The
+equivalence of (i) and (iii) is Theorem~2.10 of
+\cite{Castillo2015} (with the same result developed from the Midy-set
+characterizations in the preceding results of that paper).
+
+It remains only to observe that (iii) and (iv) are elementarily equivalent.
+If $p^a\Vert N$, reduction modulo $p$ gives
+\[
+\ord_p(b)\mid\ord_{p^a}(b),
+\]
+whereas $p^a\mid N$ gives
+\[
+\ord_{p^a}(b)\mid\ord_N(b)=L.
+\]
+Thus $\ord_p(b)=L$ forces $\ord_{p^a}(b)=L$.  The order modulo an arbitrary
+divisor $D>1$ is the least common multiple of its prime-power local orders,
+so it is again $L$.  The converse follows by taking $D=p$.
+\end{proof}
+
+A caution is useful.  Merely checking that the orders modulo the prime
+divisors are equal \emph{to one another} is not enough; they must equal the
+global order $L=\ord_N(b)$.  For example,
+\[
+N=9,\qquad b=2,
+\]
+has the single prime divisor $3$, with $\ord_3(2)=2$, but
+$\ord_9(2)=6$, so $9$ is not total Midy to base $2$.
+
+\subsection{A $q$-Midy refinement of the Pocklington mechanism}
+
+Midy's property can also force only a \emph{part} of a prime power in
+$N-1$ into every prime divisor of $N$.  This is valuable precisely when the
+usual Pocklington gcd for the full prime power fails.
+
+\begin{proposition}[$q$-Midy congruence forcing; Castillo--Garc\'ia-Pulgar\'in--Vel\'asquez-Soto]
+\label{prop:q-midy-forcing}
+Let $N>1$ be odd, $\gcd(N,b)=1$, and write
+\[
+N-1=q^s t,
+\qquad q\text{ prime},\qquad q\nmid t.
+\]
+If, for some $0\le i<s$,
+\begin{equation}
+N\mid\Phi_q\!\left(b^{q^i t}\right),
+\label{eq:q-midy-force}
+\end{equation}
+then every prime divisor $p\mid N$ satisfies
+\[
+p\equiv1\pmod{q^{i+1}}.
+\]
+In particular, if
+\begin{equation}
+2(i+1)>s+\log_q t,
+\label{eq:q-midy-prime-ineq}
+\end{equation}
+then $N$ is prime.
+\end{proposition}
+
+\begin{proof}
+This is Theorem~3.10 of \cite{Castillo2015}; the short order argument is worth
+recording.  Put $x=b^{q^i t}$.  If $p\mid N$, then $p\ne q$ because
+$q\mid N-1$.  From $p\mid\Phi_q(x)$ one has $x\not\equiv1\pmod p$ (otherwise
+$p\mid q$), while $x^q\equiv1\pmod p$.  Hence $x$ has exact order $q$
+modulo $p$.  If $m=\ord_p(b)$, then $m\mid q^{i+1}t$ because $x^q=1$, but
+$m\nmid q^it$ because $x\ne1$.  Since $q\nmid t$, this says precisely that
+$v_q(m)=i+1$.  Therefore $q^{i+1}\mid m\mid p-1$.
+
+If $N$ were composite, it would have a prime divisor $p\le\sqrt N$.  The
+preceding congruence gives $q^{i+1}\le p-1<\sqrt N$, hence
+$q^{2(i+1)}<N$.  On the other hand,
+condition~\eqref{eq:q-midy-prime-ineq} gives
+$q^{2(i+1)}>q^s t=N-1$; since both sides are integers this implies
+$q^{2(i+1)}\ge N$, a contradiction.
+\end{proof}
+
+\begin{corollary}[Accumulating forced congruence factors]
+\label{cor:forced-modulus}
+Suppose independent order or Midy arguments prove, for a collection of prime
+powers $q^{e_q}\mid N-1$, that
+\[
+q^{e_q}\mid p-1\qquad\text{for every prime }p\mid N.
+\]
+If a baseline order $L$ is already known to divide every $p-1$, define
+\[
+F_{\rm force}:=\operatorname{lcm}\!\left(L,\prod_q q^{e_q}\right).
+\]
+Then every prime divisor of $N$ is $1$ modulo $F_{\rm force}$.  Consequently
+\[
+F_{\rm force}\ge\sqrt N
+\quad\Longrightarrow\quad N\text{ is prime}.
+\]
+\end{corollary}
+
+The square-root threshold is not the only useful one.  The familiar BLS
+cube-root discriminant argument depends only on the conclusion that every
+prime factor is $1$ modulo a common forced modulus.
+
+\begin{proposition}[Cube-root test for an accumulated forced modulus]
+\label{prop:forced-modulus-cuberoot}
+Assume that every prime divisor $p\mid N$ satisfies $p\equiv1\pmod F$, where
+$F\mid N-1$, and suppose
+\[
+N^{1/3}<F<\sqrt N.
+\]
+Write the base-$F$ expansion
+\[
+N=c_2F^2+c_1F+1,
+\qquad 0\le c_1,c_2<F.
+\]
+If
+\[
+c_1^2-4c_2
+\]
+is not a square, then $N$ is prime.
+\end{proposition}
+
+\begin{proof}
+Suppose $N$ were composite and let $p\le\sqrt N$ be a prime divisor.  Write
+\[
+p=aF+1,
+\qquad
+N/p=bF+1,
+\qquad a,b\ge1,
+\]
+using the forced congruence for $p$ and for the complementary divisor.  Then
+\[
+N=abF^2+(a+b)F+1.
+\]
+Since $N<F^3$, one has $ab<F$.  Also $a+b<F$: otherwise
+$ab\ge a+b-1\ge F-1$, and hence
+\[
+N\ge(F-1)F^2+F^2+1=F^3+1,
+\]
+a contradiction.  Therefore the displayed expression is already the base-$F$
+expansion, so $c_2=ab$ and $c_1=a+b$.  Consequently
+\[
+c_1^2-4c_2=(a-b)^2
+\]
+is a square.  The contrapositive proves the assertion.
+\end{proof}
+
+This gives a useful way to combine several auxiliary bases: the original
+period supplies one forced modulus, and $q$-Midy tests can add prime-power
+information that the original base does not expose.  Crossing $\sqrt N$
+gives immediate primality; crossing $N^{1/3}$ may already finish the proof by
+Proposition~\ref{prop:forced-modulus-cuberoot}.
+
+\subsection{The part of $n-1$ immediately visible to $N-1$ tests}
+
+Assume now that
+\[
+n-1=dL,
+\qquad L=\ord_n(b).
+\]
+For each prime power $q^e\Vert n-1$, one has
+\[
+v_q(L)=e-v_q(d).
+\]
+Define the \emph{spectrally exposed factor}
+\begin{equation}
+F_L:=\prod_{\substack{q^e\Vert n-1\\q\nmid d}}q^e.
+\label{eq:FL}
+\end{equation}
+Thus $F_L$ consists exactly of the full prime-power factors of $n-1$ whose
+$q$-adic exponent is already present in $L$; equivalently, $F_L$ is the
+largest divisor of $n-1$ supported on primes not dividing $d$.
+
+For each prime $q\mid F_L$ put
+\begin{equation}
+g_q=\gcd\!\left(b^{(n-1)/q}-1,n\right).
+\label{eq:gq}
+\end{equation}
+Since $v_q(L)=v_q(n-1)$, the order $L$ does not divide $(n-1)/q$, so
+$g_q<n$.  Therefore either $g_q=1$, or $g_q$ is immediately a proper factor
+of $n$.  If all $g_q=1$, the hypotheses of the $N-1$ Pocklington theorem
+hold for the completely factored part $F_L$.  This observation is the basis
+of the Pocklington and BLS entries in the final toolbox.
+
+
+\subsection{Why the exact period is substantial input}
+\label{subsec:order-complexity}
+
+The implications collected in the final toolbox begin with the exact value
+\[
+L=\ord_n(b).
+\]
+This is important logically and computationally: the toolbox is not a
+``formula'' which turns an arbitrary integer $n$ into a practical primality
+test.  For a general pair $(b,n)$, finding $L$ may be much harder than merely
+testing $n$ for primality.
+
+In a generic group, the classical baby-step--giant-step and Pollard-rho order
+algorithms use on the order of $L^{1/2}$ group operations.  Sutherland's
+generic-order algorithms improve this for many orders, sometimes to roughly
+$L^{1/3}$, but no classical polynomial-time algorithm in $\log n$ is known for
+the unrestricted problem \cite{Sutherland2007}.  If a factored multiple of
+$L$ is already known, order computation becomes much faster: one removes prime
+factors successively by modular exponentiation.  For the multiplicative group
+modulo an unfactored composite $n$, however, obtaining such an exponent
+normally brings one back to integer factorization.
+
+The standard general-purpose classical route is therefore factorization
+assisted.  The heuristic complexity of the general number field sieve is
+\[
+\exp\!\left(
+ \left((64/9)^{1/3}+o(1)\right)
+ (\log n)^{1/3}(\log\log n)^{2/3}
+\right),
+\]
+with faster constants for suitable special forms \cite{Pomerance1996}.
+Conversely, knowledge of multiplicative orders of random units can be used to
+factor composites by the classical post-processing at the heart of Shor's
+reduction.  Quantum order finding, and hence factoring, is polynomial-time in
+the input length \cite{Shor1997}; this does not presently make exact order a
+routine classical input.
+
+There is a useful conceptual asymmetry here.  Primality itself is known to be
+in deterministic polynomial time \cite{AKS2004}, whereas exact order finding for an arbitrary
+unknown composite modulus has no comparable classical polynomial-time method.
+Thus one should not first compute $L$ merely in order to feed it into this
+toolbox.  The toolbox is most useful when $L$ arises naturally from the
+problem.
+
+\subsection{Cyclotomic values: a natural source of known periods}
+\label{subsec:cyclotomic-known-L}
+
+Cyclotomic factor tables provide an important example in which the period is
+known before primality is decided.
+
+\begin{proposition}[Primitive cyclotomic factors are prime or overpseudoprime]
+\label{prop:cyclotomic-over}
+Let $a\ge2$, $L\ge1$, and let $N>1$ divide $\Phi_L(a)$.  Suppose that
+\[
+\gcd(N,aL)=1.
+\]
+Then every divisor $D>1$ of $N$ satisfies
+\[
+\ord_D(a)=L.
+\]
+Consequently $N$ is either prime or an overpseudoprime to base $a$.
+Moreover $L\mid N-1$.
+\end{proposition}
+
+\begin{proof}
+Let $p^e\Vert D$.  Since $p\nmid aL$ and $p\mid\Phi_L(a)$, the order of
+$a$ modulo $p$ is exactly $L$.  Because $p^e\mid\Phi_L(a)$, one also has
+$a^L\equiv1\pmod{p^e}$.  The order modulo $p^e$ is therefore both a
+multiple of the order modulo $p$ and a divisor of $L$, hence equals $L$.
+Taking least common multiples over the prime-power factors of $D$ gives
+$\ord_D(a)=L$.  In particular every prime divisor $p$ of $N$ satisfies
+$p\equiv1\pmod L$, and hence $N\equiv1\pmod L$.
+\end{proof}
+
+This proposition explains both the usefulness and the limitation of exact
+period information in tables such as Kamada's factorizations of
+$\Phi_L(10)$ \cite{KamadaPhi10}.  Once exceptional factors dividing $10L$
+are removed, an unresolved cofactor is already known to have exactly the
+same order $L$ on every nontrivial divisor.  Fermat, Midy, strong
+pseudoprimality and overpseudoprimality therefore cannot distinguish a prime
+cofactor from a composite one.
+
+Within the present toolbox, the positive primality mechanism that can still
+use $L$ is the $N-1$ machinery.  If $N-1=dL$ and $F_L$ is the spectrally
+exposed factor of \eqref{eq:FL}, then for primitive cyclotomic factors the
+Pocklington gcd conditions are automatic: for $q\mid F_L$ the exponent
+$(N-1)/q$ is not divisible by $L$, so it is nontrivial modulo every prime
+divisor of $N$.  Thus
+\[
+F_L\ge\sqrt N
+\]
+gives a Pocklington certificate, while the BLS cube-root regime may apply
+when $F_L^3>N$ together with the usual nonsquare-discriminant condition.
+Since $F_L\le L$, these conditions already show why only relatively small
+factors of a large cyclotomic value can usually be certified from the period
+alone.
+
+\begin{example}[One line of Kamada's base-$10$ table]
+Kamada's entry for $L=71401$ begins
+\[
+\Phi_{71401}(10)
+=
+856813\cdot195152311403370773\cdot C,
+\]
+where $C$ is an unresolved cofactor with $64877$ decimal digits.
+Here
+\[
+71401=11\cdot6491.
+\]
+For the factor $N=856813$,
+\[
+N-1=12\cdot71401,
+\qquad
+F_L=71401,
+\]
+and
+\[
+71401^2=5\,098\,102\,801>N.
+\]
+Thus the known order $71401$ supplies a Pocklington proof of primality
+using base $10$.  By contrast,
+\[
+195152311403370773>71401^3
+ =364\,009\,638\,094\,201,
+\]
+so even the clean BLS cube-root threshold cannot be reached using only the
+known period.  The enormous cofactor is farther outside the range still.
+This is typical: the order information is perfect for recognizing the
+cyclotomic structure but, except for small factors, does not by itself settle
+primality.
+\end{example}
+
+\subsection{Beyond the period-only threshold: a qualification and proof ladder}
+\label{subsec:cyclotomic-beyond-threshold}
+
+Suppose now that $N$ is a probable-prime factor of a primitive cyclotomic
+value $\Phi_L(a)$, with $\gcd(N,aL)=1$, but that $N$ is too large for the
+factor $L$ (or $F_L$) by itself to reach the Pocklington or BLS thresholds.
+The first conclusion should be negative but precise: \emph{no further test
+that only rechecks the order of the same base $a$ can distinguish prime from
+composite}.  If $N$ is composite, Proposition~\ref{prop:cyclotomic-over}
+already forces every nontrivial divisor to have that same order.  Thus a
+Fermat test, a strong test, or total Midy to the cyclotomic base is already
+built into the hypothesis.
+
+The period-only threshold is nevertheless not a ceiling for the rest of the
+toolbox.  There are four natural next steps.
+
+\medskip
+\noindent\textbf{1. Enlarge the $N-1$ certificate with auxiliary bases.}
+Write $N-1=dL$.  The factor $F_L$ is only the portion of $N-1$ automatically
+certified by the original base.  It is not the largest factor that
+Pocklington can use.  If $q^e\Vert N-1$ is found by factoring an additional
+part of $d$, one may search for an auxiliary base $u$ satisfying
+\[
+u^{N-1}\equiv1\pmod N,
+\qquad
+\gcd\!\left(u^{(N-1)/q}-1,N\right)=1.
+\]
+Then every prime $p\mid N$ has $q^e\mid p-1$.  Different primes $q$ may use
+different witnesses $u$.  Accumulating these prime powers enlarges the
+certified factor of $N-1$; if it reaches $\sqrt N$, Pocklington finishes the
+proof, and in the cube-root range the BLS criteria may finish it.  If one of
+the gcds lies strictly between $1$ and $N$, the same computation has instead
+found a proper factor.
+
+\medskip
+\noindent\textbf{2. Use partial $q$-adic forcing when full Pocklington fails.}
+Proposition~\ref{prop:q-midy-forcing} is useful when an auxiliary base does
+not expose the full $q^e\Vert N-1$.  A congruence
+\[
+N\mid\Phi_q\!\left(u^{q^i t}\right),
+\qquad N-1=q^s t,
+\]
+still forces $q^{i+1}\mid p-1$ for every $p\mid N$.  Such partial powers can
+be combined through Corollary~\ref{cor:forced-modulus}; once the accumulated
+modulus exceeds $N^{1/3}$, Proposition~\ref{prop:forced-modulus-cuberoot}
+may already finish the proof.  For the original
+cyclotomic base $a$ this generally recovers only the $q$-part already present
+in $L$; genuine amplification therefore requires auxiliary bases or
+additional information.
+
+\medskip
+\noindent\textbf{3. Do not restrict BLS to $N-1$.}
+The original Brillhart--Lehmer--Selfridge paper develops three families of
+criteria: tests using factors of $N-1$, Lucas-sequence tests using factors of
+$N+1$, and mixed tests using factors of both $N-1$ and $N+1$
+\cite{BLS1975}.  Its stronger $N-1$ results also use lower bounds for the
+prime factors of the still-unfactored remainder, so trial division or ECM
+progress can itself strengthen a certificate even before another factor is
+found.  Thus a stubborn factorization of $N-1$ is a reason both to exploit
+such remainder bounds and to inspect $N+1$; the simplified cube-root entry in
+our toolbox is only one member of the full BLS family.
+
+\medskip
+\noindent\textbf{4. Separate qualification from proof.}
+If the aim is first to increase confidence that a large unresolved factor is
+prime, use strong probable-prime tests to bases \emph{independent} of the
+cyclotomic base.  For an odd composite, at most one quarter of the admissible
+bases are strong Miller--Rabin liars, so $k$ independent uniformly random
+strong tests have false-pass probability at most $4^{-k}$ with respect to the
+random choice of bases; this is a statement about the randomized test, not a
+Bayesian prior on $N$ \cite{CrandallPomerance}.  The original base $a$ must
+not be counted among these independent tests: an overpseudoprime is forced to
+pass it.  Strong Lucas/BPSW-type screening is another useful independent
+compositeness filter, but passing such filters is still not a proof.
+
+When a proof rather than a qualification is required and the $N\pm1$
+machinery remains below threshold, one should switch to a general primality
+prover.  APR--CL/Jacobi-sum methods descend from the algorithm of
+Adleman--Pomerance--Rumely \cite{APR1983,CohenLenstra1984}, while ECPP supplies
+compact elliptic-curve certificates \cite{AtkinMorain1993}.  These methods do
+not exploit the known reciprocal period directly; their role is precisely to
+finish cases in which the special structure has delivered all the information
+it can.
+
+Kamada maintains a separate list of probable-prime factors whose primality
+has not yet been certified \cite{KamadaPRP}.  Such a ``p'' entry is different
+from an unresolved cofactor already known to be composite: the former is a
+candidate for the qualification/proof ladder above, whereas the latter needs
+factorization rather than a primality proof.  As of August 2026 the current
+list begins with a $3747$-digit probable-prime factor of
+$\Phi_{12198}(10)$.  In such an example the five-digit period is enormously
+below the cube-root scale of the candidate, so the period-only certificate is
+not the realistic route; auxiliary $N\pm1$ information or a general
+certificate method is needed.
+
+
+\section{Extended period--primality toolbox}
+\label{sec:toolbox}
+
+This section is intentionally synthetic.  It is meant to be read as a
+reference sheet rather than as a chain of proofs.  Every small tool is
+accompanied by an elementary example.  Most entries are classical; the point
+is to place them next to one another in the special notation
+\[
+L=L_b(n)=\ord_n(b).
+\]
+
+\begin{center}
+\fbox{\parbox{0.91\textwidth}{
+\textbf{Important warning.}
+The toolbox assumes that the exact order $L$ is already known.  It is not a
+general-purpose primality test from $n$ alone.  Generic classical order
+computation is expensive, and for an unfactored composite modulus the
+factorization-assisted route can be harder than primality testing itself;
+see Subsection~\ref{subsec:order-complexity}.  The toolbox is most useful
+when $L$ is supplied by the structure of the problem.
+}}
+\end{center}
+
+\subsection{Fundamental order facts}
+
+Let $n>1$, $b\ge2$, and $\gcd(b,n)=1$.
+
+\begin{enumerate}[label=\textbf{T\arabic*.},leftmargin=2.2em]
+\item \textbf{Period equals order.}
+The period of $1/n$ in base $b$ is
+\[
+L=\ord_n(b),
+\qquad
+L\mid\lambda(n)\mid\phi(n).
+\]
+
+\smallskip
+\noindent\emph{Example.}
+\[
+\frac17=0.\overline{142857},
+\qquad
+\ord_7(10)=6=\lambda(7)=\phi(7).
+\]
+
+\item \textbf{Every divisor of $\lambda(n)$ occurs.}
+Because $(\mathbb Z/n\mathbb Z)^\times$ is finite abelian, every divisor of
+its exponent $\lambda(n)$ is the order of some unit.  In particular
+\[
+\max_{\gcd(b,n)=1}L_b(n)=\lambda(n).
+\]
+
+\smallskip
+\noindent\emph{Example.}
+For $n=15$, $\lambda(15)=4$.  The divisors $1,2,4$ occur as orders:
+\[
+\ord_{15}(16)=1,\qquad
+\ord_{15}(14)=2,\qquad
+\ord_{15}(2)=4.
+\]
+
+\item \textbf{Full totient order.}
+For odd $n$, an equality $L=\phi(n)$ is possible exactly when
+$(\mathbb Z/n\mathbb Z)^\times$ is cyclic; hence $n=p^k$ for an odd prime
+$p$.  Thus $L=\phi(n)$ forces an odd prime power, but not necessarily a
+prime.
+
+\smallskip
+\noindent\emph{Example.}
+\[
+\phi(9)=6,\qquad \ord_9(2)=6,
+\]
+yet $9$ is composite.
+
+\item \textbf{Spectral condition equals Fermat's congruence.}
+\[
+L\mid n-1
+\quad\Longleftrightarrow\quad
+b^{n-1}\equiv1\pmod n.
+\]
+For composite $n$ this is exactly Fermat pseudoprimality to base $b$.
+
+\smallskip
+\noindent\emph{Example.}
+For $n=341=11\cdot31$ and $b=2$,
+\[
+L=\ord_{341}(2)=10\mid340,
+\]
+so $2^{340}\equiv1\pmod{341}$.
+Carmichael numbers are the extreme all-base version of Fermat pseudoprimality;
+their infinitude was proved by Alford, Granville and Pomerance
+\cite{AGP1994}.
+
+\item \textbf{Somer reduction under the spectral condition.}
+If $L\mid n-1$, then
+\[
+L\mid\lambda_0(n)=\operatorname{lcm}_{p\mid n}(p-1).
+\]
+Prime-power factors of $n$ therefore do not supply extra factors to a
+spectral period.
+
+\smallskip
+\noindent\emph{Example.}
+For $n=25$, $b=7$,
+\[
+L=\ord_{25}(7)=4,
+\qquad
+\lambda_0(25)=5-1=4,
+\]
+even though $\lambda(25)=20$.
+\end{enumerate}
+
+\subsection{Direct primality and pseudoprimality consequences}
+
+\begin{enumerate}[label=\textbf{T\arabic*.},leftmargin=2.2em,resume]
+\item \textbf{Lucas criterion.}
+For odd $n>1$,
+\[
+\exists b:\ \ord_n(b)=n-1
+\quad\Longleftrightarrow\quad
+n\text{ is prime}.
+\]
+
+\smallskip
+\noindent\emph{Example.}
+\[
+\ord_7(3)=6=7-1,
+\]
+so Lucas' criterion certifies $7$.  Recursive primality certificates based
+on a primitive-root witness and the prime factors of $p-1$ lead to the
+classical Pratt certificate framework \cite{Pratt1975}.
+
+\item \textbf{Small spectral index.}
+Somer proved fixed-index finiteness.  The present paper adds explicit size
+obstructions and exact low-frequency lines.
+
+\smallskip
+\noindent\emph{Example.}
+At $d=4$ the complete spectral line is
+\[
+\mathcal E(4)=\{9\}.
+\]
+Thus any odd $n>9$ satisfying
+\[
+\ord_n(b)=\frac{n-1}{4}
+\]
+is prime.
+
+\item \textbf{Repeated prime powers.}
+In the notation
+\[
+\kappa=\lambda(n)/L,
+\qquad
+K=n/\rad(n),
+\]
+one has
+\[
+K\mid\kappa.
+\]
+Thus a prime divisor $p>\kappa$ occurs only to the first power.
+
+\smallskip
+\noindent\emph{Example.}
+For the exceptional point $n=25$, $d=6$, $b=7$,
+\[
+L=4,\qquad \kappa=\frac{20}{4}=5,\qquad
+K=\frac{25}{5}=5,
+\]
+and indeed $K\mid\kappa$.
+
+\item \textbf{Number of distinct prime factors.}
+If $s=\omega(n)$ and $n$ is an odd composite spectral point, then
+\[
+2^{s-1}\kappa\le d-1,
+\qquad
+s\le1+\left\lfloor\log_2\frac{d-1}{\kappa}\right\rfloor.
+\]
+
+\smallskip
+\noindent\emph{Example.}
+For $n=561$, one may take $b=5$ and $d=7$:
+\[
+L=80,\qquad \lambda(561)=80,\qquad \kappa=1,\qquad s=3.
+\]
+The inequality reads
+\[
+2^{3-1}=4\le6=d-1.
+\]
+\end{enumerate}
+
+\subsection{Midy's property from the exact period}
+
+Let $r>1$ divide $L$ and $h=L/r$.
+
+\begin{enumerate}[label=\textbf{T\arabic*.},leftmargin=2.2em,resume]
+\item \textbf{Exact block criterion.}
+The sum of the $r$ equal-length repetend blocks is divisible by $b^h-1$
+exactly when
+\[
+n\mid1+b^h+\cdots+b^{(r-1)h}.
+\]
+For prime $r=q$ this is
+\[
+n\mid\Phi_q(b^h).
+\]
+
+\smallskip
+\noindent\emph{Example.}
+For $1/7$ in base $10$, take $r=2$, $h=3$:
+\[
+1+10^3=1001=7\cdot143.
+\]
+Correspondingly,
+\[
+142+857=999=10^3-1.
+\]
+
+\item \textbf{Prime Midy property.}
+If $n=p$ is prime, the Midy condition holds for every divisor $r>1$ of
+$L$.
+
+\smallskip
+\noindent\emph{Example.}
+Again $1/7=0.\overline{142857}$.  Taking $r=3$, $h=2$ gives
+\[
+14+28+57=99=10^2-1.
+\]
+
+\item \textbf{The nines property.}
+If $2\mid L$ and $h=L/2$, the two halves add to $b^h-1$ precisely when
+\[
+b^h\equiv-1\pmod n.
+\]
+
+\smallskip
+\noindent\emph{Example.}
+For $n=7$, $b=10$,
+\[
+10^3\equiv-1\pmod7
+\]
+and the two halves $142$ and $857$ add to $999$.
+
+\item \textbf{Two-block Midy implies strong pseudoprimality in the spectral
+case.}
+If $n$ is composite, $L\mid n-1$, and
+\[
+b^{L/2}\equiv-1\pmod n,
+\]
+then $n$ passes the Miller--Rabin strong pseudoprime test to base $b$.
+
+\smallskip
+\noindent\emph{Example.}
+For
+\[
+n=3277,\qquad b=2,
+\]
+one has
+\[
+L=\ord_{3277}(2)=28,\qquad 28\mid3276,
+\qquad
+2^{14}\equiv-1\pmod{3277}.
+\]
+Thus $3277$ is a strong pseudoprime to base $2$.
+
+\item \textbf{Total Midy needs only prime checks.}
+The following conditions are equivalent:
+\[
+\begin{array}{c}
+\text{Midy holds for every }r>1\text{ dividing }L,\\[1mm]
+\text{Midy holds for every prime }q\mid L,\\[1mm]
+\ord_p(b)=L\text{ for every prime }p\mid n,\\[1mm]
+\ord_D(b)=L\text{ for every divisor }D>1\text{ of }n.
+\end{array}
+\]
+Thus neither all block divisors of $L$ nor all divisors of $n$ have to be
+checked; see Proposition~\ref{prop:total-midy-prime-only} and
+\cite{Castillo2015}.  A composite satisfying these conditions is an
+overpseudoprime to base $b$ and is automatically a strong pseudoprime to the
+same base \cite{Shevelev2012,Castillo2012}.
+
+\smallskip
+\noindent\emph{Example.}
+\[
+2047=23\cdot89,\qquad
+\ord_{23}(2)=\ord_{89}(2)=\ord_{2047}(2)=11.
+\]
+The two prime checks already prove that $2047$ is total Midy, hence an
+overpseudoprime, to base $2$.
+
+\item \textbf{$q$-Midy forcing can refine Pocklington.}
+If
+\[
+n-1=q^s t,\qquad q\nmid t,
+\]
+and for some $0\le i<s$
+\[
+n\mid\Phi_q\!\left(b^{q^i t}\right),
+\]
+then every prime divisor $p\mid n$ satisfies
+\[
+p\equiv1\pmod{q^{i+1}}.
+\]
+If $2(i+1)>s+\log_q t$, this alone proves that $n$ is prime; see
+Proposition~\ref{prop:q-midy-forcing} and \cite{Castillo2015}.
+
+\smallskip
+\noindent\emph{Example.}
+For $n=1459$, $n-1=3^6\cdot2$.  Castillo, Garc\'ia-Pulgar\'in and
+Vel\'asquez-Soto verify the criterion with $b=2$, $q=3$, and $i=4$; hence
+every prime factor would be $1\pmod{3^5}$, which is already too large for a
+proper factor not exceeding $\sqrt{1459}$.  Thus $1459$ is prime.
+\end{enumerate}
+
+\subsection{$N-1$ primality certificates extracted from $L$}
+
+Suppose $L\mid n-1$, $n-1=dL$, and let $F_L$ be the spectrally exposed
+factor of \eqref{eq:FL}.
+
+\begin{enumerate}[label=\textbf{T\arabic*.},leftmargin=2.2em,resume]
+\item \textbf{Automatic compositeness witness.}
+For each prime $q\mid F_L$ put
+\[
+g_q=\gcd\!\left(b^{(n-1)/q}-1,n\right).
+\]
+One always has $g_q<n$; if $g_q>1$, it is a proper factor of $n$.
+
+\smallskip
+\noindent\emph{Example.}
+For
+\[
+n=15,\quad b=4,\quad L=2,\quad d=7,
+\]
+the prime $q=2$ is spectrally exposed and
+\[
+\gcd(4^7-1,15)=3.
+\]
+The order information itself produces the factor $3$.
+
+\item \textbf{Pocklington regime.}
+If $g_q=1$ for every $q\mid F_L$, every prime divisor $p$ of $n$ satisfies
+$p\equiv1\pmod{F_L}$.  Hence
+\[
+F_L\ge\sqrt n
+\quad\Longrightarrow\quad n\text{ is prime}.
+\]
+
+\smallskip
+\noindent\emph{Example.}
+For $n=13$, $b=2$,
+\[
+L=12,\qquad F_L=12>\sqrt{13}.
+\]
+The two required checks are
+\[
+\gcd(2^6-1,13)=1,\qquad
+\gcd(2^4-1,13)=1,
+\]
+so Pocklington certifies $13$.
+
+\item \textbf{Certificate amplification beyond the original period.}
+The exposed factor $F_L$ is only what the known base certifies automatically.
+If $q^e\Vert n-1$ lies in the remaining cofactor $d=(n-1)/L$, an auxiliary
+base $u$ satisfying
+\[
+u^{n-1}\equiv1\pmod n,
+\qquad
+\gcd\!\left(u^{(n-1)/q}-1,n\right)=1
+\]
+forces $q^e\mid p-1$ for every prime $p\mid n$.  Different $q$ may use
+different bases.  Such prime powers may therefore be adjoined to the
+certified $N-1$ factor until Pocklington or BLS reaches its threshold.  A
+nontrivial gcd instead proves compositeness immediately.
+
+\smallskip
+\noindent\emph{Example.}
+If the original order exposes $F_L=2^a$ but factoring $(n-1)/L$ also reveals
+$q^e$, a successful auxiliary witness for $q$ upgrades the usable certified
+factor from $2^a$ to $2^a q^e$; the auxiliary base need not be the base whose
+reciprocal period supplied $L$.
+
+\item \textbf{BLS cube-root regime.}
+If
+\[
+n^{1/3}<F_L<\sqrt n
+\]
+and the Pocklington congruences hold, write
+\[
+n=c_2F_L^2+c_1F_L+1,\qquad0\le c_1,c_2<F_L.
+\]
+If
+\[
+c_1^2-4c_2
+\]
+is not a square, the Brillhart--Lehmer--Selfridge cube-root criterion
+proves primality \cite{BLS1975}.  We use only this precise version here;
+stronger BLS variants have additional hypotheses and are not folded into the
+toolbox statement.  More generally, $F_L$ may be replaced by any accumulated
+forced modulus $F$ for which every prime divisor of $n$ is known to be
+$1\pmod F$; see Proposition~\ref{prop:forced-modulus-cuberoot}.
+
+\smallskip
+\noindent\emph{Example.}
+Take $n=71$.  The element $b=20$ has
+\[
+\ord_{71}(20)=7,\qquad 71-1=10\cdot7,
+\]
+so $F_L=7$.  Since
+\[
+71=1\cdot7^2+3\cdot7+1
+\]
+and
+\[
+3^2-4\cdot1=5
+\]
+is not a square, the BLS cube-root criterion certifies $71$.
+
+\item \textbf{The full BLS toolbox also uses $N+1$.}
+The preceding entry is only the convenient $N-1$ cube-root form.  The
+original BLS theory also contains Lucas-sequence criteria based on factors of
+$N+1$ and stronger mixed criteria using factors of both $N-1$ and $N+1$
+\cite{BLS1975}.  When the known period leaves the $N-1$ certificate too
+small, factoring $N+1$ is therefore a natural second route.
+
+\smallskip
+\noindent\emph{Example.}
+For a large cyclotomic probable prime with $L^3<N$, failure of the
+period-only cube-root test says nothing about the factorization of $N+1$; a
+large certified factor there can activate a Lucas or mixed BLS criterion.
+
+\item \textbf{Primitive cyclotomic factors.}
+If
+\[
+N\mid\Phi_L(b),\qquad \gcd(N,bL)=1,
+\]
+then every nontrivial divisor of $N$ has order $L$.  Thus $N$ is either
+prime or overpseudoprime.  All order-only tests in this toolbox therefore
+see the two cases in exactly the same way; the $N-1$ certificate is the
+tool that can still turn the known $L$ into a positive primality proof.
+
+\smallskip
+\noindent\emph{Example.}
+Kamada lists
+\[
+856813\mid\Phi_{71401}(10).
+\]
+Here
+\[
+856813-1=12\cdot71401,
+\qquad
+71401^2>856813.
+\]
+The primitive cyclotomic structure supplies the Pocklington gcd conditions,
+so the known period proves that $856813$ is prime.  On the same Kamada line,
+the $18$-digit factor $195152311403370773$ is already larger than
+$71401^3$, so the period alone does not reach even the clean BLS cube-root
+threshold.
+
+\item \textbf{Independent bases qualify a cyclotomic PRP.}
+An overpseudoprime is forced to pass the strong test to its defining
+cyclotomic base, so that base supplies no statistical evidence.  Strong
+Miller--Rabin tests to independently chosen bases do: an odd composite has at
+most one quarter strong-liar bases, giving a false-pass probability at most
+$4^{-k}$ for $k$ independent uniformly random choices.  This qualifies a
+probable prime; it does not prove one \cite{CrandallPomerance}.
+
+\smallskip
+\noindent\emph{Example.}
+For a Kamada factor of $\Phi_L(10)$, base $10$ should not be counted among
+the independent Miller--Rabin bases, because the cyclotomic structure already
+forces the required order behavior.
+
+\item \textbf{General proof fallback: APR--CL or ECPP.}
+If certificate amplification, $q$-Midy forcing, and the $N\pm1$ BLS routes
+remain below threshold, a general primality prover is the correct final tool.
+APR--CL uses Jacobi sums, while ECPP recursively constructs elliptic-curve
+primality certificates \cite{APR1983,CohenLenstra1984,AtkinMorain1993}.
+These methods do not need the reciprocal period; they finish precisely the
+cases in which the special period structure no longer suffices.
+
+\smallskip
+\noindent\emph{Example.}
+Kamada maintains a separate list of large probable-prime factors whose
+primality has not yet been certified \cite{KamadaPRP}; those entries are
+natural inputs for a general certificate generator after the inexpensive
+structural and probable-prime filters have been exhausted.
+\end{enumerate}
+
+\subsection{Spectral distribution and related spectra}
+
+\begin{enumerate}[label=\textbf{T\arabic*.},leftmargin=2.2em,resume]
+\item \textbf{Existential prime spectrum.}
+Allowing the base to vary,
+\[
+\mathcal P(d)=\{p\text{ prime}:p\equiv1\pmod d\}.
+\]
+Each line is infinite and has relative density $1/\phi(d)$ among primes.
+
+\smallskip
+\noindent\emph{Example.}
+For $d=5$, the prime $31$ belongs to the line because
+\[
+31\equiv1\pmod5.
+\]
+Indeed,
+\[
+\ord_{31}(6)=6=\frac{31-1}{5}.
+\]
+
+\item \textbf{Fixed-base prime spectrum.}
+For one fixed base $b$, the set
+\[
+\{p:\ord_p(b)=(p-1)/d\}
+\]
+is the near-primitive-root problem.  Under GRH it has the
+Wagstaff--Moree density described in Section~\ref{sec:fixed-base}.
+
+\smallskip
+\noindent\emph{Example.}
+For the decimal base,
+\[
+\ord_{13}(10)=6=\frac{13-1}{2},
+\]
+so $13$ lies on the fixed-base-$10$ spectral line $d=2$.
+
+\item \textbf{$\lambda$- and $\phi$-spectral hierarchy.}
+Define
+\[
+d_f(n)=\frac{n-1}{\gcd(n-1,f(n))},
+\qquad f\in\{\lambda,\phi\}.
+\]
+Then
+\[
+d_\phi(n)\mid d_\lambda(n),
+\]
+and $d_\lambda(n)$ is the unique genuine $L$-spectral index of $n$.
+
+\smallskip
+\noindent\emph{Example.}
+For $n=21$,
+\[
+\lambda(21)=6,\qquad \phi(21)=12,\qquad n-1=20.
+\]
+Hence
+\[
+d_\lambda(21)=\frac{20}{2}=10,
+\qquad
+d_\phi(21)=\frac{20}{4}=5,
+\]
+so indeed $d_\phi(21)\mid d_\lambda(21)$.
+\end{enumerate}
+
+\subsection{One-page decision map}
+
+For quick use:
+\[
+\begin{array}{ccl}
+L=n-1
+&\Longrightarrow& n\text{ prime},\\[2mm]
+L\mid n-1
+&\Longleftrightarrow& b^{n-1}\equiv1\pmod n,\\[2mm]
+L\mid n-1,\ n\text{ composite}
+&\Longrightarrow& \text{Fermat pseudoprime to }b,\\[2mm]
+2\mid L,\ \text{two-block Midy}
+&\Longrightarrow& \text{strong pseudoprime to }b,\\[2mm]
+\ord_p(b)=L\ \forall p\mid n
+&\Longleftrightarrow& \text{total Midy / overpseudoprime},\\[2mm]
+N\mid\Phi_q(b^{q^it})
+&\Longrightarrow& q^{i+1}\mid(p-1)\ \forall p\mid N,\\[2mm]
+F_L\ge\sqrt n,\ g_q=1\ \forall q\mid F_L
+&\Longrightarrow& n\text{ prime},\\[2mm]
+F_{\rm force}\ge\sqrt N
+&\Longrightarrow& N\text{ prime},\\[2mm]
+F_{\rm force}>N^{1/3},\ \text{nonsquare digit discriminant}
+&\Longrightarrow& N\text{ prime},\\[2mm]
+n\ge U_0(d),\ L=(n-1)/d
+&\Longrightarrow& n\text{ prime}.
+\end{array}
+\]
+
+The conceptual message is twofold.  First, many classical statements become
+especially transparent once the exact reciprocal period $L$ is placed at the
+center.  Second, none of this removes the computational cost of obtaining
+$L$.  The toolbox is therefore a structural reference and a conditional
+certificate generator, not a universal replacement for modern primality
+testing.
+
+
+
+\section{Structural bounds for composite spectral lines}
+
+Assume throughout this section that $n$ is odd and composite and
+\[
+L=L_b(n)=\frac{n-1}{d}.
+\]
+Define
+\begin{equation}
+\kappa=\frac{\lambda(n)}L,
+\qquad
+H=\frac{\phi(n)}{\lambda(n)},
+\qquad
+j=\frac{\phi(n)}L=\kappa H.
+\label{eq:dHj}
+\end{equation}
+Then
+\[
+d\lambda(n)=\kappa(n-1),
+\qquad
+d\phi(n)=j(n-1).
+\]
+Since $\phi(n)<n-1$,
+\begin{equation}
+1\le \kappa\le j\le d-1.
+\label{eq:djrange}
+\end{equation}
+
+Write
+\[
+n=\prod_{i=1}^s p_i^{a_i},
+\qquad
+3\le p_1<\cdots<p_s,
+\qquad
+s=\omega(n),
+\]
+and put
+\[
+K=\prod_{i=1}^s p_i^{a_i-1}.
+\]
+
+\begin{lemma}[Repeated-prime restriction]
+\label{lem:Kdivd}
+One has
+\[
+K\mid \kappa.
+\]
+Consequently, if $a_i>1$, then
+\[
+p_i^{a_i-1}\mid \kappa.
+\]
+In particular every prime $p_i>\kappa$ occurs to the first power.
+\end{lemma}
+
+\begin{proof}
+For odd prime powers,
+\[
+\lambda(p_i^{a_i})=p_i^{a_i-1}(p_i-1).
+\]
+Hence $K\mid\lambda(n)$.  From
+$d\lambda(n)=\kappa(n-1)$ we get $K\mid \kappa(n-1)$.
+But every prime divisor of $K$ divides $n$, and hence
+$\gcd(K,n-1)=1$.  Therefore $K\mid \kappa$.
+\end{proof}
+
+\begin{lemma}[Two-adic overlap]
+\label{lem:H2adic}
+For odd $n$ with $s$ distinct prime divisors,
+\[
+2^{s-1}\mid H=\frac{\phi(n)}{\lambda(n)}.
+\]
+Consequently
+\begin{equation}
+2^{s-1}\kappa\mid j,
+\qquad
+2^{s-1}\kappa\le d-1.
+\label{eq:sd-bound}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If $e_i=v_2(p_i-1)$, then
+\[
+v_2(\phi(n))=\sum_i e_i,
+\qquad
+v_2(\lambda(n))=\max_i e_i.
+\]
+Since all $e_i\ge1$,
+\[
+v_2(H)
+=
+\sum_i e_i-\max_i e_i
+\ge s-1.
+\]
+The second assertion follows from $j=\kappa H\le d-1$.
+\end{proof}
+
+\begin{corollary}[Number of distinct prime factors]
+\label{cor:sbound}
+Every composite on spectral line $d$ satisfies
+\[
+s
+\le
+1+\left\lfloor
+\log_2\!\left(\frac{d-1}{\kappa}\right)
+\right\rfloor
+\le
+1+\lfloor\log_2(d-1)\rfloor.
+\]
+\end{corollary}
+
+\begin{proposition}[Smallest-prime bound]
+\label{prop:p1}
+One has
+\[
+p_1<
+\frac{d+j(s-1)}{d-j},
+\]
+and therefore
+\[
+p_1\le s(d-1).
+\]
+\end{proposition}
+
+\begin{proof}
+From $d\phi(n)=j(n-1)$,
+\[
+\frac dj
+=
+\frac{n-1}{\phi(n)}
+<
+\frac n{\phi(n)}
+=
+\prod_{i=1}^s\frac{p_i}{p_i-1}.
+\]
+Since the primes are distinct and odd, $p_i\ge p_1+2(i-1)$, and hence a fortiori $p_i\ge p_1+i-1$,
+\[
+\prod_{i=1}^s\frac{p_i}{p_i-1}
+\le
+\frac{p_1+s-1}{p_1-1}.
+\]
+Solving for $p_1$ gives the result.
+\end{proof}
+
+\begin{lemma}[A uniform Euler-factor ratio bound]
+\label{lem:euler-ratio}
+If $3\le p_1<\cdots<p_r$ are distinct odd primes, then
+\[
+\prod_{i=1}^r\frac{p_i}{p_i-1}
+\le
+\prod_{i=1}^r\frac{i+2}{i+1}
+=
+\frac{r+2}{2}
+<r+1.
+\]
+\end{lemma}
+
+\begin{proof}
+Since $p_i\ge i+2$ and $x/(x-1)$ is decreasing for $x>1$, each factor is at
+most $(i+2)/(i+1)$; the latter product telescopes.
+\end{proof}
+
+For
+\[
+P_k=\prod_{i=1}^k p_i^{a_i},
+\]
+the following recursive restriction is useful.
+
+\begin{proposition}[Squarefree-suffix bound]
+\label{prop:suffix}
+If $2\le k\le s$ and $p_k>\kappa$, then
+$p_k,\ldots,p_s$ occur only to the first power and
+\[
+p_k
+<
+d\lambda(P_{k-1})(s-k+1).
+\]
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:Kdivd}, the suffix
+\[
+q:=\prod_{i=k}^{s}p_i
+\]
+is squarefree.  Put $P=P_{k-1}$ and
+\[
+J_k:=\frac{\lambda(P)\phi(q)}{\lambda(n)}.
+\]
+Since $\lambda(n)=\operatorname{lcm}(\lambda(P),\lambda(q))$ and
+$\lambda(q)\mid\phi(q)$, the number $J_k$ is an integer.  Multiplying
+\[
+d\lambda(n)=\kappa(n-1)
+\]
+by $J_k$ gives
+\[
+d\lambda(P)\phi(q)=\kappa J_k(Pq-1).
+\]
+Write
+\[
+\phi(q)=q-\Delta_q.
+\]
+Then
+\[
+q\bigl(d\lambda(P)-\kappa J_kP\bigr)
+=
+d\lambda(P)\Delta_q-\kappa J_k.
+\]
+The coefficient on the left is a positive integer, because
+\[
+d\lambda(P)-\kappa J_kP
+=
+d\lambda(P)
+\frac{P(q-\phi(q))-1}{Pq-1}>0.
+\]
+Hence it is at least $1$, and therefore
+\[
+q<d\lambda(P)\Delta_q.
+\]
+Finally,
+\[
+\frac{\Delta_q}{q}
+=
+1-\prod_{i=k}^{s}\left(1-\frac1{p_i}\right)
+<
+\sum_{i=k}^{s}\frac1{p_i}
+\le\frac{s-k+1}{p_k}.
+\]
+Combining the last two inequalities proves
+\[
+p_k<d\lambda(P_{k-1})(s-k+1).
+\]
+\end{proof}
+
+\begin{proposition}[Largest-prime bound]
+\label{prop:largest}
+For $s\ge2$,
+\[
+p_s\le \kappa(P_{s-1}-1)+1.
+\]
+More precisely, if $p_s>\kappa$, then
+\[
+p_s-1\mid \kappa(P_{s-1}-1).
+\]
+\end{proposition}
+
+\begin{proof}
+If $p_s\le\kappa$, then the displayed upper bound is immediate because
+$P_{s-1}\ge3$.  Suppose therefore that $p_s>\kappa$.  Lemma~\ref{lem:Kdivd}
+gives $a_s=1$.  Since $p_s-1\mid\lambda(n)$ and
+$d\lambda(n)=\kappa(n-1)$,
+\[
+p_s-1\mid \kappa(n-1).
+\]
+Writing $n=P_{s-1}p_s$ and reducing modulo $p_s-1$ gives
+\[
+p_s-1\mid \kappa(P_{s-1}-1),
+\]
+and hence $p_s\le\kappa(P_{s-1}-1)+1$.
+\end{proof}
+
+
+\subsection{A uniform spectral size obstruction}
+\label{sec:uniform-size}
+
+Let
+\[
+L=\frac{n-1}{d},\qquad
+\kappa=\frac{\lambda(n)}{L},\qquad
+H=\frac{\phi(n)}{\lambda(n)},\qquad
+j=\kappa H.
+\]
+For an odd composite $n$ with $s=\omega(n)$ distinct prime factors,
+\[
+2^{s-1}\mid H,\qquad j\le d-1,
+\]
+and hence
+\[
+2^{s-1}\kappa\le d-1.
+\tag{U1}\label{eq:u1}
+\]
+
+For $d\ge2$, define
+\[
+S=S(d):=1+\lfloor\log_2(d-1)\rfloor,
+\qquad
+M=M(d):=2^{S-1}.
+\]
+Thus $M$ is the largest power of $2$ not exceeding $d-1$.
+
+\begin{theorem}[Uniform spectral size obstruction]
+\label{thm:uniform-U}
+Suppose that $n>1$ is odd and
+\[
+L_b(n)=\frac{n-1}{d}
+\]
+for some $b\ge2$ coprime to $n$.  If $n$ is composite, then
+\[
+\boxed{
+ n< U_0(d):=\bigl(dS(d)\bigr)^{\,2M(d)} .
+}
+\tag{U2}\label{eq:U0}
+\]
+Consequently
+\[
+n\ge U_0(d)\quad\Longrightarrow\quad n\text{ is prime}.
+\]
+Here $d\ge2$; for $d=1$ the conclusion is Lucas's criterion.
+\end{theorem}
+
+\begin{proof}
+The case $d=1$ is immediate from $L_b(n)=n-1$, so assume $d\ge2$.
+Write
+\[
+n=K\prod_{i=1}^{s}p_i,
+\qquad
+K=\prod_{i=1}^{s}p_i^{a_i-1},
+\qquad
+3\le p_1<\cdots<p_s.
+\]
+The repeated-prime restriction gives $K\mid\kappa$.  In particular,
+\[
+n\le \kappa R_s,
+\qquad
+R_k:=\prod_{i=1}^{k}p_i,
+\tag{U3}\label{eq:radical}
+\]
+and $s\le S$ by \eqref{eq:u1}.
+
+We first dispose of the prime-power case $s=1$, which is not covered by the
+terminal-prime estimate below.  Then $n=p^a$ with $a\ge2$ and
+$K=p^{a-1}\mid\kappa\le d-1$.  Since $p\le p^{a-1}=K$,
+\[
+n=pK\le K^2\le(d-1)^2<d^2\le U_0(d).
+\]
+Henceforth assume $s\ge2$.
+
+For $2\le k\le s-1$, put
+\[
+A_{k-1}:=\prod_{i<k}(p_i-1),
+\qquad
+K_{k-1}:=\prod_{i<k}p_i^{a_i-1}.
+\]
+Then
+$P_{k-1}=K_{k-1}\prod_{i<k}p_i$ has $k-1$ distinct odd prime factors and
+$K_{k-1}\mid K\mid\kappa$.  Therefore
+\[
+\lambda(P_{k-1})
+ \le \frac{\phi(P_{k-1})}{2^{k-2}}
+ = \frac{K_{k-1}A_{k-1}}{2^{k-2}}
+ \le \frac{\kappa A_{k-1}}{2^{k-2}}.
+\]
+The squarefree-suffix estimate yields
+\[
+p_k<
+\frac{d\kappa(s-k+1)}{2^{k-2}}A_{k-1}
+\qquad\text{whenever }p_k>\kappa.
+\tag{U4}\label{eq:pk-sharp}
+\]
+If $p_k\le\kappa$, the weaker inequality
+\[
+p_k<d\kappa(s-k+1)A_{k-1}
+\]
+is automatic.  Thus, for all $2\le k\le s-1$,
+\[
+A_k=A_{k-1}(p_k-1)
+<d\kappa S\,A_{k-1}^{\,2}.
+\tag{U5}\label{eq:A-rec}
+\]
+
+We distinguish two cases.
+
+\smallskip
+\noindent\emph{Case 1: $s=S$.}
+Since
+\[
+M=2^{S-1}\le d-1<2M,
+\]
+\eqref{eq:u1} forces $\kappa=1$.  Moreover $H$ is a positive multiple of
+$M$ and $j=H\le d-1<2M$, hence
+\[
+H=j=M.
+\]
+The smallest-prime bound gives
+\[
+p_1<\frac{d+M(S-1)}{d-M}<dS,
+\]
+so $A_1<dS$.  Iterating \eqref{eq:A-rec} gives
+\[
+A_{S-1}<(dS)^{M-1}.
+\tag{U6}\label{eq:A-top}
+\]
+By Lemma~\ref{lem:euler-ratio},
+\[
+\frac{R_{S-1}}{A_{S-1}}
+=\prod_{i=1}^{S-1}\frac{p_i}{p_i-1}
+\le\frac{S+1}{2}<S,
+\]
+and therefore
+\[
+R_{S-1}<S(dS)^{M-1}.
+\]
+Here $\kappa=K=1$, so $n$ is squarefree.  The terminal-prime divisibility is
+\[
+p_S-1\mid R_{S-1}-1.
+\]
+Because $S\ge2$, one has $R_{S-1}-1>0$, hence
+$p_S\le R_{S-1}$.  Consequently
+\[
+n=R_{S-1}p_S
+\le R_{S-1}^{\,2}
+<S^2(dS)^{2M-2}
+<(dS)^{2M}.
+\]
+
+\smallskip
+\noindent\emph{Case 2: $2\le s<S$.}
+Put $M_s=2^{s-1}$, so $M_s\le M/2$.  Using only
+$\kappa<d$, $s\le S$, and $p_1<dS$, equation \eqref{eq:A-rec} gives
+\[
+A_{s-1}<(d^2S)^{M_s-1}.
+\]
+Lemma~\ref{lem:euler-ratio} gives
+\[
+R_{s-1}<S(d^2S)^{M_s-1}.
+\tag{U7}\label{eq:R-low}
+\]
+The terminal-prime bound and $P_{s-1}\le\kappa R_{s-1}$ imply
+\[
+p_s\le\kappa(P_{s-1}-1)+1\le\kappa P_{s-1}
+\le\kappa^2R_{s-1}.
+\]
+Using \eqref{eq:radical}, $\kappa<d$, \eqref{eq:R-low}, and $2M_s\le M$,
+\[
+n<d^3R_{s-1}^{\,2}
+<d^3S^2(d^2S)^{2M_s-2}
+\le d^{2M-1}S^M
+<(dS)^{2M}.
+\]
+This completes the proof.
+\end{proof}
+
+\begin{corollary}[Asymptotic primality criterion]
+\label{cor:asymptotic-U}
+For composite spectral points,
+\[
+\log n
+\le
+2d\bigl(\log d+\log\log d+O(1)\bigr).
+\]
+Equivalently,
+\[
+d\ge
+\left(\frac12+o(1)\right)
+\frac{\log n}{\log\log n}.
+\]
+Thus for every fixed $\varepsilon>0$, all sufficiently large $n$ satisfying
+\[
+d\le
+\left(\frac12-\varepsilon\right)
+\frac{\log n}{\log\log n}
+\]
+are prime.
+\end{corollary}
+
+\begin{proof}
+Since $M(d)\le d-1$ and $S(d)=O(\log d)$, Theorem~\ref{thm:uniform-U}
+gives
+\[
+\log U_0(d)
+\le
+2d\bigl(\log d+\log\log d+O(1)\bigr).
+\]
+Fix $\varepsilon>0$ and suppose that
+\[
+d\le\left(\frac12-\varepsilon\right)
+\frac{\log n}{\log\log n}.
+\]
+Only upper bounds on $d$ are needed.  Uniformly in this range,
+\[
+\log d\le \log\log n+O(\log\log\log n),
+\qquad
+\log\log d=O(\log\log\log n)
+\]
+whenever $d\to\infty$; bounded $d$ are easier and satisfy the same final
+estimate.  Therefore
+\begin{align*}
+\log U_0(d)
+&\le 2d\bigl(\log d+\log\log d+O(1)\bigr)\\
+&\le (1-2\varepsilon)
+   \frac{\log n}{\log\log n}
+   \bigl(\log\log n+O(\log\log\log n)\bigr)\\
+&=(1-2\varepsilon+o(1))\log n<\log n
+\end{align*}
+for all sufficiently large $n$.  Hence $n>U_0(d)$, so
+Theorem~\ref{thm:uniform-U} forces $n$ to be prime.  This proves the stated
+criterion without assuming a lower bound on $d$.
+\end{proof}
+
+\begin{remark}
+The coefficient $1/2$ is the worst leading coefficient produced by the
+uniform bound, rather than a claimed sharp asymptotic constant for actual
+composite spectral points.  It is governed by the dyadic extremal values
+\[
+M(d)=d-1
+\quad\Longleftrightarrow\quad
+d=2^r+1.
+\]
+At $d=2^r$ one has $M(d)=d/2$, and the corresponding local leading coefficient
+in this bound is $1$ rather than $1/2$.  Retaining the exact branch parameters
+$(s,\kappa,H,j)$ gives much smaller finite bounds away from the dyadic spikes.
+\end{remark}
+
+\begin{remark}[Comparison with Somer's effective finiteness]
+Somer's proof of fixed-$d$ finiteness is effective in the sense that, for
+each prescribed $d$, it eventually produces a computable constant beyond
+which no Fermat $d$-pseudoprime can occur.  He explicitly remarks, however,
+that his argument does not provide a uniform procedure for obtaining this
+constant as a function of arbitrary $d$ \cite{Somer1989}.  The point of
+$U_0(d)$ is therefore not finiteness itself, which is Somer's theorem, but
+uniformity: it is one closed expression valid for every $d$.  The asymptotic
+consequence
+\[
+d\ge\left(\frac12+o(1)\right)\frac{\log n}{\log\log n}
+\]
+for composite spectral points is a quantitative form of the statement that
+small indices are rare.
+\end{remark}
+
+
+\section{Somer's small-index theorem and a unified three-page proof}
+\label{sec:small-index}
+
+Somer's Theorem~3 \cite{Somer1989} gives a complete table of his Fermat
+$d$-pseudoprimes for $1\le d\le8$.  With his convention excluding bases
+$a\equiv\pm1\pmod N$, the table is
+\[
+\begin{array}{c|c}
+ d&\text{composite Fermat $d$-pseudoprimes}\\ \hline
+1,2,3,4&\varnothing\\
+5&6601\\
+6&25\\
+7&15,561\\
+8&49\\
+\end{array}
+\]
+The present spectral convention allows every integer base $b\ge2$ coprime
+to $n$.  It therefore adds the order-two occurrence
+$\ord_9(8)=2=(9-1)/4$ and the order-one occurrence
+$\ord_9(10)=1=(9-1)/8$.
+
+Somer's published paper gives a detailed proof only for $d=1$ and $d=5$,
+describing the latter as illustrative; it refers the six remaining cases to
+his dissertation.  We rely here on Somer's published statement of that
+reference rather than on an independent inspection of the dissertation pages.  Since a complete proof of the small
+range is useful to readers and to later computational checks, we give here
+a single argument handling all $1\le d\le8$ at once.  It is independent of
+Somer's case-by-case calculation and uses the structural lemmas of the
+preceding section.
+
+\begin{theorem}[Small-index classification]
+\label{thm:small-index}
+Let $n>1$ be odd, let $b\ge2$ with $\gcd(b,n)=1$, and suppose
+\[
+L_b(n)=\frac{n-1}{d},
+\qquad 1\le d\le8.
+\]
+Then $n$ is prime except for
+\[
+\begin{array}{c|c}
+ d&\text{composite exceptions}\\ \hline
+4&9\\
+5&6601\\
+6&25\\
+7&15,561\\
+8&9,49.
+\end{array}
+\]
+Every listed exception actually occurs; witnesses are
+\[
+\ord_9(8)=2,\quad
+\ord_{6601}(11)=1320,\quad
+\ord_{25}(7)=4,\quad
+\ord_{15}(4)=2,
+\]
+\[
+\ord_{561}(5)=80,\quad
+\ord_9(10)=1,\quad
+\ord_{49}(19)=6.
+\]
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+\ell:=L_b(n)=\frac{n-1}{d},
+\qquad
+\phi(n)=j\ell,
+\qquad
+\lambda(n)=\kappa\ell.
+\]
+Because $\lambda(n)\mid\phi(n)$,
+\[
+\kappa\mid j.
+\]
+For composite $n$, $\phi(n)<n-1=d\ell$, so
+\begin{equation}
+1\le \kappa\le j\le d-1\le7.
+\tag{S1}\label{eq:small-j}
+\end{equation}
+Write
+\[
+n=\prod_{i=1}^{s}p_i^{a_i},
+\qquad 3\le p_1<\cdots<p_s,
+\qquad
+K=\prod_i p_i^{a_i-1}.
+\]
+By Lemma~\ref{lem:Kdivd}, $K\mid \kappa$.  By
+Lemma~\ref{lem:H2adic},
+\[
+2^{s-1}\kappa\mid j.
+\]
+Together with \eqref{eq:small-j}, this gives $s\le3$.  We treat the three
+possibilities separately.
+
+\medskip
+\noindent\textit{Case 1: one distinct prime factor.}
+Let $n=p^a$, $a\ge2$.  Then $\lambda(n)=\phi(n)$, hence $\kappa=j$, and
+$d\phi(n)=j(n-1)$ becomes
+\begin{equation}
+p^{a-1}\bigl((d-j)p-d\bigr)=-j.
+\tag{S2}\label{eq:small-oneprime}
+\end{equation}
+Thus $p^{a-1}\mid j\le7$.  Hence $a=2$ and
+$p\in\{3,5,7\}$.  Substitution in \eqref{eq:small-oneprime} gives only
+\[
+(d,j,n)=(4,3,9),\quad(6,5,25),\quad(8,6,9),\quad(8,7,49).
+\]
+These are exactly the prime-power exceptions displayed in the theorem.
+
+\medskip
+\noindent\textit{Case 2: two distinct prime factors.}
+Write
+\[
+n=p^a q^c,
+\qquad p<q,
+\qquad
+P=p^{a-1}q^{c-1}=K.
+\]
+The equation $d\phi(n)=j(n-1)$ is
+\begin{equation}
+P\bigl((d-j)pq-d(p+q)+d\bigr)=-j.
+\tag{S3}\label{eq:small-two-master}
+\end{equation}
+Here $2\kappa\mid j$ and $P\mid \kappa$.  Since $j\le7$ and $P$ is odd, a
+nonsquarefree solution would force $P=3$, hence $n=9q$ with $q>3$ prime.
+Here $P=3$ forces $\kappa=3$, and $2\kappa\mid j\le7$ therefore gives
+$j=6$.  Equation \eqref{eq:small-two-master} reduces to
+\[
+6d(q-1)=6(9q-1),
+\qquad
+q=\frac{d-1}{d-9}<0
+\]
+for $d\le8$.  Thus no nonsquarefree two-prime solution occurs.
+
+Putting $P=1$ in \eqref{eq:small-two-master} and completing the product
+gives the useful factorization
+\begin{equation}
+\bigl((d-j)p-d\bigr)
+\bigl((d-j)q-d\bigr)=j^2.
+\tag{S4}\label{eq:small-two-factor}
+\end{equation}
+For a valid solution the two factors in \eqref{eq:small-two-factor} are positive: solving the master equation for the larger prime gives a positive denominator.  The two-adic overlap budget should also be used before any further enumeration: since $2\kappa\mid j$, the integer $j$ is even.  This parity condition is what removes the formal odd-$j$ master-equation solutions (such as $21,33,65$ on other spectral lines).  Together with
+$j\le7$, this leaves only $j\in\{2,4,6\}$.  Factoring
+\eqref{eq:small-two-factor} over these three small squares gives exactly
+\[
+\begin{array}{c|c|c|c|c|c}
+ d&j&(p,q)&n&\lambda(n)&\ell=(n-1)/d\\ \hline
+5&4&(7,13)&91&12&18\\
+7&4&(3,5)&15&4&2\\
+8&6&(5,13)&65&12&8.
+\end{array}
+\]
+The defining order can exist only if $\ell\mid\lambda(n)$.  This removes
+the first and third rows, leaving only $n=15$ at $d=7$, and indeed
+$\ord_{15}(4)=2$.
+
+\medskip
+\noindent\textit{Case 3: three distinct prime factors.}
+Now
+\[
+4\kappa\mid j.
+\]
+Since $j\le7$, necessarily
+\begin{equation}
+\kappa=1,\qquad j=4.
+\tag{S5}\label{eq:small-three-kappa}
+\end{equation}
+Because $K\mid \kappa$, we immediately get $K=1$: the integer is squarefree,
+\[
+n=pqr,
+\qquad p<q<r.
+\]
+The Euler equation is
+\begin{equation}
+d(p-1)(q-1)(r-1)=j(pqr-1).
+\tag{S6}\label{eq:small-three-master}
+\end{equation}
+For fixed $p$, put
+\[
+A=(d-j)p-d,
+\qquad
+B=d(p-1).
+\]
+Equation \eqref{eq:small-three-master} becomes
+\[
+Aqr-B(q+r)+B+j=0,
+\]
+and hence
+\begin{equation}
+(Aq-B)(Ar-B)
+=j\bigl(d(p-1)^2+jp\bigr).
+\tag{S7}\label{eq:small-three-factor}
+\end{equation}
+Furthermore, \eqref{eq:small-three-master} implies
+\[
+(d-j)pqr<d(pq+pr+qr)<3dqr,
+\]
+and a valid solution also requires $A=(d-j)p-d>0$, hence $p>d/(d-j)$.  Thus
+\begin{equation}
+\frac{d}{d-j}<p<\frac{3d}{d-j}.
+\tag{S8}\label{eq:small-pbound}
+\end{equation}
+Thus only a handful of primes $p$ can occur, and for each one
+\eqref{eq:small-three-factor} reduces the remaining search to divisor pairs
+of one explicit integer.  Concretely, the bound gives $p=7,11,13$ for $d=5$,
+$p=5,7$ for $d=6$, $p=3,5$ for $d=7$, and $p=3,5$ for $d=8$; checking the
+positive divisor pairs in \eqref{eq:small-three-factor} leaves precisely the
+three prime triples displayed below (all other pairs contain a composite
+entry or violate the required ordering).  Since $j=4$ already, the complete
+candidate list has only three rows:
+\[
+\begin{array}{c|c|c|c|c|c}
+ d&j&(p,q,r)&n&\lambda(n)&\ell=(n-1)/d\\ \hline
+5&4&(7,19,67)&8911&198&1782\\
+5&4&(7,23,41)&6601&1320&1320\\
+7&4&(3,11,17)&561&80&80.
+\end{array}
+\]
+By \eqref{eq:small-three-kappa} one must have
+$\lambda(n)=\ell$.  Exactly two rows survive:
+\[
+6601\quad(d=5),
+\qquad
+561\quad(d=7).
+\]
+
+Combining the three cases gives
+\[
+\begin{array}{c|c}
+ d&\mathcal E(d)\\ \hline
+1,2,3&\varnothing\\
+4&\{9\}\\
+5&\{6601\}\\
+6&\{25\}\\
+7&\{15,561\}\\
+8&\{9,49\}.
+\end{array}
+\]
+The displayed witness bases verify every surviving entry.
+\end{proof}
+
+\subsection{Comparison with Somer's proof}
+
+The two proofs emphasize different structures.  Somer introduces
+$\lambda'(N)=\operatorname{lcm}_{p\mid N}(p-1)$ and an auxiliary product
+$\lambda''(N)$, proves the factor-count bound
+$t\le\lfloor\log_2 d+1\rfloor$, bounds repeated prime powers, and then
+handles each small value of $d$ separately.  In the 1989 paper only the
+$d=5$ case is written out in detail: after several reductions it isolates
+$7\cdot23\cdot41=6601$.
+
+Our proof packages the same small-index scarcity into the two integers
+\[
+\kappa=\lambda(n)/L,
+\qquad
+H=\phi(n)/\lambda(n),
+\]
+with $j=\kappa H$.  The exact divisibilities $K\mid \kappa$ and
+$2^{s-1}\kappa\mid j$ reduce the whole range at once to $s\le3$.  The cases
+$s=2$ and $s=3$ are then controlled by the two explicit factorizations
+\eqref{eq:small-two-factor} and \eqref{eq:small-three-factor}.  The resulting
+proof is short enough to reproduce in full, while retaining a transparent
+candidate list that can be checked by hand.
+
+The classification itself should therefore be credited to Somer for his
+nontrivial-base convention.  What is new here in the small range is the
+unified proof, the inclusion of the two trivial-base spectral occurrences,
+and the integration of the result into the effective spectral framework used
+for larger $d$.
+
+The later Carlip--Jacobson--Somer treatment \cite{CarlipJacobsonSomer1998}
+also recovers the general Fermat factor-count bound $t<\log_2d+1$ and controls
+prime powers.  The present argument should therefore not be read as claiming
+novelty for those qualitative restrictions.  Its sharper bookkeeping retains
+$\kappa$ and $H$ separately: $K\mid\kappa$ records the complete repeated-prime
+part, while $2^{s-1}\kappa\mid j\le d-1$ couples repetition and overlap.  This
+is what makes the uniform branch bounds and the later counting argument
+possible.
+
+\section{Certified computer-assisted classification through $d=64$}
+\label{sec:certified-search}
+\label{sec:computer-assisted}
+
+For larger $d$ the number of possible distinct prime factors grows:
+\[
+s\le4\quad(9\le d\le16),
+\qquad
+s\le5\quad(17\le d\le32).
+\]
+A hand proof by separate Diophantine branches becomes increasingly
+unattractive.  We therefore use a certified exact enumeration of the
+finite factorization space.
+
+Write
+\[
+n=P\prod_{i=1}^s p_i,
+\qquad
+P=\prod_{i=1}^s p_i^{a_i-1}.
+\]
+Since
+\[
+d\phi(n)=j(n-1),
+\qquad
+P\mid j,
+\]
+write
+\[
+j=cP.
+\]
+Then every candidate satisfies the master equation
+\begin{equation}
+d\prod_{i=1}^s(p_i-1)
+=
+c\left(P\prod_{i=1}^s p_i-1\right).
+\label{eq:master-search}
+\end{equation}
+The ranges
+\[
+s\le1+\lfloor\log_2(d-1)\rfloor,
+\qquad
+1\le P\le d-1,
+\qquad
+1\le c\le\left\lfloor\frac{d-1}{P}\right\rfloor
+\]
+are finite.
+
+Suppose the first $s-1$ primes have been chosen and put
+\[
+A=\prod_{i<s}(p_i-1),
+\qquad
+B=\prod_{i<s}p_i.
+\]
+Equation~\eqref{eq:master-search} is linear in the final prime:
+\begin{equation}
+p_s=
+\frac{dA-c}{dA-cPB}.
+\label{eq:lastprime}
+\end{equation}
+Thus the last prime is solved algebraically rather than scanned.
+
+For counting purposes it is useful to stop one step earlier and solve the
+last \emph{two} primes simultaneously.  This gives an exact divisor problem
+rather than a second prime scan.
+
+\begin{lemma}[Divisor-pair completion of the last two primes]
+\label{lem:two-prime-completion}
+Fix a master-equation branch $(d,s,j,P)$, put $c=j/P$, and suppose the first
+$r=s-2$ primes have been chosen.  Write
+\[
+A=\prod_{i\le r}(p_i-1),\qquad
+B=\prod_{i\le r}p_i,
+\]
+with the empty products equal to $1$.  If the two remaining primes are
+$x<y$, define
+\[
+a=dA,\qquad b=cPB=jB,\qquad \Delta=a-b.
+\]
+Every valid completion has $\Delta>0$ and satisfies
+\begin{equation}
+\boxed{
+(\Delta x-a)(\Delta y-a)=T,
+\qquad
+T:=a(b-c)+bc.
+}
+\label{eq:two-prime-divisor-pair}
+\end{equation}
+Consequently, for a fixed branch and prefix, there are at most
+$\lfloor\tau(T)/2\rfloor$ ordered prime completions.
+\end{lemma}
+
+\begin{proof}
+The master equation becomes
+\[
+a(x-1)(y-1)=bxy-c,
+\]
+or
+\[
+\Delta xy-a(x+y)+(a+c)=0.
+\]
+Solving for $y$ gives
+\[
+y=\frac{a(x-1)-c}{\Delta x-a}.
+\]
+The numerator is positive: $a=dA\ge d$, $x\ge3$, and $c\le j\le d-1$.
+Hence the denominator is positive for every valid completion, and therefore
+$\Delta>0$.  Multiplying the preceding bilinear equation by $\Delta$ and
+completing the product gives
+\[
+(\Delta x-a)(\Delta y-a)
+=a^2-\Delta(a+c)
+=a(b-c)+bc.
+\]
+The two positive factors on the left form a divisor pair of $T$; because
+$x<y$, at most half of the positive divisors can occur as the first factor.
+Integrality, primality, the support condition for $P$, and the final
+$\lambda$-divisibility checks can only reduce this number.
+\end{proof}
+
+The principal computational application of this lemma is the difficult
+$(d,s,\kappa,H,P)=(49,5,3,16,1)$ branch in
+Subsection~\ref{subsec:d64}: after the first three primes are exhausted,
+exactly $49\,496$ prefixes remain and the last two primes are then completed
+entirely by \eqref{eq:two-prime-divisor-pair}.
+
+At an intermediate prefix, put
+\[
+A_r=\prod_{i\le r}(p_i-1),
+\qquad
+B_r=\prod_{i\le r}p_i,
+\qquad
+R=\frac{dA_r}{cPB_r}.
+\]
+If $R\le1$, the branch is impossible.  Suppose that $R>1$, that $t$
+primes remain, and that the next prime is $x$.  Dividing
+\eqref{eq:master-search} by $cPB_r$ gives the necessary inequality
+\[
+R\prod_{\text{remaining }q}\left(1-\frac1q\right)<1.
+\]
+Every remaining prime satisfies $q\ge x$, so
+\[
+\prod_{\text{remaining }q}\left(1-\frac1q\right)
+\ge
+\left(\frac{x-1}{x}\right)^t.
+\]
+Hence every surviving branch must satisfy
+\begin{equation}
+\boxed{
+x^t\,cPB_r
+>
+(x-1)^t\,dA_r.
+}
+\label{eq:exactbound}
+\end{equation}
+The predicate is monotone in $x$, so the largest admissible $x$ is obtained
+by binary search using exact integer comparisons.  No floating-point
+approximation is allowed to decide whether a branch is discarded.
+
+Every completed candidate is checked for
+\[
+d\mid n-1,
+\qquad
+\frac{n-1}{d}\mid\lambda(n).
+\]
+The first of these checks is essential: an earlier exploratory script
+used integer division without the divisibility test and thereby created
+several false positives in preliminary tables.
+
+The overlap pruning used below can be updated recursively.  Put
+\[
+c_i=p_i^{a_i-1}(p_i-1),
+\qquad
+\Lambda_k=\operatorname{lcm}(c_1,\ldots,c_k),
+\qquad
+H_k=\frac{\prod_{i=1}^k c_i}{\Lambda_k}.
+\]
+Then
+\begin{equation}
+H_k=H_{k-1}\gcd(\Lambda_{k-1},c_k).
+\label{eq:overlap}
+\end{equation}
+Thus each new prime consumes part of the finite overlap budget
+$H_s=\phi(n)/\lambda(n)$.  In the minimal-overlap case $H_s=2^{s-1}$ this
+forces $\gcd(c_i,c_j)=2$ for $i\ne j$; for squarefree $n$,
+$\gcd(p_i-1,p_j-1)=2$.
+
+\begin{proposition}[Finite and complete search specification]
+\label{prop:search-spec}
+For fixed spectral index $d$, every composite solution occurs in the following
+finite search.
+\begin{enumerate}[label=(\arabic*)]
+\item Handle $s=1$ separately: enumerate odd prime powers $p^a$, $a\ge2$,
+with $p^{a-1}\le d-1$, and retain exactly those satisfying
+$d\mid p^a-1$ and $(p^a-1)/d\mid\lambda(p^a)$.
+\item For $s\ge2$, enumerate
+\[
+2\le s\le S(d),\quad
+1\le\kappa\le\frac{d-1}{2^{s-1}},\quad
+H\in\{2^{s-1},2\cdot2^{s-1},\ldots\},\quad
+\kappa H\le d-1.
+\]
+For each branch set $j=\kappa H$, enumerate $P\mid\kappa$, and put $c=j/P$.
+\item Factor $P$.  Every prime dividing $P=n/\rad(n)$ is a required support
+prime and $v_q(P)=a_q-1$.  Recursion uses strictly increasing distinct primes.
+\item Apply only necessary prunes: required-prime ordering and remaining-slot
+checks; $H_k\mid H$ and the remaining overlap budget from
+\eqref{eq:overlap}; $R>1$; and the exact ratio bound
+\eqref{eq:exactbound}.
+\item Solve the final prime by \eqref{eq:lastprime}.  Reject it if it is not
+an integer prime strictly larger than the preceding prime, if required support
+is missing, or if the exact terminal overlap is not $H$.  Finally recompute
+$n,\phi(n),\lambda(n),L$ and all defining divisibilities.
+\end{enumerate}
+For $s\ge2$ the number of parameter branches before prefix recursion is
+\[
+B(d)=\sum_{s=2}^{S(d)}
+\sum_{\kappa\le(d-1)/2^{s-1}}
+\left\lfloor\frac{d-1}{2^{s-1}\kappa}\right\rfloor\tau(\kappa).
+\]
+\end{proposition}
+
+\begin{proof}
+The prime-power restriction in step (1) follows from
+$p^{a-1}\mid\kappa\le d-1$.  For $s\ge2$, Corollary~\ref{cor:sbound},
+Lemma~\ref{lem:H2adic}, and Lemma~\ref{lem:Kdivd} place every genuine
+solution in one enumerated $(s,\kappa,H,P)$ branch.  The identity
+$P=\prod p_i^{a_i-1}$ proves the support rule.
+
+No recursive prune can remove a prefix of a genuine solution.  If $R\le1$,
+appending another prime multiplies $R$ by $(q-1)/q<1$, whereas positivity of
+the denominator in \eqref{eq:lastprime} requires $R>1$ immediately before
+the last prime.  The ratio bound is the necessary inequality derived above.
+For the overlap tests, $H_k$ must divide the target $H$, and after the first
+local factor every future multiplier
+$\gcd(\Lambda_{i-1},c_i)$ is at least $2$ because both arguments are even;
+this proves the remaining-budget test.  The final prime in
+\eqref{eq:lastprime} is the unique possible algebraic completion.  Requiring
+it to exceed the prefix loses nothing because every factorization is enumerated
+in increasing order.  Finally $H_s=H$ is an identity for the fixed branch, so
+the exact terminal check is necessary.  The final arithmetic tests are exactly
+the conditions of Proposition~\ref{prop:composite-spectrum}.
+\end{proof}
+
+The implementation follows the proposition literally.  In pseudocode:
+\begin{verbatim}
+prime_power_solutions(d)
+for s, kappa, H, P in all admissible branches:
+    required := prime_support(P)
+    recurse(increasing_prefix):
+        reject if required-prime order/slots are impossible
+        reject unless H_prefix divides H and overlap budget can finish
+        reject if R <= 1
+        bound next prime by the exact ratio inequality
+        recurse over every prime within that exact bound
+        at length s-1 solve the last prime algebraically
+        reject unless last prime > prefix and required support is complete
+        reject unless H_full == H
+        recompute phi, lambda, L and all defining divisibilities
+\end{verbatim}
+Thus the written specification includes every mathematical prune used by the
+reference search.
+
+\begin{theorem}[Computer-assisted classification for $9\le d\le32$]
+\label{thm:d32}
+For every $9\le d\le32$, $\Eset(d)$ is exactly the corresponding row of
+Table~\ref{tab:exceptions}.
+\end{theorem}
+
+\begin{proof}
+Proposition~\ref{prop:search-spec} proves completeness of the finite search.
+The reference implementation exhausts every branch with exact integer
+arithmetic and an arithmetic verifier independently recomputes every reported
+solution.  No integer-size cutoff is used in the Diophantine search.
+\end{proof}
+
+\subsection{The dyadic transition at $d=33$}
+\label{subsec:d33}
+
+At $d=33$, six distinct prime factors become structurally possible.  The two
+largest $\kappa=1$ branches can be removed analytically.
+
+\begin{lemma}[Odd-index $2$-adic parity]
+\label{lem:odd-index-parity}
+Let $n=\prod_{i=1}^s p_i$ be squarefree and
+$\lambda(n)=(n-1)/d$ with $d$ odd.  Put
+\[
+e_i=v_2(p_i-1),\qquad E=\max_i e_i,
+\qquad a=\#\{i:e_i=1\}.
+\]
+Then $v_2(n-1)=E$.  If $E=1$, then $a=s$ is odd; if $E\ge2$, then $a$ is
+even.
+\end{lemma}
+
+\begin{proof}
+Because $d$ is odd,
+$v_2(n-1)=v_2(\lambda(n))=E$.  Also $e_i=1$ exactly when
+$p_i\equiv3\pmod4$, so $n\equiv(-1)^a\pmod4$.  The two cases follow.
+\end{proof}
+
+\begin{theorem}[Exact spectral line at $d=33$]
+\label{thm:d33}
+\[
+\mathcal E(33)=\{1047619,2210671,3494701,15197491,25158871,93755971\}.
+\]
+In particular $N_{\max}(33)=93\,755\,971$.
+\end{theorem}
+
+\begin{proof}
+The branch formula gives $B(33)=166=31+135$, separating $31$ branches with
+$\kappa=1$ from $135$ with $\kappa>1$.  In the $s=6$, $\kappa=1$ branch,
+$H=32$ and $\sum e_i-E=5$, so the five nonmaximal exponents are all $1$;
+Lemma~\ref{lem:odd-index-parity} gives a contradiction.  In the $s=5$,
+$\kappa=1$, $H=32$ branch, four positive nonmaximal exponents sum to $5$,
+so their multiset is $\{2,1,1,1\}$; here $E\ge2$, leaving exactly three
+primes congruent to $3\pmod4$, again contradicting the lemma.  The program
+\texttt{certify\_d33\_reduced.jl} exhausts the remaining $29$ $\kappa=1$
+branches and finds none.  Independently,
+\texttt{certify\_d33\_noncar.jl} exhausts all $135$ branches with
+$\kappa>1$ and returns exactly the six displayed integers.  Step (1) of
+Proposition~\ref{prop:search-spec} gives no additional prime-power solution
+at $d=33$.  This exhausts all strata.
+\end{proof}
+
+The six surviving points are all squarefree and have exactly three prime
+factors.  Their branch invariants are:
+\begin{center}
+\small
+\begin{tabular}{r l r r r r r}
+\toprule
+$n$ & factorization & $\kappa$ & $H$ & $j$ & $\lambda(n)$ & $L=(n-1)/33$\\
+\midrule
+$1\,047\,619$  & $79\cdot89\cdot149$    & $4$ & $8$ & $32$ & $126\,984$    & $31\,746$\\
+$2\,210\,671$  & $59\cdot89\cdot421$    & $4$ & $8$ & $32$ & $267\,960$    & $66\,990$\\
+$3\,494\,701$  & $7\cdot101\cdot4943$   & $7$ & $4$ & $28$ & $741\,300$    & $105\,900$\\
+$15\,197\,491$ & $37\cdot431\cdot953$  & $4$ & $8$ & $32$ & $1\,842\,120$ & $460\,530$\\
+$25\,158\,871$ & $41\cdot173\cdot3547$ & $4$ & $8$ & $32$ & $3\,049\,560$ & $762\,390$\\
+$93\,755\,971$ & $41\cdot167\cdot13693$& $4$ & $8$ & $32$ & $11\,364\,360$& $2\,841\,090$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus this dyadic transition permits six prime factors structurally, but
+none of the actual exceptions uses more than three; in particular the entire
+$\kappa=1$ (Carmichael-index) slice is empty at $d=33$.
+
+The branch $\kappa=1$ is exactly the Carmichael-index problem
+$n-1=d\lambda(n)$ studied in the small-index Carmichael literature; compare
+Pinch~\cite{PinchSmallIndex}.  For external comparison, Pinch's exhaustive
+Carmichael-number tables were extended from the earlier $10^{15}$ computation
+to a complete enumeration through $10^{21}$ \cite{Pinch2007}.  The present exclusion of the
+$\kappa=1$ line at $d=33$ does not rely on absence from Pinch's table:
+the two largest branches are eliminated analytically by
+Lemma~\ref{lem:odd-index-parity}, and the remaining branches are exhausted by
+the certified exact search below.  Pinch's table is therefore an independent
+large-range check rather than an input to the proof.
+
+
+\subsection{Extension from $d=34$ through $d=64$}
+\label{subsec:d64}
+
+The interval $34\le d\le64$ has a useful structural split.
+If $\kappa>1$, then
+\[
+2^{s-1}\kappa\le d-1\le63
+\]
+forces $s\le5$.  If $\kappa=1$, then $K=1$ and
+\[
+n-1=d\lambda(n),
+\]
+so the number is precisely a Carmichael number of Carmichael index $d$.
+We independently implement the finite prescribed-index recursion for this
+$\kappa=1$ stratum.  At each prefix the exact ratio bound and the necessary
+overlap condition restrict the next prime; with two primes left we use
+Lemma~\ref{lem:two-prime-completion}, factoring the resulting integer $T$
+and reconstructing every admissible divisor pair.  The two largest empty
+cases, $d=34$ and $d=35$, are recorded as disjoint exact prefix partitions in
+the supplement; the union of each partition is the full branch, not a size
+cutoff.  All factor outputs are reconstructed and their prime factors are
+independently certified.  The completed computation agrees exactly with
+Pinch's published prescribed-index list through $64$ \cite{PinchSmallIndex},
+so Pinch is an external cross-check rather than a proof dependency.  The
+nonempty new $\kappa=1$ rows occur at
+\[
+37,39,43,44,45,47,48,49,50,52,53,54,55,60,61.
+\]
+
+For $\kappa>1$ we used a second exact implementation of
+Proposition~\ref{prop:search-spec}, written in C++ with arbitrary-precision
+integers for the branch algebra.  Every exact recursive prime bound encountered
+in the completed $34\le d\le64$ runs lies below $2^{64}$; the program aborts
+rather than truncating a branch if this condition fails.  Primality is tested
+with the first twelve prime Miller--Rabin bases $2,3,\ldots,37$.
+Sorenson--Webster proved that the smallest composite passing all twelve is
+$318665857834031151167461>2^{64}$ \cite{SorensonWebster2017}; hence every
+C++ primality decision in the recorded 64-bit domain is deterministic.  The
+implementation exhausts all such branches.  The only noticeably expensive
+branch is
+\[
+(d,s,\kappa,H,P)=(49,5,3,16,1).
+\]
+For it we stop after three primes and apply Lemma~\ref{lem:two-prime-completion}.
+There are exactly $49\,496$ surviving three-prime prefixes; exact divisor-pair
+completion yields no solution.  The source and captured log are supplied.
+Prime powers are enumerated separately by step (1) of
+Proposition~\ref{prop:search-spec}.
+
+\begin{theorem}[Certified composite spectrum through $d=64$]
+\label{thm:d64}
+For every $1\le d\le64$, the inclusive composite spectral line $\Eset(d)$ is
+exactly the corresponding row of Table~\ref{tab:exceptions}.  Across the
+first $64$ lines there are $351$ incidences representing $234$ distinct odd
+composites.  The largest row size is
+\[
+\max_{d\le64} e(d)=13,
+\]
+attained at $d=53$ and $d=62$.
+\end{theorem}
+
+\begin{proof}
+The range $d\le8$ is Theorem~\ref{thm:small-index}, the range $9\le d\le32$
+is Theorem~\ref{thm:d32}, and $d=33$ is Theorem~\ref{thm:d33}.  For
+$34\le d\le64$, the prime-power stratum is exhausted by step (1) of
+Proposition~\ref{prop:search-spec}; the $\kappa=1$ stratum is exhausted by
+the independent prescribed-index certificate just described (with Pinch used
+only as a cross-check); and every $\kappa>1$ branch is exhausted by
+the exact search just described, with the single $d=49$ branch completed by
+the divisor-pair identity.  The accompanying verifier recomputes
+$\lambda(n)$ and both defining divisibilities for all $351$ incidences and
+returns $234$ distinct integers.  Hence no stratum is omitted.
+\end{proof}
+
+
+\subsection{Reproducibility of the computer-assisted part}
+\label{subsec:reproducibility}
+
+The computational claims are supplied with machine-readable supplementary
+material rather than being treated as an opaque numerical experiment.  The
+reference implementation uses exact integer arithmetic for every pruning
+decision and performs the final checks
+\[
+d\mid n-1,\qquad (n-1)/d\mid\lambda(n)
+\]
+for every reported candidate.  Failed tasks are required to abort a run.
+
+The original frozen $d\le33$ subarchive has SHA--256
+\[
+\text{\scriptsize\ttfamily bc7b993c4a58678de2aa2303b4e011c8d5a319c24ad805ff00515452f47881b2}.
+\]
+It is retained unchanged inside the extended supplement.  The present arXiv
+supplement additionally contains the exact $34\le d\le64$ C++ search,
+the specialized $d=49$ divisor-pair certificate, the independent $\kappa=1$
+prescribed-index certificate and its exact split logs, the Pinch cross-check,
+the combined machine-readable $1\le d\le64$ table, its arithmetic verifier,
+the exact prime-mass calculation through $64$, and the arXiv-only low-$\omega$
+and OEIS data.  A machine-readable SHA manifest identifies every file.  The
+legacy subarchive contains the following proof-critical files:
+\begin{center}
+\scriptsize
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+file & SHA--256\\
+\midrule
+\texttt{overlap\_U\_search.jl} &
+\texttt{df97f12dbf322229\allowbreak 91131f36482fece2\allowbreak ab752643638691c3\allowbreak 6a1fbf37c45ae426}\\
+\texttt{verify\_overlap\_U\_output.jl} &
+\texttt{670adbd590865eca\allowbreak 6eb4b9f1154ccdee\allowbreak 87e9518a8c2180ec\allowbreak 051cfe9ee113bf17}\\
+\texttt{certify\_d33\_reduced.jl} &
+\texttt{b023717245e965b1\allowbreak 6559edc4a0e6d211\allowbreak c34bd82274d3409f\allowbreak a510f1dc93741da7}\\
+\texttt{certify\_d33\_noncar.jl} &
+\texttt{57a26bb49947a99a\allowbreak 6a712ac2e0c25bf6\allowbreak 5b033bff3bb0ccb5\allowbreak 8167647df03d0f08}\\
+\texttt{prime\_mass\_d33\_check.jl} &
+\texttt{dd3fd20d28a51606\allowbreak 15da798fa40d0a7d\allowbreak 642ac6ae9191b5ec\allowbreak 41ad0b94d8eda212}\\
+\texttt{branch\_parameter\_counts\_d9\_d33.tsv} &
+\texttt{60ead43be1cea3c1\allowbreak af6ab85d8590dd3c\allowbreak f5330864f5b74a8c\allowbreak 763585ee8440508d}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The frozen reference computation was executed under Julia~1.12.6 on
+August~23, 2026.  The $d\le8$ regression self-test passed.  The general exact
+search then exhausted every parameter branch for $9\le d\le32$ and reproduced
+the corresponding rows of Table~\ref{tab:exceptions}; the separate arithmetic verifier
+checked all $96$ resulting incidences.  It uses no external packages,
+deterministically certifies every reported prime factor below $2^{64}$, and
+recomputes $n$, $\phi(n)$, $\lambda(n)$, $L$, $\kappa$, $H$, the repeated-prime
+factor $P$, and all defining divisibilities from the reported factorizations.
+
+The dyadic transition $d=33$ is certified by the split proof described above,
+rather than by an unspecialized rerun of the general search.  After the two
+$\kappa=1$ branches eliminated analytically by Lemma~\ref{lem:odd-index-parity}
+are removed, \texttt{certify\_d33\_reduced.jl} exhausts all $29$ remaining
+$\kappa=1$ parameter branches and finds none.  Independently,
+\texttt{certify\_d33\_noncar.jl} exhausts all $135$ branches with $\kappa>1$
+and returns exactly the six integers in Theorem~\ref{thm:d33}; it then checks
+the factorizations and the $(\kappa,H,j,\lambda,L)$ data displayed above.  The
+reference runs used the command-line option \texttt{--resume=false} for a clean non-resuming run.  The supplementary
+branch-count table records the exact parameter-branch counts for every
+$9\le d\le33$.
+
+For $34\le d\le64$, the supplement contains the exact C++ branch search,
+the independent $\kappa=1$ prescribed-index certificate, its exact split logs
+for the two dominant empty indices $34$ and $35$, the Pinch cross-check, the
+specialized $d=49$ last-two-prime certificate, and an independent Python
+arithmetic verifier.  The verifier recomputes $\lambda(n)$ and the defining
+divisibilities for all $351$ incidences and returns $234$ distinct integers.
+Every recursive prime bound encountered in the completed $\kappa>1$ runs lies
+below $2^{64}$; this is not an upper bound on $n$, and the search aborts rather
+than truncating a branch if a required prime bound exceeds the deterministic
+primality range.  The recorded runs also print the maximum exact recursive
+prime bound and the maximum primality-test input, together with an explicit
+\texttt{overflow=false} status.
+
+The density calculation used in Theorem~\ref{thm:prime-mass-64} is certified
+separately by \path{prime_mass_d64_check_exact.py}.  It checks all
+$2^{18}-1=262143$ squarefree kernels supported on primes through $61$ using
+exact integer/rational arithmetic, proves the $q\ge67$ tail exclusion by
+$G_{64}-\mathfrak M_2(64)>G_{64}/4421$, and reproduces both quoted masses and
+the unique minimizing squarefree kernel $2$.  Captured output is included in
+the supplement.
+
+The legacy Julia source uses only standard libraries.  The new C++ search
+tests primality with the first twelve prime bases $2,3,\ldots,37$ and aborts
+instead of silently changing to a probable-prime decision outside its 64-bit
+search domain.  Sorenson--Webster's value
+$\psi_{12}=318665857834031151167461$ proves every such C++ decision
+\cite{SorensonWebster2017}.  The specialized $d=49$ divisor-pair certificate
+checks complete factorizations of the integers $T$ factor by factor with the
+same certificate.  The independent $\kappa=1$ program uses $\psi_{12}$ and,
+for a few larger auxiliary factors, Sorenson--Webster's
+$\psi_{13}=3317044064679887385961981$; above that it falls back to a recursive
+Pocklington certificate after an exact factorization of $n-1$.  Thus no
+probable-prime assumption occurs in either certificate.  The separate verifier
+is an arithmetic verifier of reported outputs; it does not replace the
+completeness proof in Proposition~\ref{prop:search-spec}.  This explicit separation
+between theorem, search engine, specialized $d=33$ certification, and
+independent arithmetic verification is especially important because an earlier
+exploratory program used integer division before checking $d\mid n-1$ and
+consequently produced several false positives.  Those exploratory outputs are
+not used in any theorem of the present paper.
+
+The exact supplement accompanying this revision is frozen and identified by
+its SHA--256 manifest.  The unchanged archive is intended for deposition in
+Zenodo or an institutional repository; the resulting persistent identifier
+will replace the placeholder \texttt{[SUPPLEMENT-DOI]} in the archival version.
+The deposited archive itself will not subsequently be modified.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Certificate summary for the new $34\le d\le64$ computation.
+``Max bound'' is the largest exact recursive prime bound recorded by the
+component; every recorded overflow/abort flag is false.}
+\label{tab:certificate-summary}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllrl}
+\toprule
+component & program / theorem & range & work & max bound & status\\
+\midrule
+$\kappa=1$ prescribed-index & ratio recursion + Lemma~\ref{lem:two-prime-completion} & $d=34$ & $15$ branches; $344284$ prefixes & $2140591$ & pass\\
+$\kappa=1$ prescribed-index & same & $d=35$ & $15$ branches; $381524$ prefixes & $7296343$ & pass\\
+$\kappa=1$ prescribed-index & same & $36\le d\le48$ & $227$ branches; $202725$ prefixes & $1113271$ & Pinch match\\
+$\kappa=1$ prescribed-index & same & $49\le d\le64$ & $384$ branches; $194688$ prefixes & $305758$ & Pinch match\\
+$\kappa>1$ C++ & Proposition~\ref{prop:search-spec}; 12-base MR & $34\le d\le48$ & $2645$ branches & $4864229$ & overflow=false\\
+$\kappa>1$ C++ & same & $50\le d\le54$ & $1360$ branches & $22551385$ & overflow=false\\
+$\kappa>1$ C++ & same & $55\le d\le59$ & $1523$ branches & $1368683$ & overflow=false\\
+$\kappa>1$ C++ & same & $60\le d\le64$ & $1725$ branches & $31170$ & overflow=false\\
+$d=49$ special branch & Lemma~\ref{lem:two-prime-completion} & $(49,5,3,16,1)$ & $49496$ three-prime prefixes & --- & pass\\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{longtable}{r r r r >{\raggedright\arraybackslash}p{0.58\textwidth}}
+\caption{Certified inclusive composite spectrum through $d=64$.  Here
+$e(d)=|\Eset(d)|$, $g(d)$ counts first (genuine) occurrences, $C(d)$ is the
+cumulative number of distinct composites, and $\ast$ marks inheritance from a
+smaller spectral index.}\label{tab:exceptions}\\
+\toprule
+$d$ & $e(d)$ & $g(d)$ & $C(d)$ & $\Eset(d)$\\
+\midrule
+\endfirsthead
+\toprule
+$d$ & $e(d)$ & $g(d)$ & $C(d)$ & $\Eset(d)$\\
+\midrule
+\endhead
+1&0&0&0&---\\
+2&0&0&0&---\\
+3&0&0&0&---\\
+4&1&1&1&$9$\\
+5&1&1&2&$6601$\\
+6&1&1&3&$25$\\
+7&2&2&5&$15,\allowbreak\ 561$\\
+8&2&1&6&$9^{\ast},\allowbreak\ 49$\\
+9&3&3&9&$30889,\allowbreak\ 88561,\allowbreak\ 534061$\\
+10&2&1&10&$21,\allowbreak\ 6601^{\ast}$\\
+11&1&1&11&$45$\\
+12&2&1&12&$25^{\ast},\allowbreak\ 121$\\
+13&3&3&15&$27,\allowbreak\ 126673,\allowbreak\ 1333333$\\
+14&3&1&16&$15^{\ast},\allowbreak\ 169,\allowbreak\ 561^{\ast}$\\
+15&2&1&17&$91,\allowbreak\ 6601^{\ast}$\\
+16&3&2&19&$33,\allowbreak\ 49^{\ast},\allowbreak\ 65$\\
+17&2&2&21&$35,\allowbreak\ 139231$\\
+18&7&4&25&$289,\allowbreak\ 30889^{\ast},\allowbreak\ 88561^{\ast},\allowbreak\ 534061^{\ast},\allowbreak\ 55462177,\allowbreak\ 8885251441,\allowbreak\ 42018333841$\\
+19&4&4&29&$39,\allowbreak\ 153,\allowbreak\ 4371,\allowbreak\ 7107$\\
+20&4&2&31&$21^{\ast},\allowbreak\ 361,\allowbreak\ 3201,\allowbreak\ 6601^{\ast}$\\
+21&7&7&38&$85,\allowbreak\ 8695,\allowbreak\ 10585,\allowbreak\ 26335,\allowbreak\ 9717247,\allowbreak\ 16666651,\allowbreak\ 37769887$\\
+22&3&2&40&$45^{\ast},\allowbreak\ 133,\allowbreak\ 2465$\\
+23&5&5&45&$231,\allowbreak\ 645,\allowbreak\ 1105,\allowbreak\ 24013,\allowbreak\ 34133$\\
+24&4&1&46&$25^{\ast},\allowbreak\ 49^{\ast},\allowbreak\ 121^{\ast},\allowbreak\ 529$\\
+25&4&3&49&$51,\allowbreak\ 6601^{\ast},\allowbreak\ 15051,\allowbreak\ 11921001$\\
+26&4&1&50&$27^{\ast},\allowbreak\ 105,\allowbreak\ 126673^{\ast},\allowbreak\ 1333333^{\ast}$\\
+27&6&3&53&$55,\allowbreak\ 325,\allowbreak\ 3565,\allowbreak\ 30889^{\ast},\allowbreak\ 88561^{\ast},\allowbreak\ 534061^{\ast}$\\
+28&3&1&54&$57,\allowbreak\ 169^{\ast},\allowbreak\ 561^{\ast}$\\
+29&6&6&60&$117,\allowbreak\ 175,\allowbreak\ 1045,\allowbreak\ 1447681,\allowbreak\ 2121061,\allowbreak\ 164424781$\\
+30&4&2&62&$91^{\ast},\allowbreak\ 841,\allowbreak\ 6601^{\ast},\allowbreak\ 158401$\\
+31&8&8&70&$63,\allowbreak\ 125,\allowbreak\ 435,\allowbreak\ 62745,\allowbreak\ 1154131,\allowbreak\ 2609581,\allowbreak\ 3936691,\allowbreak\ 5624641$\\
+32&6&4&74&$33^{\ast},\allowbreak\ 65^{\ast},\allowbreak\ 385,\allowbreak\ 961,\allowbreak\ 12673,\allowbreak\ 12801$\\
+33&6&6&80&$1047619,\allowbreak\ 2210671,\allowbreak\ 3494701,\allowbreak\ 15197491,\allowbreak\ 25158871,\allowbreak\ 93755971$\\
+34&4&2&82&$35^{\ast},\allowbreak\ 69,\allowbreak\ 341,\allowbreak\ 139231^{\ast}$\\
+35&4&3&85&$561^{\ast},\allowbreak\ 91001,\allowbreak\ 610051,\allowbreak\ 683761$\\
+36&9&2&87&$145,\allowbreak\ 217,\allowbreak\ 289^{\ast},\allowbreak\ 30889^{\ast},\allowbreak\ 88561^{\ast},\allowbreak\ 534061^{\ast},\allowbreak\ 55462177^{\ast},\allowbreak\ 8885251441^{\ast},\allowbreak\ 42018333841^{\ast}$\\
+37&11&11&98&$75,\allowbreak\ 17169,\allowbreak\ 33153,\allowbreak\ 45141,\allowbreak\ 62605,\allowbreak\ 2415953,\allowbreak\ 2929291,\allowbreak\ 11972017,\allowbreak\ 16894571,\allowbreak\ 67902031,\allowbreak\ 191834567$\\
+38&9&5&103&$39^{\ast},\allowbreak\ 77,\allowbreak\ 153^{\ast},\allowbreak\ 1065,\allowbreak\ 1369,\allowbreak\ 4371^{\ast},\allowbreak\ 7107^{\ast},\allowbreak\ 13833,\allowbreak\ 1170401$\\
+39&5&3&106&$703,\allowbreak\ 15211,\allowbreak\ 126673^{\ast},\allowbreak\ 334153,\allowbreak\ 1333333^{\ast}$\\
+40&7&4&110&$81,\allowbreak\ 361^{\ast},\allowbreak\ 481,\allowbreak\ 3201^{\ast},\allowbreak\ 6601^{\ast},\allowbreak\ 460801,\allowbreak\ 1372801$\\
+41&8&8&118&$165,\allowbreak\ 247,\allowbreak\ 2871,\allowbreak\ 8365,\allowbreak\ 73555,\allowbreak\ 184255,\allowbreak\ 9345541,\allowbreak\ 128950249$\\
+42&9&1&119&$85^{\ast},\allowbreak\ 169^{\ast},\allowbreak\ 1681,\allowbreak\ 8695^{\ast},\allowbreak\ 10585^{\ast},\allowbreak\ 26335^{\ast},\allowbreak\ 9717247^{\ast},\allowbreak\ 16666651^{\ast},\allowbreak\ 37769887^{\ast}$\\
+43&7&7&126&$87,\allowbreak\ 259,\allowbreak\ 861,\allowbreak\ 22791,\allowbreak\ 52633,\allowbreak\ 69231,\allowbreak\ 82733$\\
+44&5&2&128&$45^{\ast},\allowbreak\ 133^{\ast},\allowbreak\ 1849,\allowbreak\ 2465^{\ast},\allowbreak\ 15841$\\
+45&7&4&132&$91^{\ast},\allowbreak\ 451,\allowbreak\ 8911,\allowbreak\ 88561^{\ast},\allowbreak\ 534061^{\ast},\allowbreak\ 3763801,\allowbreak\ 14245741$\\
+46&8&3&135&$93,\allowbreak\ 185,\allowbreak\ 231^{\ast},\allowbreak\ 369,\allowbreak\ 645^{\ast},\allowbreak\ 1105^{\ast},\allowbreak\ 24013^{\ast},\allowbreak\ 34133^{\ast}$\\
+47&9&9&144&$95,\allowbreak\ 1035,\allowbreak\ 2821,\allowbreak\ 4795,\allowbreak\ 204263,\allowbreak\ 223721,\allowbreak\ 308039,\allowbreak\ 559489,\allowbreak\ 38649041$\\
+48&5&3&147&$49^{\ast},\allowbreak\ 529^{\ast},\allowbreak\ 1729,\allowbreak\ 2209,\allowbreak\ 52417$\\
+49&12&12&159&$99,\allowbreak\ 87676681,\allowbreak\ 133861729,\allowbreak\ 161005573,\allowbreak\ 258844951,\allowbreak\ 1411040359,\allowbreak\ 3462426241,\allowbreak\ 7950140448251,\allowbreak\ 131097700645913,\allowbreak\ 798178197617711,\allowbreak\ 989473937059427,\allowbreak\ 1208361237478669$\\
+50&9&5&164&$51^{\ast},\allowbreak\ 301,\allowbreak\ 1001,\allowbreak\ 6601^{\ast},\allowbreak\ 15051^{\ast},\allowbreak\ 3679201,\allowbreak\ 11921001^{\ast},\allowbreak\ 4199932801,\allowbreak\ 1353385637801$\\
+51&3&2&166&$205,\allowbreak\ 32131,\allowbreak\ 139231^{\ast}$\\
+52&8&5&171&$105^{\ast},\allowbreak\ 833,\allowbreak\ 9361,\allowbreak\ 126673^{\ast},\allowbreak\ 741937,\allowbreak\ 1333333^{\ast},\allowbreak\ 206955841,\allowbreak\ 560630848961$\\
+53&13&13&184&$425,\allowbreak\ 637,\allowbreak\ 3605,\allowbreak\ 8481,\allowbreak\ 55651,\allowbreak\ 3547291,\allowbreak\ 3984541,\allowbreak\ 43523707,\allowbreak\ 52519291,\allowbreak\ 260410837,\allowbreak\ 1271325841,\allowbreak\ 152674725071,\allowbreak\ 3916268927681$\\
+54&8&2&186&$55^{\ast},\allowbreak\ 325^{\ast},\allowbreak\ 2809,\allowbreak\ 3565^{\ast},\allowbreak\ 30889^{\ast},\allowbreak\ 88561^{\ast},\allowbreak\ 534061^{\ast},\allowbreak\ 4169867689$\\
+55&10&9&195&$111,\allowbreak\ 221,\allowbreak\ 1431,\allowbreak\ 6601^{\ast},\allowbreak\ 15181,\allowbreak\ 100101,\allowbreak\ 689701,\allowbreak\ 1269621,\allowbreak\ 271794601,\allowbreak\ 568898551$\\
+56&6&3&198&$57^{\ast},\allowbreak\ 169^{\ast},\allowbreak\ 225,\allowbreak\ 561^{\ast},\allowbreak\ 25761,\allowbreak\ 376993$\\
+57&6&6&204&$115,\allowbreak\ 343,\allowbreak\ 2737,\allowbreak\ 95761,\allowbreak\ 37883341,\allowbreak\ 713798461$\\
+58&9&3&207&$117^{\ast},\allowbreak\ 175^{\ast},\allowbreak\ 1045^{\ast},\allowbreak\ 2553,\allowbreak\ 80041,\allowbreak\ 1447681^{\ast},\allowbreak\ 2121061^{\ast},\allowbreak\ 8372881,\allowbreak\ 164424781^{\ast}$\\
+59&4&4&211&$119,\allowbreak\ 1653,\allowbreak\ 1771,\allowbreak\ 42353741$\\
+60&8&3&214&$121^{\ast},\allowbreak\ 361^{\ast},\allowbreak\ 841^{\ast},\allowbreak\ 3481,\allowbreak\ 6601^{\ast},\allowbreak\ 25201,\allowbreak\ 158401^{\ast},\allowbreak\ 6840001$\\
+61&12&12&226&$123,\allowbreak\ 245,\allowbreak\ 1221,\allowbreak\ 44409,\allowbreak\ 50997,\allowbreak\ 74665,\allowbreak\ 631351,\allowbreak\ 964411,\allowbreak\ 1102759,\allowbreak\ 940724555,\allowbreak\ 1962804565,\allowbreak\ 2417562005$\\
+62&13&5&231&$63^{\ast},\allowbreak\ 125^{\ast},\allowbreak\ 435^{\ast},\allowbreak\ 3721,\allowbreak\ 19345,\allowbreak\ 62745^{\ast},\allowbreak\ 264121,\allowbreak\ 828073,\allowbreak\ 1154131^{\ast},\allowbreak\ 2609581^{\ast},\allowbreak\ 3936691^{\ast},\allowbreak\ 5624641^{\ast},\allowbreak\ 7697921$\\
+63&7&1&232&$1891,\allowbreak\ 8695^{\ast},\allowbreak\ 10585^{\ast},\allowbreak\ 26335^{\ast},\allowbreak\ 9717247^{\ast},\allowbreak\ 16666651^{\ast},\allowbreak\ 37769887^{\ast}$\\
+64&7&2&234&$65^{\ast},\allowbreak\ 129,\allowbreak\ 385^{\ast},\allowbreak\ 961^{\ast},\allowbreak\ 1281,\allowbreak\ 12673^{\ast},\allowbreak\ 12801^{\ast}$\\
+\bottomrule\end{longtable}
+
+\begin{theorem}[Exact primality criterion through spectral index $64$]
+\label{thm:primality64}
+Let $n>1$ be odd, let $\gcd(b,n)=1$, and suppose the exact order $L=\ord_n(b)$
+satisfies
+\[
+L=\frac{n-1}{d},\qquad 1\le d\le64.
+\]
+Then either $n$ is prime or $n$ belongs to the row $\Eset(d)$ of
+Table~\ref{tab:exceptions}.  In particular, if the row information is ignored,
+there are $234$ distinct composite possibilities in the whole certified range.
+\end{theorem}
+
+\begin{proof}
+For $d\le8$ this is the small-index classification of
+Section~\ref{sec:small-index}; for $9\le d\le32$ it is
+Theorem~\ref{thm:d32}; $d=33$ is Theorem~\ref{thm:d33}; and $34\le d\le64$ is covered by Theorem~\ref{thm:d64}.
+\end{proof}
+
+\begin{remark}[How to use the criterion]
+This statement is stronger than a probabilistic test.  Once $L$ is known
+exactly and $d\le64$, primality is decided by a finite table lookup: if a
+composite candidate is not in the relevant row, it is prime.  The theorem does
+not claim that computing $L$ from scratch is cheap.
+\end{remark}
+
+\section{Quantitative rarity and prime--pseudoprime spectral separation}
+\label{sec:rarity}
+
+Fixed-index finiteness is only the starting point.  To measure how sparse the
+low-index composite spectrum actually is, define
+\[
+C(D)=\left|\bigcup_{1\le d\le D}\Eset(d)\right|,
+\qquad
+C^\ast(D)=\left|\bigcup_{1\le d\le D}\Eset^\ast(d)\right|.
+\]
+The first quantity uses the inclusive spectral convention; the second uses
+Somer's nontrivial-base convention.
+
+\begin{theorem}[Quantitative rarity through $d=64$]
+\label{thm:rarity64}
+The certified table gives
+\[
+C(64)=234,\qquad C^\ast(64)=231.
+\]
+Counting inherited reappearances separately, the first $64$ inclusive lines
+contain $351$ spectral incidences, while Somer's nontrivial-base convention
+contains $329$.
+\end{theorem}
+
+The difference between the inclusive and nontrivial-base counts can again be
+audited directly.  The $22$ excluded incidences are
+\[
+\begin{array}{c|l}
+d&\text{excluded occurrence}\\ \hline
+4&9\ (L=2)\\
+8&9\ (L=1)\\
+12&25\ (L=2)\\
+13&27\ (L=2)\\
+14&15\ (L=1)\\
+20&21\ (L=1)\\
+24&25\ (L=1),\ 49\ (L=2)\\
+26&27\ (L=1)\\
+32&33\ (L=1)\\
+34&35\ (L=1)\\
+38&39\ (L=1)\\
+40&81\ (L=2)\\
+44&45\ (L=1)\\
+48&49\ (L=1)\\
+50&51\ (L=1)\\
+54&55\ (L=1)\\
+56&57\ (L=1)\\
+60&121\ (L=2)\\
+62&63\ (L=1),\ 125\ (L=2)\\
+64&65\ (L=1).
+\end{array}
+\]
+Order $1$ is represented only by $1\bmod n$, and for an odd prime power the
+unique involution is $-1\bmod n$.  Thus these are precisely the incidences
+removed by Somer's convention.  Only $9,27,81$ disappear completely from the
+union through $64$; all other affected integers have another nontrivial
+spectral occurrence by that cutoff.  Hence $351-22=329$ incidences and
+$234-3=231$ distinct composites.
+
+The distinction between $234$ and $351$ is important: a composite can occupy
+several spectral lines by the inheritance theorem.  The title of this paper refers to the certified scarcity of the first quantity across a low-index range; the general upper bounds proved later are much weaker than the observed values.  ``Rare'' is therefore not being used as a
+synonym for Somer's theorem that each single line is finite; it refers to the
+observed and certified scarcity of distinct composites across an entire
+low-index interval.
+
+Figure~\ref{fig:composite-cumulative} shows the cumulative composite count.
+The growth is irregular, with visible changes near the dyadic thresholds at
+which one more distinct prime factor becomes structurally possible.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.92\textwidth]{composite_rarity_cumulative_d64.png}
+\caption{Cumulative number of distinct odd composite exceptions through
+spectral index $D\le64$.  The upper curve uses the inclusive group-theoretic
+spectrum $\Eset(d)$; the lower curve uses Somer's nontrivial-base convention
+$\Eset^\ast(d)$.}
+\label{fig:composite-cumulative}
+\end{figure}
+
+On the prime side the relevant comparison is not the number of primes on one
+line, since every existential prime line is infinite, but the \emph{fixed-base
+prime mass} carried by the same low-index interval.  This is quantified in
+Theorem~\ref{thm:prime-mass-64} below.  The resulting juxtaposition is a structural spectral comparison: the existential-over-bases composite union remains thin in the certified range, while each fixed non-perfect-power base places most of its prime residual-index mass in the same range.
+
+The two sides of this display are deliberately not probabilities on the same
+sample space.  The composite set $\Eset(d)$ is enlarged by allowing the base to
+vary with $n$, whereas $\delta(b,d)$ fixes one base.  The comparison is therefore
+structural rather than a direct density identity: even the union over all
+possible bases contains very few low-index composite exceptions, while each
+individual positive non-perfect-power base places most of its prime
+residual-index mass in the same spectral range.  The line-sampling probability
+introduced in Section~\ref{sec:counting-probability} later places primes and
+composites in one common sample space.
+
+The computations also suggest a dyadic stratification.  Composite spectral
+lines become combinatorially richer when $d$ passes
+\[
+d=2^r+1,
+\]
+because another distinct prime factor becomes compatible with
+\[
+2^{s-1}\le d-1.
+\]
+
+\section{Counting composites on a spectral line and a primality probability}
+\label{sec:counting-probability}
+
+The exact low-index table suggests a natural quantitative question stronger
+than fixed-$d$ finiteness.  Put
+\[
+e(d):=|\Eset(d)|,
+\qquad
+g(d):=|\mathcal G(d)|,
+\]
+and, for the stratification by the number of distinct prime factors,
+\[
+e_s(d):=
+\bigl|\{n\in\Eset(d):\omega(n)=s\}\bigr|.
+\]
+No convincing asymptotic formula for $e(d)$ or $g(d)$ is presently known.
+The data through $64$ are much too short and irregular to justify one.
+Nevertheless the structural theory gives considerably more than the crude
+consequence of fixed-index finiteness.
+
+\subsection{The crude bound inherited from the size theorem}
+
+For $d\ge2$, every composite in $\Eset(d)$ satisfies
+\[
+n<U_0(d):=(dS(d))^{2M(d)}
+\]
+and $n\equiv1\pmod d$.  Hence
+\[
+e(d)\ll\frac{U_0(d)}d,
+\qquad
+\log e(d)\le
+2d\bigl(\log d+\log\log d+O(1)\bigr).
+\]
+This is uniform but enormously larger than the observed counts.  We now
+obtain a sharper bound by counting factorization patterns directly rather
+than counting all integers below the size obstruction.
+
+\subsection{Overlap-resolved branches versus master-equation branches}
+
+The exact search is organized by $(s,\kappa,H,P)$.  Its number of
+\emph{overlap-resolved} parameter branches is
+\[
+B(d)=
+\sum_{s=2}^{S(d)}
+\sum_{\kappa\le(d-1)/2^{s-1}}
+\left\lfloor\frac{d-1}{2^{s-1}\kappa}\right\rfloor\tau(\kappa).
+\]
+This decomposition is computationally valuable because fixing $\kappa$ and
+$H$ permits exact $\lambda$-overlap pruning.
+
+\begin{proposition}[Asymptotic overlap-resolved branch count]
+\label{prop:branch-asymptotic}
+As $d\to\infty$,
+\[
+\boxed{
+B(d)=\frac12d(\log d)^2+O(d\log d).
+}
+\]
+\end{proposition}
+
+\begin{proof}
+Put $D=d-1$ and $r=s-1$.  For
+$X_r=\lfloor D/2^r\rfloor$, the inner sum is
+\[
+\sum_{\kappa\le X_r}\tau(\kappa)
+\left\lfloor\frac{X_r}{\kappa}\right\rfloor
+=
+\sum_{m\le X_r}d_3(m),
+\]
+where $d_3=1*1*1$.  The Piltz divisor estimate
+\[
+\sum_{m\le x}d_3(m)
+=\frac12x(\log x)^2+O(x\log x)
+\]
+is more than sufficient here; see, for example,
+\cite[Chapter~1]{IwaniecKowalski2004}.  Summing over $r\ge1$ and using
+$\sum2^{-r}=1$ together with convergence of
+$\sum r2^{-r}$ and $\sum r^22^{-r}$ gives the result.
+\end{proof}
+
+For the Diophantine equation itself, however, $\kappa$ and $H$ occur only
+through
+\[
+j=\kappa H,
+\qquad
+c=\frac jP.
+\]
+This collapses one logarithmic layer of the parameter space.
+
+\begin{proposition}[Relaxed collapsed master-equation count]
+\label{prop:master-branch-asymptotic}
+Fix $s\ge2$ and put $D=d-1$.  Every actual master-equation parameter pair
+$(j,P)$ satisfies
+\[
+1\le j\le d-1,
+\qquad
+2^{s-1}P\mid j.
+\]
+If we deliberately drop the additional arithmetic restrictions on $P$---in
+particular that $P=n/\rad(n)$ is odd and is supported on the primes dividing
+$n$---the number of resulting \emph{relaxed} candidate pairs is
+\[
+B^{+}_{\mathrm{mast},s}(d)=
+\sum_{m\le D/2^{s-1}}\tau(m).
+\]
+Consequently the number of actual $(j,P)$ pairs is at most
+$B^{+}_{\mathrm{mast},s}(d)$, and the total relaxed count is
+\[
+B^{+}_{\mathrm{mast}}(d)
+=\sum_{s=2}^{S(d)}B^{+}_{\mathrm{mast},s}(d)
+=\sum_{r\ge1}\sum_{m\le D/2^r}\tau(m).
+\]
+Moreover
+\begin{equation}
+\boxed{
+B^{+}_{\mathrm{mast}}(d)
+=D\log D+(2\gamma-1-2\log2)D+O(\sqrt D)
+=d\log d+O(d),
+}
+\label{eq:master-branch-asymptotic}
+\end{equation}
+where $\gamma$ is Euler's constant.
+\end{proposition}
+
+\begin{proof}
+Every actual branch has $P\mid\kappa$ and $2^{s-1}\mid H$, hence
+$2^{s-1}P\mid j=\kappa H$.  Writing $j=2^{s-1}m$, every actual $P$ is
+therefore a divisor of $m$.  If all divisors of $m$ are retained, without
+checking oddness, prime support, or whether a compatible $\lambda$-overlap
+really exists, there are exactly $\tau(m)$ relaxed choices.  This proves the
+upper count.
+
+The classical divisor summatory formula
+\[
+\sum_{m\le x}\tau(m)
+=x\log x+(2\gamma-1)x+O(\sqrt x)
+\]
+now gives, after summing over $r=s-1\ge1$,
+\[
+D\log D\sum_{r\ge1}2^{-r}
+-D\log2\sum_{r\ge1}r2^{-r}
++(2\gamma-1)D\sum_{r\ge1}2^{-r}
++O\!\left(\sqrt D\sum_{r\ge1}2^{-r/2}\right).
+\]
+Since the first two geometric sums are $1$ and $2$, respectively,
+\eqref{eq:master-branch-asymptotic} follows.
+\end{proof}
+
+Thus the extra factor of order $\log d$ in the overlap-resolved search count
+$B(d)$ disappears already after forgetting the particular decomposition
+$j=\kappa H$.  The relaxed quantity $B^{+}_{\mathrm{mast}}(d)$ is not claimed
+to count realizable arithmetic branches exactly; it is a convenient and safe
+upper layer for estimating how many Diophantine candidates a spectral line can
+support.
+
+\subsection{Exact low-$\omega$ strata}
+
+The first three strata admit particularly transparent estimates.
+
+\begin{proposition}[Prime-power stratum]
+\label{prop:e1-bound}
+For an odd prime power $n=p^a$, $a\ge2$, put
+\[
+R_a(p)=1+p+\cdots+p^{a-1}=\frac{p^a-1}{p-1}.
+\]
+Then
+\[
+d_\lambda(p^a)=R_a(p),
+\qquad
+\Spec_L(p^a)=\{R_a(p)r:r\mid p-1\}.
+\]
+Consequently
+\[
+e_1(d)=
+\#\{(p,a):p\text{ odd prime},\ a\ge2,
+\ R_a(p)\mid d,\ d/R_a(p)\mid p-1\},
+\]
+and
+\[
+\boxed{e_1(d)=O(\tau(d)\log d)=d^{o(1)}.}
+\]
+\end{proposition}
+
+\begin{proof}
+Since
+\[
+\lambda(p^a)=p^{a-1}(p-1),
+\qquad
+p^a-1=(p-1)R_a(p),
+\]
+and $R_a(p)\equiv1\pmod p$, one has
+$\gcd(p^a-1,\lambda(p^a))=p-1$.  The formula for the genuine index follows,
+and spectral inheritance gives the displayed spectrum.  Finally
+$R_a(p)\ge(3^a-1)/2$, so only $O(\log d)$ exponents can occur; for each
+exponent the strictly increasing function $R_a(p)$ can take at most one
+prime value for each divisor of $d$.
+\end{proof}
+
+For two distinct prime factors, Lemma~\ref{lem:two-prime-completion} has no
+prefix: $A=B=1$, $a=d$, $b=j$, and $\Delta=d-j$.  It therefore becomes
+\begin{equation}
+\boxed{
+((d-j)p-d)((d-j)q-d)
+=c\,[d(P-1)+j].
+}
+\label{eq:two-prime-special}
+\end{equation}
+Indeed, since $cP=j\le d-1$ and $c,j\le d-1$,
+\[
+T=c[d(P-1)+j]=dj-cd+cj=O(d^2).
+\]
+
+\begin{theorem}[One-, two-, and three-prime counting bounds]
+\label{thm:low-omega-counts}
+As $d\to\infty$,
+\[
+\boxed{
+e_1(d)\le d^{o(1)},
+\qquad
+e_2(d)\le d^{1+o(1)},
+\qquad
+e_3(d)\le d^{1+o(1)}.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+The first assertion is Proposition~\ref{prop:e1-bound}.  For $s=2$,
+Proposition~\ref{prop:master-branch-asymptotic} gives $O(d\log d)$ relaxed master
+parameter pairs, and hence at most that many actual pairs.  Equation~\eqref{eq:two-prime-special} has $T=O(d^2)$ as noted above, so it
+supplies at most $\tau(T)/2=d^{o(1)}$ divisor-pair completions on each branch,
+by the standard maximal-order estimate
+\[
+\tau(m)=\exp\!\left(O\!\left(\frac{\log m}{\log\log m}\right)\right).
+\]
+This proves $e_2(d)\le d^{1+o(1)}$.
+
+For $s=3$, $4\mid H$ and $P\mid\kappa$, hence
+\[
+P\mid\kappa\mid\frac{\kappa H}{4}=\frac j4.
+\]
+Write $j=4m$; then $P\mid m$.  If $p=p_1$, the smallest-prime bound gives
+\[
+p<\frac{d+2j}{d-j},
+\qquad\text{hence}\qquad
+j>\frac{d(p-1)}{p+2}.
+\]
+Also $p<3d$.  For fixed $p$, the number of multiples of $4$ in the allowed
+$j$-interval is $O(d/p+1)$, and for each $j$ there are at most
+$\tau(j/4)=d^{o(1)}$ choices for $P$.  Mertens' estimate for reciprocal
+primes therefore gives at most
+\[
+d^{o(1)}\sum_{p<3d}\left(\frac d p+1\right)=d^{1+o(1)}
+\]
+possible triples $(j,P,p_1)$.  For each such prefix $p_1<3d$, so
+$A=p_1-1=O(d)$ and $B=p_1=O(d)$.  Hence in
+Lemma~\ref{lem:two-prime-completion}
+\[
+a=O(d^2),\qquad b=O(d^2),\qquad c=O(d),\qquad T=O(d^4),
+\]
+and there are only $d^{o(1)}$ divisor-pair completions.  This proves the third
+assertion.
+\end{proof}
+
+These estimates are intentionally one-sided.  They do not suggest that
+$e_2(d)$ or $e_3(d)$ actually has polynomial order; the certified small-index
+data are far smaller.  Their point is that the first nontrivial strata already
+admit nearly linear rigorous upper bounds.
+
+\subsection{An exploratory exact count of the low-$\omega$ strata}
+\label{subsec:low-omega-experiment}
+
+To see the scale hidden by the upper bounds, we implemented the preceding
+prime-power formula and divisor-pair identities independently in Python/SymPy.
+Every generated candidate is rechecked from $n$, $d$, and $\lambda(n)$ rather
+than accepted from the parametrization alone.  As a regression test, the
+program reproduces every $\omega(n)\le3$ incidence in the certified spectrum through $d=64$.  It was then run for every $2\le d\le500$.
+
+\begin{center}
+\begin{tabular}{c|rrrr}
+\toprule
+range of $d$ & mean $e_1(d)$ & mean $e_2(d)$ & mean $e_3(d)$
+& mean $\sum_{s\le3}e_s(d)$\\
+\midrule
+$2$--$100$   & $0.556$ & $1.424$ & $4.475$ & $6.455$\\
+$101$--$200$ & $0.510$ & $2.020$ & $9.710$ & $12.240$\\
+$201$--$500$ & $0.420$ & $2.350$ & $13.817$ & $16.587$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These are \emph{not} values of the full function $e(d)$ beyond the certified
+range: strata with four or more distinct prime divisors are omitted.  Through $d=64$, however, the low-$\omega$ calculation accounts for $320$ of the $351$ certified spectral incidences: $40$ have one distinct prime factor, $71$ have two, and $209$ have three.  The remaining $31$ incidences have $\omega(n)=4$; none in the certified range has five or more distinct prime factors.  The experiment therefore
+supports the qualitative impression that the actual low-order strata grow far
+more slowly than the worst-case bounds.  We deliberately do not fit an
+asymptotic law to the range $d\le500$: it is too short, and the dyadic changes
+in the allowed value of $\omega(n)$ make extrapolation particularly unsafe.
+The script and captured output are supplied separately as exploratory material;
+they are not used in any proof.
+
+\subsection{A uniform upper bound for the full composite line}
+
+The same two-prime completion identity improves the global count even when
+$s$ is allowed to grow with $d$.
+
+\begin{theorem}[Uniform counting bound for a spectral line]
+\label{thm:uniform-e-count}
+As $d\to\infty$,
+\begin{equation}
+\boxed{
+\log e(d)
+\le
+\frac d2\bigl(\log d+\log\log d+O(1)\bigr).
+}
+\label{eq:uniform-e-count}
+\end{equation}
+Equivalently,
+\[
+e(d)\le
+\exp\!\left\{
+\frac d2\bigl(\log d+\log\log d+O(1)\bigr)
+\right\}.
+\]
+\end{theorem}
+
+\begin{proof}
+The strata $s=1,2$ are already smaller than the claimed bound, so suppose
+$s\ge3$ and fix one overlap-resolved branch $(s,\kappa,H,P)$.  Let
+\[
+Q_r:=\prod_{i=1}^r p_i
+\]
+be the radical of a prime prefix.  The smallest-prime estimate gives
+$Q_1=p_1<sd$.  For $k\ge2$, if $p_k>\kappa$, the squarefree-suffix bound applies.  Since
+$K_{k-1}\mid\kappa$,
+\[
+\lambda(P_{k-1})\le\phi(P_{k-1})
+=K_{k-1}\prod_{i<k}(p_i-1)
+< K_{k-1}Q_{k-1}\le\kappa Q_{k-1}.
+\]
+Therefore
+\[
+p_k<d\lambda(P_{k-1})(s-k+1)
+\le d\kappa s\,Q_{k-1}.
+\]
+If $p_k\le\kappa$, the same weaker inequality is automatic.  Hence
+\[
+Q_k<d\kappa s\,Q_{k-1}^2.
+\]
+Induction yields
+\begin{equation}
+Q_r<(sd)^{2^r-1}\kappa^{2^{r-1}-1}.
+\label{eq:prefix-radical-bound}
+\end{equation}
+
+Stop with $r=s-2$ primes selected.  Since
+$2^{s-1}\kappa\le d-1$, one has
+\[
+2^r=2^{s-2}\le\frac{d-1}{2\kappa}<\frac d{2\kappa},
+\qquad
+2^{r-1}=2^{s-3}<\frac d{4\kappa}.
+\]
+Consequently the two leading logarithmic contributions in
+\eqref{eq:prefix-radical-bound} satisfy
+\[
+(2^r-1)\log(sd)\le
+\frac d{2\kappa}\bigl(\log d+\log s\bigr),
+\qquad
+(2^{r-1}-1)\log\kappa\le
+\frac d4\frac{\log\kappa}{\kappa}.
+\]
+Now $s=O(\log d)$ and $(\log\kappa)/\kappa$ is bounded for
+$\kappa\ge1$; the first term is largest in leading order at $\kappa=1$.
+Thus \eqref{eq:prefix-radical-bound} gives
+\begin{equation}
+\log Q_r
+\le
+\frac d2\bigl(\log d+\log\log d+O(1)\bigr).
+\label{eq:prefix-count-log}
+\end{equation}
+On the fixed branch, the numerical value of $P$ is already fixed.  Hence an
+increasing prime prefix is determined by the squarefree integer $Q_r$; for any
+prefix prime dividing $P$, its exponent is fixed by $v_p(P)+1$.  The number of
+possible prefixes on this branch is therefore at most the right-hand size bound
+for $Q_r$ itself.  Required prime factors of $P$ that are not yet in the prefix
+must occur among the final two primes and are handled by the support check in
+the completion step.
+
+For a fixed prefix, Lemma~\ref{lem:two-prime-completion} gives at most
+$\tau(T)/2$ completions.  Here
+\[
+a=dA\le dQ_r,
+\qquad
+b=jB\le dQ_r,
+\qquad
+c\le d,
+\]
+so
+\[
+T=a(b-c)+bc\le2d^2Q_r^2.
+\]
+Thus $\log T=O(d\log d)$ and the maximal-order bound for the divisor
+function gives $\log\tau(T)=O(d)$, lower order relative to
+\eqref{eq:prefix-count-log}.  Finally the total number of overlap-resolved
+branches is only $B(d)=O(d(\log d)^2)$, whose logarithm is also lower order.
+Summing over all branches proves \eqref{eq:uniform-e-count}.
+\end{proof}
+
+Compared with the crude estimate inherited from the size theorem, the leading
+coefficient in the exponent has fallen from $2$ to $1/2$.  This is not merely
+a cosmetic improvement: after inversion it enlarges the range in which a
+spectral line is overwhelmingly prime under the sampling model below.
+
+\subsection{A natural conditional probability of primality}
+
+There is no intrinsic probability that an integer is prime until a sampling
+model is specified.  We choose uniformly from the integers on a fixed
+existential spectral line $d$ up to a cutoff $X$:
+\[
+\mathcal S_d(X)=
+\{n\le X:\exists b,\ \gcd(b,n)=1,\ \ord_n(b)=(n-1)/d\}.
+\]
+Its prime part is $\{p\le X:p\equiv1\pmod d\}$, while its composite part is
+$\Eset(d)\cap[1,X]$.  Put
+\[
+\pi(X;d,1)=\#\{p\le X:p\equiv1\pmod d\}.
+\]
+Then
+\begin{equation}
+\Pr_X(n\text{ prime}\mid d)
+=
+\frac{\pi(X;d,1)}
+{\pi(X;d,1)+|\Eset(d)\cap[1,X]|}.
+\label{eq:conditional-prime-prob}
+\end{equation}
+
+\begin{theorem}[Primality probability on a fixed existential line]
+\label{thm:conditional-prime-prob}
+For every fixed $d\ge1$,
+\[
+\Pr_X(n\text{ prime}\mid d)
+=
+1-e(d)\phi(d)\frac{\log X}{X}
++o\!\left(\frac{\log X}{X}\right).
+\]
+In particular
+\[
+\boxed{\Pr_X(n\text{ prime}\mid d)\longrightarrow1.}
+\]
+\end{theorem}
+
+\begin{proof}
+For fixed $d$ and all sufficiently large $X$,
+$|\Eset(d)\cap[1,X]|=e(d)$.  The prime number theorem in arithmetic
+progressions gives
+\[
+\pi(X;d,1)\sim\frac{\operatorname{Li}(X)}{\phi(d)}
+\sim\frac{X}{\phi(d)\log X}.
+\]
+Substitution in \eqref{eq:conditional-prime-prob} and expansion of
+$1/(1+y)$ prove the formula.
+\end{proof}
+
+For fixed $d$, the convergence to $1$ is essentially the prime-number-theorem
+consequence of Somer's finiteness theorem; the first-order coefficient records
+how the exact finite composite count enters.  The stronger analytic use of the
+new counting theorem is the growing-$d$ result below.
+
+For $d\le64$ the leading coefficient
+\[
+\rho(d):=e(d)\phi(d)
+\]
+is known exactly.  Its maximum is
+\[
+\max_{1\le d\le64}\rho(d)=720,
+\qquad\text{at }d=61,
+\]
+since $e(61)=12$ and $\phi(61)=60$.
+
+\begin{corollary}[Uniform line-sampling estimate through $64$]
+\label{cor:probability64}
+For the finite family $1\le d\le64$,
+\[
+\min_{1\le d\le64}\Pr_X(n\text{ prime}\mid d)
+=
+1-720\frac{\log X}{X}
++o\!\left(\frac{\log X}{X}\right).
+\]
+The lines $d=1,2,3$ have $e(d)=0$ and therefore contain no odd composites.
+\end{corollary}
+
+The new counting theorem also permits $d$ to grow with the sampling cutoff.
+
+\begin{theorem}[A uniform high-probability spectral range]
+\label{thm:uniform-probability-growing-d}
+For every fixed $0<\varepsilon<2$,
+\begin{equation}
+\boxed{
+\inf_{1\le d\le(2-\varepsilon)\log X/\log\log X}
+\Pr_X(n\text{ prime}\mid d)
+\longrightarrow1
+\qquad(X\to\infty).
+}
+\label{eq:uniform-probability-growing-d}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+D_X=(2-\varepsilon)\frac{\log X}{\log\log X}.
+\]
+Since $D_X\ll\log X$, Siegel--Walfisz gives, uniformly for $d\le D_X$,
+\[
+\pi(X;d,1)=\frac{X}{\phi(d)\log X}(1+o(1));
+\]
+see, for example, \cite[Chapter~5]{IwaniecKowalski2004}.  Choose a constant
+$C$ and $d_0$ so that Theorem~\ref{thm:uniform-e-count} gives
+\[
+\log e(d)\le\frac d2\bigl(\log d+\log\log d+C\bigr)
+\qquad(d\ge d_0).
+\]
+The right-hand side is increasing for sufficiently large $d$.  Hence, uniformly
+for $d_0\le d\le D_X$,
+\begin{align*}
+\log e(d)
+&\le \frac{D_X}{2}
+   \bigl(\log D_X+\log\log D_X+C\bigr)\\
+&=\left(1-\frac\varepsilon2+o(1)\right)\log X.
+\end{align*}
+The finitely many $d<d_0$ contribute only bounded constants $e(d)$ and satisfy
+the same weaker estimate for large $X$.  Therefore
+\[
+e(d)\le X^{1-\varepsilon/2+o(1)}
+\]
+uniformly throughout the displayed range.  Since $\phi(d)\le d$,
+\[
+\frac{|\Eset(d)\cap[1,X]|}{\pi(X;d,1)}
+\le X^{-\varepsilon/2+o(1)}d\log X\longrightarrow0
+\]
+uniformly.  Equation~\eqref{eq:conditional-prime-prob} proves the claim.
+\end{proof}
+
+\begin{remark}[Certainty versus high probability]
+The constants $1/2$ and $2$ describe different statements.  The asymptotic
+size theorem gives the deterministic implication
+\[
+d\le\left(\frac12-\varepsilon\right)
+\frac{\log n}{\log\log n}
+\quad\Longrightarrow\quad n\text{ is prime}
+\]
+for every sufficiently large candidate.  Theorem~\ref{thm:uniform-probability-growing-d}
+extends to the four-times-wider leading range
+\[
+d\le(2-\varepsilon)\frac{\log X}{\log\log X},
+\]
+but only in the explicitly specified uniform line-sampling sense: composites
+are asymptotically negligible rather than impossible.  Neither constant is
+claimed sharp.
+\end{remark}
+
+For $d\le64$, Theorem~\ref{thm:primality64} is stronger still: once $n$ and
+its exact period are known, the explicit exceptional table decides the
+question rather than assigning a probability.
+
+For a fixed base $b$, put $e_b(d)=|\Eset_b(d)|$.  Since
+$\Eset_b(d)\subseteq\Eset(d)$, this number is finite.  Under the GRH
+hypotheses of Theorem~\ref{thm:moree-density}, if $\delta(b,d)>0$, the same
+fixed-$d$ argument gives
+\[
+\Pr_X(n\text{ prime}\mid b,d)
+=
+1-\frac{e_b(d)}{\delta(b,d)}\frac{\log X}{X}
++o\!\left(\frac{\log X}{X}\right).
+\]
+This formula makes explicit how the composite count and the fixed-base prime
+density combine in a spectral estimate of primality.
+
+\section{Fixed-base prime spectra and near-primitive roots}
+\label{sec:fixed-base}
+
+The existential prime spectrum of Remark~\ref{thm:prime-spectrum} allows the
+base to vary with the prime.  A finer spectral problem fixes an integer
+$b\notin\{-1,0,1\}$ and considers
+\[
+\Pset_b(d)
+=
+\left\{
+p\nmid b:
+\ord_p(b)=\frac{p-1}{d}
+\right\}.
+\]
+In the terminology of the Artin literature, $b$ is then an
+$d$-\emph{near-primitive root} modulo $p$, and $d$ is the residual index of
+$b\bmod p$.
+
+The relevant density theory is classical.  Following Hooley's method for
+Artin's conjecture, Wagstaff proved the near-primitive-root density statement
+under GRH; Moree subsequently derived explicit Euler-product and entanglement
+correction formulas \cite{Wagstaff1982,Moree2000,Moree2013}.
+
+\begin{theorem}[Wagstaff density theorem, with Moree correction formulas, under GRH]
+\label{thm:moree-density}
+Let $b\in\mathbb Q\setminus\{-1,0,1\}$ and $d\ge1$.  Assume the Riemann Hypothesis for the Dedekind zeta functions of every Kummer field
+$\mathbb Q(\zeta_{kd},b^{1/(kd)})$, $k\ge1$.  Then the set
+$\Pset_b(d)$ has a natural density
+\[
+\delta(b,d)
+=
+\sum_{k=1}^{\infty}
+\frac{\mu(k)}
+{[\mathbb Q(\zeta_{kd},b^{1/(kd)}):\mathbb Q]}.
+\tag{A1}\label{eq:moree-series}
+\]
+This density is a rational multiple of Artin's constant.  Its vanishing is
+governed by explicit entanglement conditions.
+\end{theorem}
+
+For a fixed base $b$ and a cutoff $D$, define the cumulative prime spectral
+mass
+\[
+\mathfrak M_b(D)=\sum_{1\le d\le D}\delta(b,d).
+\]
+Since each prime $p\nmid b$ has one residual index, $\mathfrak M_b(D)$ is the
+natural density, relative to all primes, of those primes for which
+\[
+\frac{p-1}{\ord_p(b)}\le D.
+\]
+
+For the spectral comparison it is useful that a large class of bases has an
+especially simple odd-index spectrum.  Write
+\[
+b=b_0^h,
+\]
+where $b_0>0$ is not a perfect power in $\mathbb Q$ and $h\ge1$.  For a
+positive integer $b$ that is not a perfect power, define its squarefree part by
+\[
+\operatorname{sf}(b):=\prod_{v_p(b)\ {\rm odd}}p.
+\]
+This is the squarefree representative of $b$ modulo rational squares and
+should not be confused with the radical $\rad(b)$.
+
+\begin{definition}[Odd-index generic base]
+A positive integer $b>1$ is called \emph{odd-index generic} if it is not a
+perfect power and
+\[
+\operatorname{sf}(b)\not\equiv1\pmod4.
+\]
+Equivalently, the quadratic discriminant of $\mathbb Q(\sqrt b)$ is even.
+\end{definition}
+
+\begin{lemma}[Explicit positive non-perfect-power correction factor, under GRH]
+\label{lem:moree-h1-table}
+Let $b>1$ be a positive integer that is not a perfect power, put
+$g=\operatorname{sf}(b)$, and write
+\[
+d_2=2^{v_2(d)},
+\qquad
+B(g,d)=\prod_{\substack{q\mid g\\q\nmid d}}
+\frac{-1}{q^2-q-1}.
+\]
+Then Moree's $h=1$ formula depends on $b$ only through the quadratic field
+$\mathbb Q(\sqrt g)$, and the ratio $\delta(b,d)/E(d)$ is given by
+\[
+\begin{array}{c|c|c}
+ g\pmod4 & d_2 & \delta(b,d)/E(d)\\ \hline
+ 1 & 1 & 1-B(g,d)\\
+ 1 & d_2\ge2 & 1+B(g,d)\\
+ 2 & d_2<4 & 1\\
+ 2 & d_2=4 & 1-B(g,d)/3\\
+ 2 & d_2>4 & 1+B(g,d)\\
+ 3 & d_2=1 & 1\\
+ 3 & d_2=2 & 1-B(g,d)/3\\
+ 3 & d_2\ge4 & 1+B(g,d).
+\end{array}
+\]
+This is the positive $h=1$ specialization of Moree's explicit
+near-primitive-root density formula; equivalently it is Table~1 of
+\cite{Moree2013} applied to the squarefree representative of $b$ modulo
+rational squares.
+\end{lemma}
+
+\begin{proof}[Derivation of Lemma~\ref{lem:moree-h1-table}]
+For $b$ not a perfect power, Moree's degree calculation gives
+\[
+[\mathbb Q(\zeta_m,b^{1/m}):\mathbb Q]
+=\frac{m\phi(m)}{\epsilon(m)},
+\]
+where $\epsilon(m)=2$ precisely when $2\mid m$ and the quadratic discriminant
+$D=\operatorname{disc}\mathbb Q(\sqrt{\operatorname{sf}(b)})$ divides $m$;
+otherwise $\epsilon(m)=1$.  Insert this dichotomy into
+\eqref{eq:moree-series}.  Relative to the generic Euler product $E(d)$, the
+terms for which the discriminant condition is active force a finite set $S$
+of primes into the squarefree Möbius variable.  The resulting Euler-product
+ratio is
+\[
+\prod_{p\in S}\frac{-1}{p c_p-1},
+\qquad
+c_p=\begin{cases}
+p,&p\mid d,\\ p-1,&p\nmid d.\end{cases}
+\]
+The $2$-adic condition determines the eight cases in the table.  In particular
+when $p=2\mid d$ the factor is $-1/(2^2-1)=-1/3$.  This gives exactly the
+listed correction factors.
+\end{proof}
+
+\begin{corollary}[Universal odd-index prime spectrum, under GRH]
+\label{cor:odd-universal}
+Let $b$ be odd-index generic and let $d$ be odd.  Then
+\[
+\delta(b,d)=E(d)
+=
+\frac{A}{d^2}
+\prod_{q\mid d}
+\frac{q^2-1}{q^2-q-1}.
+\tag{A2}\label{eq:Em}
+\]
+where $A$ is Artin's constant.  In particular, for odd spectral indices the
+prime density is independent of the choice of odd-index generic base.
+\end{corollary}
+
+\begin{proof}
+If $d$ is odd, then $d_2=1$.  For an odd-index generic base one has
+$g=\operatorname{sf}(b)\equiv2$ or $3\pmod4$.  The corresponding $d_2=1$
+rows of Lemma~\ref{lem:moree-h1-table} both give
+$\delta(b,d)/E(d)=1$.
+\end{proof}
+
+\begin{theorem}[Prime-mass minimum and all-base infimum through $d=64$, under GRH]
+\label{thm:prime-mass-64}
+Let
+\[
+G_{64}:=\sum_{1\le d\le64}E(d),
+\qquad
+\mathfrak M_b(64):=\sum_{1\le d\le64}\delta(b,d).
+\]
+Then:
+\begin{enumerate}[label=(\roman*)]
+\item The correction-free Wagstaff mass is
+\[
+G_{64}=0.984529145953884713\ldots .
+\]
+
+\item Among all odd-index generic bases,
+\[
+\min_b\mathfrak M_b(64)
+=0.982709160681865379\ldots .
+\]
+The minimum is attained exactly by those bases in this class whose squarefree
+part is $2$.
+
+\item More strongly, the same sharp minimum holds over all positive integer
+bases $b>1$ that are not perfect powers:
+\[
+\mathfrak M_b(64)\ge\mathfrak M_2(64)
+=0.982709160681865379\ldots .
+\]
+Equality holds precisely when the squarefree part of $b$ is $2$.
+
+\item If arbitrary perfect-power bases are admitted, no positive minimum
+exists.  Instead
+\[
+\inf_{b\ge2}\mathfrak M_b(64)=0.
+\]
+A sequence of powers of $2$ approaches this infimum.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Part (i) is the direct sum of Moree's generic factors
+\[
+E(d)=\frac{A}{d^2}
+\prod_{q\mid d}\frac{q^2-1}{q^2-q-1}.
+\]
+
+For (iii), let $g=\operatorname{sf}(b)$ for a positive non-perfect-power base.
+Lemma~\ref{lem:moree-h1-table} reduces the problem to squarefree kernels
+$g>1$.  Every correction has the form
+\[
+\delta(b,d)=E(d)\{1+\alpha(g,d)B(g,d)\},
+\qquad \alpha(g,d)\in\{0,\pm\tfrac13,\pm1\}.
+\]
+If $g$ contains a prime $q\ge67$, then $q\nmid d$ for all $d\le64$ and
+\[
+|B(g,d)|\le\frac1{67^2-67-1}=\frac1{4421}.
+\]
+Hence
+\[
+|\mathfrak M_b(64)-G_{64}|\le\frac{G_{64}}{4421}.
+\]
+Exact rational arithmetic gives
+\[
+G_{64}-\mathfrak M_2(64)>\frac{G_{64}}{4421},
+\]
+so no minimizing kernel contains a prime at least $67$.
+
+It remains to inspect the $2^{18}-1=262143$ nonempty squarefree products of
+\[
+2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61.
+\]
+The exact computation evaluates Lemma~\ref{lem:moree-h1-table} for all of
+these kernels and finds the unique minimizer $g=2$.  The calculation is
+implemented without floating-point comparisons in
+\path{prime_mass_d64_check_exact.py}; its captured output is included
+in the supplement.  This proves (iii), and (ii) follows because the odd-index
+generic class contains the kernel $2$.
+
+For (iv), put
+\[
+H_y=\prod_{\substack{67\le q\le y\\q\ {\rm prime}}}q,
+\qquad b_y=2^{H_y}.
+\]
+For every $d\le64$ and every prime $q\mid H_y$ one has $q\nmid2d$.
+In Moree's Euler-product formula this is exactly the perfect-power factor
+$q(q-2)/(q^2-q-1)$; see \cite[Eq.~(8)]{Moree2013}, specifically the factor
+attached to $q\mid h$ and $q\nmid mt$.  Consequently
+\[
+\mathfrak M_{b_y}(64)=\mathfrak M_2(64)
+\prod_{\substack{67\le q\le y\\q\ {\rm prime}}}
+\frac{q(q-2)}{q^2-q-1}.
+\]
+The factors are $1-1/q+O(q^{-2})$, so the product tends to zero.  This proves
+(iv).
+\end{proof}
+
+\begin{remark}[A fixed-base prime-side comparison through $64$]
+\label{cor:low-index-separation}
+Under GRH, the same interval $1\le d\le64$ which contains only
+\[
+C^\ast(64)=231
+\]
+distinct odd composite exceptions in Somer's nontrivial-base convention
+contains at least
+\[
+98.2709160681865\ldots\%
+\]
+of the fixed-base prime mass for every positive non-perfect-power integer
+base.  For correction-free Wagstaff behavior the corresponding prime mass is
+\[
+98.4529145953885\ldots\%.
+\]
+These percentages are fixed-base prime densities; $C^\ast(64)$ is an existential-over-bases composite cardinality.  The display is therefore a side-by-side structural comparison, not a probability theorem.
+\end{remark}
+
+\begin{remark}
+The prime-mass theorem clarifies two different uses of the word ``generic''.  For
+correction-free Wagstaff behavior the mass through $64$ is
+$98.452915\ldots\%$.  Over the larger odd-index generic class the worst
+case is the squarefree part $2$, giving the sharp
+$98.270916\ldots\%$.  Over all bases, including arbitrarily high perfect
+powers, the infimum is $0$.  Thus the correction-free value $98.452915\ldots\%$ is not a universal lower bound over all non-perfect-power bases, while the sharp universal value $98.270916\ldots\%$ is.
+\end{remark}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.92\textwidth]{prime_mass_cumulative_d64.png}
+\caption{Cumulative fixed-base prime mass through spectral index $D$.
+The upper curve is the correction-free Wagstaff mass
+$\sum_{d\le D}E(d)$.  The lower curve is $\mathfrak M_2(D)$, the cumulative
+mass for squarefree kernel $2$; its endpoint at $D=64$ is the proven global
+minimum among positive non-perfect-power bases.  No claim is made here that
+kernel $2$ minimizes every intermediate cutoff $D$.  The dashed horizontal
+line, labeled $0.98$, marks $98\%$.}
+\label{fig:prime-mass-cumulative}
+\end{figure}
+
+For example,
+\[
+E(5)=
+\frac{A}{25}\frac{24}{19}
+\approx0.0189,
+\]
+so approximately $1.89\%$ of all primes lie on the fixed-base spectral line
+$d=5$ for every odd-index generic base.
+
+The distinction between the two prime spectra should be kept explicit:
+\[
+\underbrace{\frac1{\phi(d)}}_{\text{existential over bases}}
+\qquad\text{versus}\qquad
+\underbrace{\delta(b,d)}_{\text{one fixed base}}.
+\]
+The first quantity is unconditional and is the correct comparison with the
+union-over-bases composite spectrum $\Eset(d)$.  The second is a refined,
+fixed-base Artin spectrum and is conditional on GRH in the present state of
+the theory.
+
+\section{The range beyond $d=64$}
+
+The certified theorem in this paper now stops at $d=64$.  No exploratory table for
+larger $d$ is used as evidence or as an input to any proof.  Extending the exact
+branch search to $34\le d\le128$ is a natural next computation, with the next
+dyadic transition occurring at $d=65$.
+
+\section{Further structural refinements}
+
+The overlap recurrence \eqref{eq:overlap}, introduced above as a certified
+search invariant, also has a useful structural interpretation.  With
+\[
+c_i=p_i^{a_i-1}(p_i-1),
+\qquad
+\Lambda_k=\operatorname{lcm}(c_1,\ldots,c_k),
+\qquad
+H_k=\frac{\prod_{i=1}^k c_i}{\Lambda_k},
+\]
+one has $H_s=\phi(n)/\lambda(n)$, so every prefix consumes part of a finite
+``overlap budget''.  In the minimal-overlap case
+\[
+H_s=2^{s-1},
+\]
+one obtains
+\[
+\gcd(c_i,c_j)=2
+\qquad(i\ne j).
+\]
+For squarefree $n$ this reduces to
+\[
+\gcd(p_i-1,p_j-1)=2.
+\]
+
+The terminal prime is also strongly constrained.  If $p_s>\kappa$, then
+\[
+p_s-1\mid \kappa(P_{s-1}-1).
+\]
+Together with \eqref{eq:overlap}, this turns final-prime completion into
+a finite divisor problem.  These refinements are central to the ongoing
+extension beyond $d=64$.
+
+\section{Discussion and open problems}
+
+The spectral formulation suggests several problems.
+
+\begin{enumerate}
+\item
+Determine the exact growth of
+\[
+N_{\max}(d)
+=
+\max\Eset(d),
+\]
+with the convention $N_{\max}(d)=0$ when $\Eset(d)=\varnothing$.
+The explicit function $U_0(d)$ of
+Theorem~\ref{thm:uniform-U} proves finiteness but is far
+from optimal.
+
+\item
+Determine the asymptotic behavior of
+\[
+e(d)=|\Eset(d)|.
+\]
+The data for $d\le64$ show strong fluctuations and repeated inherited
+spectral lines.
+
+\item
+Determine the asymptotic behavior of the genuine count
+\[
+g(d)=|\mathcal G(d)|
+\]
+and compare it with the inclusive incidence count $e(d)$.  By
+Corollary~\ref{cor:genuine-partition}, $g(d)$ is the distribution of the
+canonical genuine index across all odd composites.
+
+\item
+Extend the certified classification beyond $d=64$.  The next dyadic threshold is $65$, followed by $129,\ldots$; these are natural complexity transitions because another distinct prime factor becomes possible.
+
+\item
+Develop the $\phi$-spectrum.  Its finiteness is substantially more
+delicate and contains Lehmer-type problems.
+
+\item
+For fixed base $b$, determine and compare the prime density
+$\delta_b(d)$ and the fixed-base pseudoprime count
+\[
+|\Eset_b(d)|.
+\]
+This is the most direct fixed-base version of the spectral-separation
+program.
+\end{enumerate}
+
+
+\subsection{Four natural OEIS sequences}
+\label{subsec:oeis}
+
+The certified rows now define substantially longer prefixes of four natural
+integer sequences.  A search of the current OEIS finds many fixed-base
+pseudoprime, Carmichael and fixed-order sequences, but we have not located a
+direct entry for Somer's variable-base Fermat $d$-pseudoprime spectrum in the
+inclusive form used here.  For example, OEIS A086249 counts \emph{base-$2$}
+Fermat pseudoprimes by the value of $\ord_n(2)$; that fixed-base, fixed-order
+statistic differs from the variable-base reciprocal index studied here.  The
+following prefixes are now certified through $d=64$ with no numerical cutoff
+on $n$.
+
+Let
+\[
+\mathcal G(d)=\{n:d_\lambda(n)=d\}.
+\]
+The four sequences are as follows.
+
+\begin{enumerate}
+\item \textbf{Inclusive spectral list, retaining inherited repetitions.}
+Read the rows $\Eset(1),\Eset(2),\ldots$ in increasing $d$, sorting each row
+increasingly.  Through $d=64$ the complete certified prefix is
+\begin{quote}\small\sloppy
+9,\allowbreak\ 6601,\allowbreak\ 25,\allowbreak\ 15,\allowbreak\ 561,\allowbreak\ 9,\allowbreak\
+49,\allowbreak\ 30889,\allowbreak\ 88561,\allowbreak\ 534061,\allowbreak\ 21,\allowbreak\ 6601,\allowbreak\
+45,\allowbreak\ 25,\allowbreak\ 121,\allowbreak\ 27,\allowbreak\ 126673,\allowbreak\ 1333333,\allowbreak\
+15,\allowbreak\ 169,\allowbreak\ 561,\allowbreak\ 91,\allowbreak\ 6601,\allowbreak\ 33,\allowbreak\
+49,\allowbreak\ 65,\allowbreak\ 35,\allowbreak\ 139231,\allowbreak\ 289,\allowbreak\ 30889,\allowbreak\
+88561,\allowbreak\ 534061,\allowbreak\ 55462177,\allowbreak\ 8885251441,\allowbreak\ 42018333841,\allowbreak\
+39,\allowbreak\ 153,\allowbreak\ 4371,\allowbreak\ 7107,\allowbreak\ 21,\allowbreak\ 361,\allowbreak\
+3201,\allowbreak\ 6601,\allowbreak\ 85,\allowbreak\ 8695,\allowbreak\ 10585,\allowbreak\ 26335,\allowbreak\
+9717247,\allowbreak\ 16666651,\allowbreak\ 37769887,\allowbreak\ 45,\allowbreak\ 133,\allowbreak\
+2465,\allowbreak\ 231,\allowbreak\ 645,\allowbreak\ 1105,\allowbreak\ 24013,\allowbreak\ 34133,\allowbreak\
+25,\allowbreak\ 49,\allowbreak\ 121,\allowbreak\ 529,\allowbreak\ 51,\allowbreak\ 6601,\allowbreak\
+15051,\allowbreak\ 11921001,\allowbreak\ 27,\allowbreak\ 105,\allowbreak\ 126673,\allowbreak\
+1333333,\allowbreak\ 55,\allowbreak\ 325,\allowbreak\ 3565,\allowbreak\ 30889,\allowbreak\ 88561,\allowbreak\
+534061,\allowbreak\ 57,\allowbreak\ 169,\allowbreak\ 561,\allowbreak\ 117,\allowbreak\ 175,\allowbreak\
+1045,\allowbreak\ 1447681,\allowbreak\ 2121061,\allowbreak\ 164424781,\allowbreak\ 91,\allowbreak\
+841,\allowbreak\ 6601,\allowbreak\ 158401,\allowbreak\ 63,\allowbreak\ 125,\allowbreak\ 435,\allowbreak\
+62745,\allowbreak\ 1154131,\allowbreak\ 2609581,\allowbreak\ 3936691,\allowbreak\ 5624641,\allowbreak\
+33,\allowbreak\ 65,\allowbreak\ 385,\allowbreak\ 961,\allowbreak\ 12673,\allowbreak\ 12801,\allowbreak\
+1047619,\allowbreak\ 2210671,\allowbreak\ 3494701,\allowbreak\ 15197491,\allowbreak\ 25158871,\allowbreak\
+93755971,\allowbreak\ 35,\allowbreak\ 69,\allowbreak\ 341,\allowbreak\ 139231,\allowbreak\ 561,\allowbreak\
+91001,\allowbreak\ 610051,\allowbreak\ 683761,\allowbreak\ 145,\allowbreak\ 217,\allowbreak\ 289,\allowbreak\
+30889,\allowbreak\ 88561,\allowbreak\ 534061,\allowbreak\ 55462177,\allowbreak\ 8885251441,\allowbreak\
+42018333841,\allowbreak\ 75,\allowbreak\ 17169,\allowbreak\ 33153,\allowbreak\ 45141,\allowbreak\
+62605,\allowbreak\ 2415953,\allowbreak\ 2929291,\allowbreak\ 11972017,\allowbreak\ 16894571,\allowbreak\
+67902031,\allowbreak\ 191834567,\allowbreak\ 39,\allowbreak\ 77,\allowbreak\ 153,\allowbreak\
+1065,\allowbreak\ 1369,\allowbreak\ 4371,\allowbreak\ 7107,\allowbreak\ 13833,\allowbreak\
+1170401,\allowbreak\ 703,\allowbreak\ 15211,\allowbreak\ 126673,\allowbreak\ 334153,\allowbreak\
+1333333,\allowbreak\ 81,\allowbreak\ 361,\allowbreak\ 481,\allowbreak\ 3201,\allowbreak\ 6601,\allowbreak\
+460801,\allowbreak\ 1372801,\allowbreak\ 165,\allowbreak\ 247,\allowbreak\ 2871,\allowbreak\
+8365,\allowbreak\ 73555,\allowbreak\ 184255,\allowbreak\ 9345541,\allowbreak\ 128950249,\allowbreak\
+85,\allowbreak\ 169,\allowbreak\ 1681,\allowbreak\ 8695,\allowbreak\ 10585,\allowbreak\ 26335,\allowbreak\
+9717247,\allowbreak\ 16666651,\allowbreak\ 37769887,\allowbreak\ 87,\allowbreak\ 259,\allowbreak\
+861,\allowbreak\ 22791,\allowbreak\ 52633,\allowbreak\ 69231,\allowbreak\ 82733,\allowbreak\ 45,\allowbreak\
+133,\allowbreak\ 1849,\allowbreak\ 2465,\allowbreak\ 15841,\allowbreak\ 91,\allowbreak\ 451,\allowbreak\
+8911,\allowbreak\ 88561,\allowbreak\ 534061,\allowbreak\ 3763801,\allowbreak\ 14245741,\allowbreak\
+93,\allowbreak\ 185,\allowbreak\ 231,\allowbreak\ 369,\allowbreak\ 645,\allowbreak\ 1105,\allowbreak\
+24013,\allowbreak\ 34133,\allowbreak\ 95,\allowbreak\ 1035,\allowbreak\ 2821,\allowbreak\ 4795,\allowbreak\
+204263,\allowbreak\ 223721,\allowbreak\ 308039,\allowbreak\ 559489,\allowbreak\ 38649041,\allowbreak\
+49,\allowbreak\ 529,\allowbreak\ 1729,\allowbreak\ 2209,\allowbreak\ 52417,\allowbreak\ 99,\allowbreak\
+87676681,\allowbreak\ 133861729,\allowbreak\ 161005573,\allowbreak\ 258844951,\allowbreak\
+1411040359,\allowbreak\ 3462426241,\allowbreak\ 7950140448251,\allowbreak\ 131097700645913,\allowbreak\
+798178197617711,\allowbreak\ 989473937059427,\allowbreak\ 1208361237478669,\allowbreak\ 51,\allowbreak\
+301,\allowbreak\ 1001,\allowbreak\ 6601,\allowbreak\ 15051,\allowbreak\ 3679201,\allowbreak\
+11921001,\allowbreak\ 4199932801,\allowbreak\ 1353385637801,\allowbreak\ 205,\allowbreak\ 32131,\allowbreak\
+139231,\allowbreak\ 105,\allowbreak\ 833,\allowbreak\ 9361,\allowbreak\ 126673,\allowbreak\
+741937,\allowbreak\ 1333333,\allowbreak\ 206955841,\allowbreak\ 560630848961,\allowbreak\ 425,\allowbreak\
+637,\allowbreak\ 3605,\allowbreak\ 8481,\allowbreak\ 55651,\allowbreak\ 3547291,\allowbreak\
+3984541,\allowbreak\ 43523707,\allowbreak\ 52519291,\allowbreak\ 260410837,\allowbreak\
+1271325841,\allowbreak\ 152674725071,\allowbreak\ 3916268927681,\allowbreak\ 55,\allowbreak\ 325,\allowbreak\
+2809,\allowbreak\ 3565,\allowbreak\ 30889,\allowbreak\ 88561,\allowbreak\ 534061,\allowbreak\
+4169867689,\allowbreak\ 111,\allowbreak\ 221,\allowbreak\ 1431,\allowbreak\ 6601,\allowbreak\
+15181,\allowbreak\ 100101,\allowbreak\ 689701,\allowbreak\ 1269621,\allowbreak\ 271794601,\allowbreak\
+568898551,\allowbreak\ 57,\allowbreak\ 169,\allowbreak\ 225,\allowbreak\ 561,\allowbreak\ 25761,\allowbreak\
+376993,\allowbreak\ 115,\allowbreak\ 343,\allowbreak\ 2737,\allowbreak\ 95761,\allowbreak\
+37883341,\allowbreak\ 713798461,\allowbreak\ 117,\allowbreak\ 175,\allowbreak\ 1045,\allowbreak\
+2553,\allowbreak\ 80041,\allowbreak\ 1447681,\allowbreak\ 2121061,\allowbreak\ 8372881,\allowbreak\
+164424781,\allowbreak\ 119,\allowbreak\ 1653,\allowbreak\ 1771,\allowbreak\ 42353741,\allowbreak\
+121,\allowbreak\ 361,\allowbreak\ 841,\allowbreak\ 3481,\allowbreak\ 6601,\allowbreak\ 25201,\allowbreak\
+158401,\allowbreak\ 6840001,\allowbreak\ 123,\allowbreak\ 245,\allowbreak\ 1221,\allowbreak\
+44409,\allowbreak\ 50997,\allowbreak\ 74665,\allowbreak\ 631351,\allowbreak\ 964411,\allowbreak\
+1102759,\allowbreak\ 940724555,\allowbreak\ 1962804565,\allowbreak\ 2417562005,\allowbreak\ 63,\allowbreak\
+125,\allowbreak\ 435,\allowbreak\ 3721,\allowbreak\ 19345,\allowbreak\ 62745,\allowbreak\ 264121,\allowbreak\
+828073,\allowbreak\ 1154131,\allowbreak\ 2609581,\allowbreak\ 3936691,\allowbreak\ 5624641,\allowbreak\
+7697921,\allowbreak\ 1891,\allowbreak\ 8695,\allowbreak\ 10585,\allowbreak\ 26335,\allowbreak\
+9717247,\allowbreak\ 16666651,\allowbreak\ 37769887,\allowbreak\ 65,\allowbreak\ 129,\allowbreak\
+385,\allowbreak\ 961,\allowbreak\ 1281,\allowbreak\ 12673,\allowbreak\ 12801.
+\end{quote}
+There are $351$ displayed terms because inherited occurrences are retained.
+
+\item \textbf{Genuine spectral list.}
+Read the rows $\mathcal G(1),\mathcal G(2),\ldots$ in increasing $d$.  By
+Corollary~\ref{cor:genuine-partition}, no odd composite occurs twice in this
+sequence.  Through $d=64$ the complete certified prefix is
+\begin{quote}\small\sloppy
+9,\allowbreak\ 6601,\allowbreak\ 25,\allowbreak\ 15,\allowbreak\ 561,\allowbreak\ 49,\allowbreak\
+30889,\allowbreak\ 88561,\allowbreak\ 534061,\allowbreak\ 21,\allowbreak\ 45,\allowbreak\ 121,\allowbreak\
+27,\allowbreak\ 126673,\allowbreak\ 1333333,\allowbreak\ 169,\allowbreak\ 91,\allowbreak\ 33,\allowbreak\
+65,\allowbreak\ 35,\allowbreak\ 139231,\allowbreak\ 289,\allowbreak\ 55462177,\allowbreak\
+8885251441,\allowbreak\ 42018333841,\allowbreak\ 39,\allowbreak\ 153,\allowbreak\ 4371,\allowbreak\
+7107,\allowbreak\ 361,\allowbreak\ 3201,\allowbreak\ 85,\allowbreak\ 8695,\allowbreak\ 10585,\allowbreak\
+26335,\allowbreak\ 9717247,\allowbreak\ 16666651,\allowbreak\ 37769887,\allowbreak\ 133,\allowbreak\
+2465,\allowbreak\ 231,\allowbreak\ 645,\allowbreak\ 1105,\allowbreak\ 24013,\allowbreak\ 34133,\allowbreak\
+529,\allowbreak\ 51,\allowbreak\ 15051,\allowbreak\ 11921001,\allowbreak\ 105,\allowbreak\ 55,\allowbreak\
+325,\allowbreak\ 3565,\allowbreak\ 57,\allowbreak\ 117,\allowbreak\ 175,\allowbreak\ 1045,\allowbreak\
+1447681,\allowbreak\ 2121061,\allowbreak\ 164424781,\allowbreak\ 841,\allowbreak\ 158401,\allowbreak\
+63,\allowbreak\ 125,\allowbreak\ 435,\allowbreak\ 62745,\allowbreak\ 1154131,\allowbreak\
+2609581,\allowbreak\ 3936691,\allowbreak\ 5624641,\allowbreak\ 385,\allowbreak\ 961,\allowbreak\
+12673,\allowbreak\ 12801,\allowbreak\ 1047619,\allowbreak\ 2210671,\allowbreak\ 3494701,\allowbreak\
+15197491,\allowbreak\ 25158871,\allowbreak\ 93755971,\allowbreak\ 69,\allowbreak\ 341,\allowbreak\
+91001,\allowbreak\ 610051,\allowbreak\ 683761,\allowbreak\ 145,\allowbreak\ 217,\allowbreak\ 75,\allowbreak\
+17169,\allowbreak\ 33153,\allowbreak\ 45141,\allowbreak\ 62605,\allowbreak\ 2415953,\allowbreak\
+2929291,\allowbreak\ 11972017,\allowbreak\ 16894571,\allowbreak\ 67902031,\allowbreak\ 191834567,\allowbreak\
+77,\allowbreak\ 1065,\allowbreak\ 1369,\allowbreak\ 13833,\allowbreak\ 1170401,\allowbreak\ 703,\allowbreak\
+15211,\allowbreak\ 334153,\allowbreak\ 81,\allowbreak\ 481,\allowbreak\ 460801,\allowbreak\
+1372801,\allowbreak\ 165,\allowbreak\ 247,\allowbreak\ 2871,\allowbreak\ 8365,\allowbreak\ 73555,\allowbreak\
+184255,\allowbreak\ 9345541,\allowbreak\ 128950249,\allowbreak\ 1681,\allowbreak\ 87,\allowbreak\
+259,\allowbreak\ 861,\allowbreak\ 22791,\allowbreak\ 52633,\allowbreak\ 69231,\allowbreak\ 82733,\allowbreak\
+1849,\allowbreak\ 15841,\allowbreak\ 451,\allowbreak\ 8911,\allowbreak\ 3763801,\allowbreak\
+14245741,\allowbreak\ 93,\allowbreak\ 185,\allowbreak\ 369,\allowbreak\ 95,\allowbreak\ 1035,\allowbreak\
+2821,\allowbreak\ 4795,\allowbreak\ 204263,\allowbreak\ 223721,\allowbreak\ 308039,\allowbreak\
+559489,\allowbreak\ 38649041,\allowbreak\ 1729,\allowbreak\ 2209,\allowbreak\ 52417,\allowbreak\
+99,\allowbreak\ 87676681,\allowbreak\ 133861729,\allowbreak\ 161005573,\allowbreak\ 258844951,\allowbreak\
+1411040359,\allowbreak\ 3462426241,\allowbreak\ 7950140448251,\allowbreak\ 131097700645913,\allowbreak\
+798178197617711,\allowbreak\ 989473937059427,\allowbreak\ 1208361237478669,\allowbreak\ 301,\allowbreak\
+1001,\allowbreak\ 3679201,\allowbreak\ 4199932801,\allowbreak\ 1353385637801,\allowbreak\ 205,\allowbreak\
+32131,\allowbreak\ 833,\allowbreak\ 9361,\allowbreak\ 741937,\allowbreak\ 206955841,\allowbreak\
+560630848961,\allowbreak\ 425,\allowbreak\ 637,\allowbreak\ 3605,\allowbreak\ 8481,\allowbreak\
+55651,\allowbreak\ 3547291,\allowbreak\ 3984541,\allowbreak\ 43523707,\allowbreak\ 52519291,\allowbreak\
+260410837,\allowbreak\ 1271325841,\allowbreak\ 152674725071,\allowbreak\ 3916268927681,\allowbreak\
+2809,\allowbreak\ 4169867689,\allowbreak\ 111,\allowbreak\ 221,\allowbreak\ 1431,\allowbreak\
+15181,\allowbreak\ 100101,\allowbreak\ 689701,\allowbreak\ 1269621,\allowbreak\ 271794601,\allowbreak\
+568898551,\allowbreak\ 225,\allowbreak\ 25761,\allowbreak\ 376993,\allowbreak\ 115,\allowbreak\
+343,\allowbreak\ 2737,\allowbreak\ 95761,\allowbreak\ 37883341,\allowbreak\ 713798461,\allowbreak\
+2553,\allowbreak\ 80041,\allowbreak\ 8372881,\allowbreak\ 119,\allowbreak\ 1653,\allowbreak\
+1771,\allowbreak\ 42353741,\allowbreak\ 3481,\allowbreak\ 25201,\allowbreak\ 6840001,\allowbreak\
+123,\allowbreak\ 245,\allowbreak\ 1221,\allowbreak\ 44409,\allowbreak\ 50997,\allowbreak\ 74665,\allowbreak\
+631351,\allowbreak\ 964411,\allowbreak\ 1102759,\allowbreak\ 940724555,\allowbreak\ 1962804565,\allowbreak\
+2417562005,\allowbreak\ 3721,\allowbreak\ 19345,\allowbreak\ 264121,\allowbreak\ 828073,\allowbreak\
+7697921,\allowbreak\ 1891,\allowbreak\ 129,\allowbreak\ 1281.
+\end{quote}
+It contains the $234$ distinct composites that occur in the inclusive spectrum
+through $d=64$.
+
+\item \textbf{Inclusive spectral counts.}
+\[
+e(d)=|\Eset(d)|.
+\]
+For $1\le d\le64$:
+\[
+\begin{split}
+0,0,0,1,1,1,2,2,3,2,1,2,3,3,2,3,\\
+2,7,4,4,7,3,5,4,4,4,6,3,6,4,8,6,\\
+6,4,4,9,11,9,5,7,8,9,7,5,7,8,9,5,\\
+12,9,3,8,13,8,10,6,6,9,4,8,12,13,7,7
+\end{split}
+\]
+
+\item \textbf{Genuine spectral counts.}
+\[
+g(d)=|\mathcal G(d)|.
+\]
+For $1\le d\le64$:
+\[
+\begin{split}
+0,0,0,1,1,1,2,1,3,1,1,1,3,1,1,2,\\
+2,4,4,2,7,2,5,1,3,1,3,1,6,2,8,4,\\
+6,2,3,2,11,5,3,4,8,1,7,2,4,3,9,3,\\
+12,5,2,5,13,2,9,3,6,3,4,3,12,5,1,2
+\end{split}
+\]
+\end{enumerate}
+
+The two list sequences should be cross-referenced to the two count sequences,
+since the counts recover the row boundaries, including the empty rows
+$d=1,2,3$.  All four use the \emph{inclusive} spectrum.  An OEIS submission
+should state explicitly that the witnessing base may vary with $n$, that
+inherited and genuine appearances are different notions, and that the
+inclusive convention allows the residue classes $\pm1$, unlike Somer's
+nontrivial-base convention.  The supplementary machine-readable
+\texttt{combined\_d1\_64.json} is the preferred source for preparing OEIS
+b-files, because it preserves the row boundaries and exact integer values.
+
+\section{Conclusion}
+
+The starting question of this extended version is not initially spectral:
+if an exact reciprocal period
+\[
+L=\ord_n(b)
+\]
+is known, what can it tell us about primality?  The answer is a collection of
+classical and newer tools.  At one extreme, $L=n-1$ gives Lucas' immediate
+primality criterion.  More generally, the exact order supplies Fermat and
+strong-pseudoprime information, Midy decompositions, cyclotomic structure,
+and sometimes enough of $n-1$ to complete a Pocklington or
+Brillhart--Lehmer--Selfridge certificate.  The toolbox also makes clear its
+own limitation: obtaining an exact order can be substantial computational
+input.
+
+The spectral investigation begins when $L\mid n-1$ and
+\[
+d=\frac{n-1}{L}.
+\]
+It then gives two direct extensions of the Lucas idea.  The exact theorem through $d=64$ says that an odd $n$ with $L=(n-1)/d$ is prime unless it belongs to one explicitly certified row of Table~\ref{tab:exceptions}; the $64$ rows contain $234$ distinct composite integers in $351$ spectral incidences.  The uniform theorem says
+that every composite spectral point satisfies
+\[
+n<(dS(d))^{2M(d)},
+\]
+and therefore sufficiently small $d$ relative to $\log n/\log\log n$ forces
+primality without any finite table.
+
+The genuine spectrum adds a complementary base-independent structure.  Every
+odd composite has exactly one genuine index
+\[
+d_\lambda(n)=\frac{n-1}{\gcd(n-1,\lambda(n))},
+\]
+so the sets $\mathcal G(d)$ partition all odd composites.  The counting
+problem is now more quantitative than in the preceding drafts.  The
+$\lambda$-overlap search has
+$B(d)=\frac12d(\log d)^2+O(d\log d)$ parameter branches, while a relaxed collapsed master-equation count has only
+$B_{\mathrm{mast}}^{+}(d)=d\log d+O(d)$ candidate pairs.  Solving
+the last two primes by a divisor-pair identity gives
+\[
+\log e(d)\le
+\frac d2(\log d+\log\log d+O(1)).
+\]
+Under the natural line-sampling model this implies not only that the
+conditional primality probability tends to $1$ for every fixed $d$, but
+uniformly, for each fixed $0<\varepsilon<2$, throughout
+\[
+d\le(2-\varepsilon)\frac{\log X}{\log\log X}.
+\]
+Thus the deterministic certainty threshold with leading constant $1/2$ and
+the high-probability threshold with leading constant $2$ give complementary
+ways in which a long reciprocal period signals primality.
+
+The prime side exhibits a different kind of concentration.  Under GRH, the
+fixed-base Wagstaff--Moree theory places at least
+$98.2709160681865\ldots\%$ of the prime mass in $d\le64$ for every positive
+integer base that is not a perfect power; the correction-free mass is
+$98.4529145953885\ldots\%$.  Thus the same low-index interval contains most of
+the prime mass but only a very small certified composite population.
+
+Historically, the reciprocal index was developed here from the period--primality
+question before Somer's 1985 dissertation and 1989 paper were located through
+an AI-assisted literature search.  Somer's earlier work establishes the
+correct priority for fixed-$d$ finiteness and the $d\le8$ classification.
+A targeted citation search shows real but relatively narrow independent uptake,
+most visibly in Ribenboim's dedicated ``Somer Pseudoprimes'' subsection and
+Pinch's bounded-index Carmichael work.  We therefore regard the Fermat
+$d$-pseudoprime theory as under-recognized rather than forgotten.  The
+independent rediscovery from a different motivation nevertheless suggests that
+$(n-1)/L$ is a natural arithmetic invariant.  The main questions now are
+quantitative: determine the true growth of $e(d)$ and $g(d)$, sharpen the
+uniform primality boundary, extend the exact spectrum beyond $33$, and
+understand how the $L$-, $\lambda$-, $\phi$-, and fixed-base Artin spectra fit
+together.
+
+\section*{Declaration on computational and AI assistance}
+
+During the development of this work, generative-AI tools, principally OpenAI
+ChatGPT, were used as interactive aids for exploratory algebra, code drafting,
+literature discovery, and manuscript editing.  In particular, an AI-assisted
+literature search first brought Somer's 1985 dissertation and 1989 Fermat
+$d$-pseudoprime paper to the authors' attention after the reciprocal-index
+viewpoint and initial small-index arguments had already been developed
+independently.  This historical sequence is stated to explain the development
+of the project, not to claim priority over Somer's results.
+
+All literature claims used mathematically are tied to human-authored sources.
+All computer-assisted classification claims are tied to the frozen Julia
+source, captured execution logs, and separate arithmetic verifier described in
+Subsection~\ref{subsec:reproducibility}.  The human authors retain full
+responsibility for the mathematical statements, citations, and the
+verification of every theorem and computational claim in this manuscript.
+
+\begin{thebibliography}{99}
+
+\bibitem{APR1983}
+L.~M. Adleman, C.~Pomerance, and R.~S. Rumely,
+\emph{On distinguishing prime numbers from composite numbers},
+Ann. of Math. (2) \textbf{117} (1983), 173--206.
+
+\bibitem{AKS2004}
+M.~Agrawal, N.~Kayal, and N.~Saxena,
+\emph{PRIMES is in P},
+Ann. of Math. \textbf{160} (2004), 781--793.
+
+\bibitem{AGP1994}
+W.~R. Alford, A.~Granville, and C.~Pomerance,
+\emph{There are infinitely many Carmichael numbers},
+Ann. of Math. 140 (1994), 703--722.
+
+\bibitem{AtkinMorain1993}
+A.~O.~L. Atkin and F.~Morain,
+\emph{Elliptic curves and primality proving},
+Math. Comp. \textbf{61} (1993), 29--68,
+doi:10.1090/S0025-5718-1993-1199989-X.
+
+\bibitem{BLS1975}
+J.~Brillhart, D.~H. Lehmer, and J.~L. Selfridge,
+\emph{New primality criteria and factorizations of $2^m\pm1$},
+Math. Comp. 29 (1975), 620--647.
+
+\bibitem{CarlipJacobsonSomer1998}
+W.~Carlip, E.~Jacobson, and L.~Somer,
+\emph{Pseudoprimes, perfect numbers, and a problem of Lehmer},
+Fibonacci Quart. \textbf{36} (1998), 361--371.
+
+\bibitem{CarlipSomer2007}
+W.~Carlip and L.~Somer,
+\emph{Square-free Lucas $d$-pseudoprimes and Carmichael--Lucas numbers},
+Czechoslovak Math. J. \textbf{57} (2007), 447--463.
+
+\bibitem{Castillo2012}
+J.~H. Castillo, G.~Garc\'ia-Pulgar\'in, and J.~M. Vel\'asquez-Soto,
+\emph{Pseudoprimes stronger than strong pseudoprimes},
+arXiv:1202.3428, 2012.
+
+\bibitem{Castillo2015}
+J.~H. Castillo, G.~Garc\'ia-Pulgar\'in, and J.~M. Vel\'asquez-Soto,
+\emph{De los n\'umeros de Midy a la primalidad},
+Rev. Integr. Temas Mat. \textbf{33} (2015), 1--10,
+doi:10.18273/revint.v33n1-2015001.
+
+\bibitem{CohenLenstra1984}
+H.~Cohen and H.~W. Lenstra, Jr.,
+\emph{Primality testing and Jacobi sums},
+Math. Comp. \textbf{42} (1984), 297--330.
+
+\bibitem{CrandallPomerance}
+R.~Crandall and C.~Pomerance,
+\emph{Prime Numbers: A Computational Perspective},
+2nd ed., Springer, 2005.
+
+\bibitem{GarciaGiraldo2009}
+G.~Garc\'ia-Pulgar\'in and H.~Giraldo,
+\emph{Characterizations of Midy's property},
+Integers 9 (2009), 191--197.
+
+\bibitem{GuptaSury2005}
+A.~Gupta and B.~Sury,
+\emph{Decimal expansion of $1/p$ and subgroup sums},
+Integers 5 (2005), A19.
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{IwaniecKowalski2004}
+H.~Iwaniec and E.~Kowalski,
+\emph{Analytic Number Theory},
+American Mathematical Society Colloquium Publications, Vol.~53,
+AMS, Providence, RI, 2004.
+
+\bibitem{KamadaPhi10}
+M.~Kamada,
+\emph{Factorizations of $\Phi_n(10)$},
+STUDIO KAMADA, continuously updated online factor tables,\newline\url{https://stdkmd.net/nrr/repunit/phin10.htm}.
+
+\bibitem{KamadaPRP}
+M.~Kamada,
+\emph{Probable prime factors of repunit},
+STUDIO KAMADA, continuously updated online appendix,\newline\url{https://stdkmd.net/nrr/repunit/prpfactors.htm}.
+
+\bibitem{Lehmer1932}
+D.~H. Lehmer,
+\emph{On Euler's totient function},
+Bull. Amer. Math. Soc. 38 (1932), 745--751.
+
+\bibitem{Lewittes2007}
+J.~Lewittes,
+\emph{Midy's theorem for periodic decimals},
+Integers 7 (2007), A02.
+
+\bibitem{Martin2007}
+H.~W. Martin,
+\emph{Generalizations of Midy's theorem on repeating decimals},
+Integers 7 (2007), A03.
+
+\bibitem{Moree2000}
+P.~Moree,
+\emph{Asymptotically exact heuristics for (near) primitive roots},
+J. Number Theory 83 (2000), 155--181.
+
+\bibitem{Moree2013}
+P.~Moree,
+\emph{Near-primitive roots},
+Funct. Approx. Comment. Math. 48 (2013), 133--145,
+doi:10.7169/facm/2013.48.1.11.
+
+\bibitem{Pinch2006e18}
+R.~G.~E. Pinch,
+\emph{The Carmichael numbers up to $10^{18}$},
+arXiv:math/0604376, 2006.
+
+\bibitem{Pinch2007}
+R.~G.~E. Pinch,
+\emph{The Carmichael numbers up to $10^{21}$},
+in A.-M. Ernvall-Hyt\"onen, M. Jutila, J. Karhum\"aki, and A. Lepist\"o (eds.),
+\emph{Proceedings of the Conference on Algorithmic Number Theory},
+TUCS General Publication 46, Turku Centre for Computer Science, 2007,
+pp.~129--131.
+
+\bibitem{PinchSmallIndex}
+R.~G.~E. Pinch,
+\emph{Carmichael numbers with small index},
+ANTS VII poster, 2006,
+\url{https://antsmath.org/ANTSVII/Poster/Pinch_Poster2.pdf}.
+
+\bibitem{Pomerance1977}
+C.~Pomerance,
+\emph{On composite $n$ for which $\phi(n)\mid n-1$},
+Acta Arith. \textbf{28} (1976), 387--389,
+doi:10.4064/aa-28-4-387-389.
+
+\bibitem{Pomerance1996}
+C.~Pomerance,
+\emph{A tale of two sieves},
+Notices Amer. Math. Soc. \textbf{43} (1996), 1473--1485.
+
+\bibitem{Pratt1975}
+V.~R. Pratt,
+\emph{Every prime has a succinct certificate},
+SIAM J. Comput. 4 (1975), 214--220.
+
+\bibitem{Ribenboim1996}
+P.~Ribenboim,
+\emph{The New Book of Prime Number Records},
+Springer, New York, 1996.
+
+\bibitem{Shevelev2012}
+V.~Shevelev, G.~Garc\'ia-Pulgar\'in, J.~M. Vel\'asquez-Soto, and
+J.~H. Castillo,
+\emph{Overpseudoprimes, and Mersenne and Fermat numbers as primover numbers},
+J. Integer Seq. 15 (2012), Article 12.7.7.
+
+\bibitem{Shor1997}
+P.~W. Shor,
+\emph{Polynomial-time algorithms for prime factorization and discrete
+logarithms on a quantum computer},
+SIAM J. Comput. \textbf{26} (1997), 1484--1509.
+
+\bibitem{Somer1985}
+L.~E. Somer,
+\emph{The Divisibility and Modular Properties of $K$th-Order Linear
+Recurrences over the Ring of Integers of an Algebraic Number Field with
+Respect to Prime Ideals},
+Ph.D. dissertation, University of Illinois at Urbana--Champaign, 1985.
+
+\bibitem{Somer1989}
+L.~Somer,
+\emph{On Fermat $d$-pseudoprimes},
+in J.-M. De Koninck and C. Levesque (eds.),
+\emph{Number Theory: Proceedings of the International Number Theory
+Conference, Universit\'e Laval, 1987},
+de Gruyter, 1989, pp.~841--860,
+doi:10.1515/9783110852790.841.
+
+\bibitem{SomerLucas1998}
+L.~Somer,
+\emph{On Lucas $d$-pseudoprimes},
+in G.~E. Bergum, A.~N. Philippou, and A.~F. Horadam (eds.),
+\emph{Applications of Fibonacci Numbers}, Vol.~7,
+Kluwer Academic Publishers, 1998, pp.~369--375.
+
+\bibitem{SorensonWebster2017}
+J.~P.~Sorenson and J.~Webster,
+\emph{Strong pseudoprimes to twelve prime bases},
+Math. Comp. \textbf{86} (2017), 985--1003,
+doi:10.1090/mcom/3134.
+
+\bibitem{Sutherland2007}
+A.~V. Sutherland,
+\emph{Order Computations in Generic Groups},
+Ph.D. thesis, Massachusetts Institute of Technology, 2007.
+
+\bibitem{Wagstaff1982}
+S.~S. Wagstaff, Jr.,
+\emph{Pseudoprimes and a generalization of Artin's conjecture},
+Acta Arith. 41 (1982), 141--150,
+doi:10.4064/aa-41-2-141-150.
+
+\end{thebibliography}
+
+\end{document}
