@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive tetrahedral sections, inverse-apex strands and triangle-space atlases. Free software by Ismail Hammoudeh, with a Julia mathematical package.">
+  <title>Tetrahedral sections · Interactive explorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div><a class="back" href="https://ismaa3iil.fyi/tetrahedral-sections/">← Paper and research</a><h1>Tetrahedral sections</h1></div>
+  <div class="byline">Ismail Hammoudeh<br><a href="https://github.com/ismaa3iil/research-site/tree/main/tetrahedral-sections/explorer/julia">Julia &amp; source</a></div>
+</header>
+<nav class="tabs" aria-label="Explorers">
+  <button type="button" data-tab="sections" aria-pressed="true">Section explorer</button>
+  <button type="button" data-tab="strands" aria-pressed="false">Inverse-apex strands</button>
+  <button type="button" data-tab="atlas" aria-pressed="false">Triangle-space atlases</button>
+</nav>
+<main>
+  <aside id="controls" aria-label="Visualization controls"></aside>
+  <div class="workspace">
+    <p id="status" role="status" aria-live="polite">Loading geometry…</p>
+    <div id="plots" class="plots"></div>
+    <div id="legend" class="legend"></div>
+    <div id="data"></div>
+  </div>
+</main>
+<details class="notes"><summary>Mathematical conventions, numerical limits, and downloads</summary>
+  <p>The cone apex is S = (0, 0, h), its base circumradius is 1, and the cutting plane is z = −hμ(x + 1), with μ = tan(α)/h. The regular height is √2. The circumsection is elliptic for μ &lt; 1, parabolic for μ = 1, and hyperbolic for μ &gt; 1. Only intersections with all three forward rays are accepted.</p>
+  <p>Triangle-space coordinates use A = (−1, 0), B = (1, 0), C = (ξ, η), or angle-barycentric weights θᵢ/π. E/P/H counts identify unordered section shapes; symmetric targets can have several labeled spatial apices for one inverse shape. The axial equilateral family is shown together with its off-axis solutions.</p>
+  <p>These are numerical explorations. Counts can be uncertain very close to folds, symmetry seams, or degenerate triangles. Raster cell colors sample cell centers and do not locate exact boundaries. Curves are sampled; the view clips distant branches and centers at infinity. Use the original exact certificates for proofs and Julia with higher precision for numerical investigation.</p>
+  <p>The browser runs locally on your device; it requires no Mathematica license or calculation server. The Julia package provides the mathematical API. <a href="https://github.com/ismaa3iil/research-site/tree/main/tetrahedral-sections/explorer">Download the source</a> · <a href="https://github.com/ismaa3iil/research-site/blob/main/tetrahedral-sections/explorer/PORTING.md">Porting and verification notes</a> · <a href="LICENSE.txt">MIT license for this port</a>.</p>
+</details>
+<noscript><p>This explorer needs JavaScript enabled. The paper and Julia source remain available through the links above.</p></noscript>
+<script type="module" src="app.mjs"></script>
+</body>
+</html>
