@@ -5,6 +5,7 @@
 \usepackage{microtype}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{booktabs,tabularx,array,float,xcolor}
+\usepackage{graphicx,longtable}
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usepackage{titlesec}
@@ -26,7 +27,7 @@
 \title{Triangle Centers Relative to Their Cevian, Circumcevian,\\
 and Pedal Triangles}
 \author{Ismail Hammoudeh}
-\date{August 2026}
+\date{September 2026}
 
 \begin{document}
 \maketitle
@@ -36,31 +37,24 @@ For a triangle center $P=X_i(ABC)$, we ask whether the same Euclidean point is
 classified as $X_j$ relative to the cevian, circumcevian, or pedal triangle
 of $P$.  Circumcevian--pedal similarity and its isogonal transfer principle
 are classical; we give a self-contained coordinate proof and use them as the
-organizing mechanism.  The new algebraic contribution is an oriented
-parameter-reversal theorem for the family $F_\lambda$, including an explicit
-branch discriminator.  It yields a general near-equilateral obstruction to
-positive-Heron fixed-point claims and explains seven numerical candidates
-that survive broad generic testing but fail near the equilateral locus.  We
-also prove the newly identified fixed relation
-$M_2:X_{67371}\mapsto X_{67371}$ by affine covariance of two symmetric
-polynomials.  Classical relations involving the Steiner-inellipse foci and
-$X_{187}$ are recovered by short intrinsic proofs rather than claimed as new.
+organizing mechanism.  The algebraic contribution is an explicit branch
+refinement for the classical family $F_\lambda$: under the positive-area
+convention, the target parameter is $-\lambda$ when the source is inside
+the circumcircle and $\lambda$ when it is outside.  This gives a general
+near-equilateral obstruction to unrestricted fixed-point claims.  Affine
+covariance of symmetric polynomials proves the fixed relations for
+$X_{67371}$ and $X_{9181}$.  Classical relations involving the
+Steiner-inellipse foci and $X_{187}$ are recovered by intrinsic proofs.
 
 Using a local snapshot of the \emph{Encyclopedia of Triangle Centers} (ETC)
 contiguous through $X_{72807}$, we enumerate every diagonal index and the two
-directed off-diagonal strips $\min(i,j)\leq1000$.  Of 161 discoveries, 54
-pass a 60-digit audit on 36 labelled instances of six scalene shapes.  A
-70-digit test on 40 additional shapes rejects 13, and the exact
-near-equilateral analysis rejects seven more, leaving 34 rows not eliminated
-by these tests.  Exact arguments in this paper prove 15 of these rows, while
-three further rows are classical; the remaining 16 are unresolved
-computational candidates.
-Among the rejected relations are
-$M_2:X_{485}\mapsto X_{61083}$ and
-$M_3:X_{485}\mapsto X_{61084}$.  Finally, $X_{795}$ is proved to lie on the
-circumcircle, so its circumcevian triple is degenerate.  The remaining rows
-not covered by the exact theorems are explicitly retained only as
-computational candidates.
+directed off-diagonal strips $\min(i,j)\leq1000$.  The census distinguishes
+exact identities, branch-dependent relations, numerical candidates, and
+unavailable evaluations.  An audit corrects an acute-seed cache fallback,
+and additional high-precision tests approach special shapes systematically.
+The accompanying supplement contains the fixed data snapshot, readable
+formulas, source programs, ordered test triangles, residuals, and a final
+status table.
 \end{abstract}
 
 \noindent\textbf{Keywords.} triangle center; cevian triangle; circumcevian
@@ -87,6 +81,16 @@ Only noncollinear derived triples are admitted.  We write
 Thus $M_k:X_i\mapsto X_j$ records a reclassification of the \emph{same
 Euclidean point in the ambient plane}; it is not an ordinary point map.
 The case $i=j$ is called a fixed-point candidate.
+
+An instance of \eqref{eq:coincidence} is \emph{admissible} if the source
+defines a finite real point, the required traces are finite, the derived
+vertices are distinct and noncollinear, and the target defines a finite
+real point on its specified ETC branch.  A zero homogeneous triple is
+undefined; it is not a point at infinity.  Common rational factors are
+cancelled before interpreting a formula, but no continuation of a selected
+algebraic root is imposed unless stated.  An unrestricted identity means
+equality at every admissible instance of its stated real domain, not
+existence on every triangle.
 
 Figure~\ref{fig:three-constructions} summarizes the three changes of
 reference triangle.  It is schematic rather than metrically exact.
@@ -120,7 +124,7 @@ reference triangle.  It is schematic rather than metrically exact.
   \node[point,label=above:$A$] at (A) {};
   \node[point,label=below left:$B$] at (B) {};
   \node[point,label=below right:$C$] at (C) {};
-  \node[point,label=below:$A_2$] at (.417,-.861) {};
+  \node[point,label=right:$A_2$] at (.417,-.861) {};
   \node[point,label=right:$B_2$] at (1.318,1.296) {};
   \node[point,label=left:$C_2$] at (-1.065,1.637) {};
   \node at (0,-1.48) {circumcevian};
@@ -307,9 +311,14 @@ Its trilinears are
  (-\cos A+\lambda\sin A:-\cos B+\lambda\sin B:
  -\cos C+\lambda\sin C).
 \]
-For an oriented labelled triangle $T=UVW$, write
-$H_T^{\mathrm{or}}=2\det(V-U,W-U)$, and use a superscript ``or'' when this
-signed radical replaces the positive Heron radical.
+In the oriented calculations choose a counterclockwise realization of
+$ABC$, so $H=2\det(B-A,C-A)>0$.  For a derived labelled triangle $T=UVW$,
+write $H_T^{\mathrm{or}}=2\det(V-U,W-U)$, and use a superscript ``or''
+when this signed radical replaces the positive Heron radical.
+For an arbitrary realization, multiply the derived determinant by
+$\operatorname{sgn}\det(B-A,C-A)$ instead.  Thus orientation is relative
+to the source; the positive-Heron statements below are independent of
+the realization.
 
 \begin{theorem}[Circumcevian parameter reversal]
 \label{thm:F-reversal}
@@ -403,9 +412,20 @@ On the same generic oriented domain,
 \end{corollary}
 \begin{proof}
 Apply Theorem~\ref{thm:F-reversal} to $P=F_{-\lambda}$ and then apply
-Theorem~\ref{thm:isogonal-transfer}.
+Theorem~\ref{thm:isogonal-transfer}.  For the signed convention, let
+$\Pi_P$ be the source power and $\mathcal R$ the circumradius.
+Determinants of the normalized derived vertex matrices give
+\[
+ \frac{H_3^{\mathrm{or}}}{H}=-\frac{\Pi_P}{4\mathcal R^2},\qquad
+ \frac{H_2^{\mathrm{or}}}{H}=-\frac{\Pi_P^3}{PA^2PB^2PC^2}.
+\]
+The two signs agree, so the signed radicals scale by the positive
+square of the similarity ratio, as required.
 \end{proof}
-This proves the corresponding pedal rows $X_3\mapsto X_4$,
+For the negative parameters $-\sqrt3$ and $-1$, $Q>0$ for every
+nondegenerate source, so the oriented circumcevian targets above are also
+the positive-Heron targets.  The cases $\lambda=0$ and $\lambda=\infty$
+are unchanged by sign reversal.  This proves the corresponding pedal rows $X_3\mapsto X_4$,
 $X_6\mapsto X_2$, $X_{61}\mapsto X_{18}$, and
 $X_{371}\mapsto X_{486}$ on their stated branches.
 
@@ -448,7 +468,62 @@ as $F_\lambda$ in the positive-Heron convention, producing an apparent
 fixed point.  If it is positive, the positive-Heron target is instead
 $F_{-\lambda}$.
 
-The phenomenon is systematic, rather than peculiar to the seven ETC
+On the regular real domain, the distance identity gives
+$BCH^2q_a=-(u+v+w)^2PA^2<0$ and cyclically.  Hence all $q_i<0$ and
+$\delta<0$, so the sign in \eqref{eq:orientation-sign} is simply
+$\operatorname{sgn}Q$.  Direct reduction also gives
+\[
+ u+v+w=H(\lambda S-H),\qquad
+ Avw+Bwu+Cuv=ABCHQ.
+\]
+The barycentric power formula therefore yields
+\begin{equation}\label{eq:family-power}
+ \Pi_P=-\frac{ABCQ}{H(\lambda S-H)^2}.
+\end{equation}
+
+\begin{theorem}[Positive-Heron branch law]\label{thm:positive-branch}
+Let $\lambda$ be real, with $3\lambda^2\ne1$, and let
+$P=F_\lambda(ABC)$ be an admissible finite source off the circumcircle.
+Where the displayed target formulas are defined,
+\[
+ P=\begin{cases}
+ F_{-\lambda}(\Circ(P)),&\Pi_P<0,\\
+ F_{\lambda}(\Circ(P)),&\Pi_P>0.
+ \end{cases}
+\]
+The corresponding pedal targets are $G_{-\lambda}$ and $G_\lambda$,
+respectively.  All radicals in this statement are positive Heron radicals.
+\end{theorem}
+\begin{proof}
+For $Q>0$, the relative derived orientation is positive, so
+Theorem~\ref{thm:F-reversal} gives the first branch.  For $Q<0$, replacing
+the negative derived radical by its absolute value changes $-\lambda$ to
+$\lambda$.  Equation~\eqref{eq:family-power} identifies the two cases with
+negative and positive power.  The pedal assertion follows from
+Theorem~\ref{thm:isogonal-transfer}.  Cancellation extends the identities
+at removable factors wherever the actual target remains defined.
+\end{proof}
+
+Thus $Q=0$ is the circumcircle degeneracy boundary of the source.
+The separate locus $\lambda S=H$ concerns an infinite or undefined source.
+For $\lambda>0$, the former boundary is
+\begin{equation}\label{eq:shape-boundary}
+ \frac{a^2+b^2+c^2}{4[ABC]}=\frac{3\lambda^2+1}{2\lambda}.
+\end{equation}
+The left side has minimum $\sqrt3$, attained only at the equilateral
+shape.  The right side has the same minimum at $\lambda=1/\sqrt3$.
+Figure~\ref{fig:branch} illustrates the resulting small branch component.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.88\linewidth]{figures/m1m2m3_branch.pdf}
+\caption{Positive-Heron branches for $\lambda=4/7$ near the equilateral
+shape, with $c=1$.  The closed boundary is $Q=0$; the surrounding grey
+curves are the excluded infinite-source locus $\lambda S=H$.}
+\label{fig:branch}
+\end{figure}
+
+The phenomenon is systematic, rather than peculiar to the nine ETC
 entries found by the search.  At the equilateral point $A=B=C=x$,
 \eqref{eq:q-family} reduces to
 \begin{equation}\label{eq:equilateral-q-limit}
@@ -472,16 +547,22 @@ $D_a=D_b=D_c$, which forces $a=b=c$.  Thus in the scalene neighbourhood
 the positive-Heron target $F_{-\lambda}$ is genuinely different from the
 source $F_\lambda$.
 
-The omitted value $\lambda=1/\sqrt3$ is not a hidden global fixed point.
+Both omitted values $\lambda=\pm1/\sqrt3$ require separate treatment.
 Here $3\lambda^2-1=0$, so $q_a=q_b=q_c$ for every triangle on the regular
 part of the construction.  Equation \eqref{eq:derived-sides-q} makes the
 circumcevian triangle equilateral, while the positive-Heron formula for
 $F_{1/\sqrt3}$ on that triangle is $(0:0:0)$ and therefore defines no
-target center.  We have proved the following global obstruction.
+target center.  For $F_{-1/\sqrt3}$ the target is the common center of this
+equilateral triangle, hence the circumcenter of $ABC$.  On a scalene source
+$F_{-1/\sqrt3}\ne F_0=X_3$, by comparison of the projective coordinates.
+Thus the negative parameter is not fixed either.  The positive parameter
+has no admissible same-formula targets; such an empty domain is excluded
+from the meaning of a fixed-center family.
 
 \begin{corollary}[Constant-family obstruction]
 No finite nonzero constant member $F_\lambda$ defines an unrestricted
-fixed point under the standard positive-Heron convention.  Within the
+fixed-center family with nonempty admissible domain under the standard
+positive-Heron convention.  Within the
 oriented parameter-reversal law, $F_0=X_3$ is fixed, and
 $F_\infty=X_6$ is the corresponding limiting fixed member.
 \end{corollary}
@@ -490,20 +571,20 @@ Exact substitution in \eqref{eq:orientation-sign} is negative for $(4,6,7)$
 but positive for the scalene near-equilateral triangle
 $(100000,100001,100002)$ for every row in Table~\ref{tab:near-equilateral}.
 The ETC formulas in the table reduce exactly to the displayed constant
-$F_\lambda$.  Hence all seven former fixed-point candidates fail on the
+$F_\lambda$.  Hence all nine former fixed-point candidates fail on the
 near-equilateral component as immediate instances of the corollary.
 
 \begin{table}[H]
 \centering
 \caption{Additional $M_2$ fixed-point candidates rejected exactly by the
-near-equilateral branch test.}
+near-equilateral branch test. The upper row gives the ETC index; the lower row gives $\lambda$.}
 \label{tab:near-equilateral}
 \small
-\begin{tabular}{@{}rrrrrrr@{}}
+\begin{tabular}{@{}rrrrrrrrr@{}}
 \toprule
-$X_{6408}$&$X_{6454}$&$X_{6469}$&$X_{6481}$&$X_{10140}$&$X_{10144}$&$X_{10146}$\\
+6408&6454&6469&6481&10140&10144&10146&17851&17852\\
 \midrule
-$4/7$&$3/5$&$7/12$&$5/9$&$25/44$&$120/209$&$16/29$\\
+$4/7$&$3/5$&$7/12$&$5/9$&$25/44$&$120/209$&$16/29$&$16/27$&$9/16$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -516,7 +597,7 @@ this explains why broad random tests can miss the thin component.
 {The fixed point X67371}}
 
 \begin{theorem}[The $X_{67371}$ fixed point]\label{thm:x67371}
-Subject to the usual nondegeneracy and definition qualifications,
+On the admissible domain of its polynomial barycentrics,
 \[
  M_2:X_{67371}\mapsto X_{67371}
 \]
@@ -583,6 +664,63 @@ Homogeneity, together with \eqref{eq:derived-sides-q} and
 Thus $X_{67371}$ evaluated in the circumcevian triangle is precisely
 $F_{-\lambda}^{\mathrm{or}}$, which equals the original point by
 Theorem~\ref{thm:F-reversal}.
+The proof initially assumes $UH\ne0$, $3\lambda^2\ne1$, and finite,
+nonzero derived formulas.  Clearing denominators gives a polynomial
+projective identity and extends it to every admissible instance.  In
+particular, when $U=0$ and $W\ne0$, the original polynomial triple is
+$W(A:B:C)$, so the source is $X_6$; this is a removable failure of the
+parameter representation.  At $U=W=0$ the displayed source triple is
+undefined, and a zero target triple is likewise excluded.
+\end{proof}
+
+\begin{corollary}[A second affine-covariant fixed center]\label{cor:x9181}
+On its admissible domain, $M_2:X_{9181}\mapsto X_{9181}$ is exact.
+\end{corollary}
+\begin{proof}
+Put $\widetilde W=2\sigma_1U/3-W$.  Exact expansion of the ETC formula
+gives
+\[
+ X_{9181}\sim
+ \bigl(A\{U(2A-\sigma_1)+\widetilde W\}:\cdots:\cdots\bigr).
+\]
+Thus it is $F_\mu$, with $\mu H=2\sigma_1/3-W/U$ wherever $U\ne0$.
+Since $\sigma_{1,q}=k\sigma_1+3n$, the covariance identities give
+\[
+ \widetilde W_q=k^3(k\widetilde W+nU).
+\]
+The preceding proof applies with $\widetilde W$ replacing $W$.
+Polynomial cancellation extends the result wherever the actual source
+and target are defined.
+\end{proof}
+
+Since $\iota(X_{67371})=X_{54602}$ in the ETC, the transfer principle also
+proves $M_3:X_{67371}\mapsto X_{54602}$.  This off-diagonal corollary is
+outside the enumerated strips and is not included in their counts.
+
+\subsection{Elementary relations in the census}
+
+\begin{proposition}\label{prop:elementary}
+On their admissible domains,
+\[
+ M_1:X_2\mapsto X_2,\qquad M_1:X_7\mapsto X_6,\qquad
+ M_2:X_1\mapsto X_4,\qquad M_3:X_1\mapsto X_3.
+\]
+\end{proposition}
+\begin{proof}
+For $P=(u:v:w)$, direct substitution in the normalized cevian vertices
+gives $P_{\Cev}=(v+w:w+u:u+v)$.  In particular the centroid is the
+centroid of its medial triangle.
+
+For the Gergonne point put $x=s-a$, $y=s-b$, $z=s-c$, so
+$P=(1/x:1/y:1/z)$.  Its cevian triangle is the contact triangle.
+The squared side opposite the contact point on $BC$ is
+$4x^2yz/((x+z)(x+y))$, cyclically, since the two tangent lengths from $A$
+are $x$ and $\sin^2(A/2)=yz/(bc)$.  These squared sides are proportional
+to $(1/y+1/z:1/z+1/x:1/x+1/y)$, proving the symmedian relation.
+
+Finally the incenter is the circumcenter of its contact triangle, which
+is its pedal triangle.  This proves the $M_3$ assertion, and the $M_2$
+assertion follows by isogonal transfer since $\iota(X_4)=X_3$.
 \end{proof}
 
 \section{Centroid preimages and an exact degeneracy theorem}
@@ -608,8 +746,9 @@ and, by Theorem~\ref{thm:isogonal-transfer},
 \]
 \end{theorem}
 
-This equivalence, including the ETC labels of the two foci, belongs to the
-classical circumcevian class table \cite{StothersCircum}.  The proof below is
+This equivalence belongs to the classical circumcevian class table
+\cite{StothersCircum}; the modern focus labels are supplied by the ETC
+\cite{ETC}.  The proof below is
 included because it is short, intrinsic, and independently validates the
 coordinate pipeline used in the census.
 
@@ -650,7 +789,7 @@ centroid-preimage list found by the scan is therefore
  \mathcal C_2(39162,2),\quad \mathcal C_2(39163,2),\qquad
  \mathcal C_3(6,2),
 \]
-and the two nonclassical circumcevian rows are now proved intrinsically.
+and the circumcevian rows have the intrinsic proof just given.
 
 \begin{proposition}[The exact $X_{795}$ degeneracy]\label{prop:x795}
 Where its barycentric formula is finite, $X_{795}$ lies on the circumcircle
@@ -678,217 +817,186 @@ Thus $a^2f_bf_c+b^2f_cf_a+c^2f_af_b=0$ identically.  Every second
 intersection is therefore $X_{795}$, and the derived triple has zero area.
 \end{proof}
 
-\section{Computational protocol}
+\section{Computational protocol and scope}
 
-The high-speed discovery comparison uses normalized barycentric triples
-$q,r$ and the projective residual
-\begin{equation}\label{eq:projective-residual}
- \rho(q,r)=\frac{\lVert q\times r\rVert}{\lVert q\rVert\lVert r\rVert},
-\end{equation}
-with threshold $10^{-9}$.  Discovery candidates are recomputed from the
-symbolic ETC definitions.  For a Cartesian source point $Q$ and its proposed
-target $X_j(UVW)$, the audit residual is
-\begin{equation}\label{eq:cartesian-residual}
- \varepsilon(Q;U,V,W,j)
- =\frac{\lVert Q-X_j(UVW)\rVert}{\operatorname{per}(ABC)}.
-\end{equation}
-The primary audit uses 60-digit working precision and accepts only
-$\varepsilon<10^{-30}$.  The independent generic-shape stress test uses
-70-digit precision and the stricter threshold $10^{-40}$.  These are the only
-validation protocols used for the results stated in this article.
+The local formula snapshot contains 72807 consecutive ETC entries, with
+no index gap or symbolic expansion failure in its first-coordinate cache.
+Completeness of this index list is not numerical evaluability: a formula
+may be nonreal, infinite, undefined, or yield a degenerate derived triangle.
+Unavailable evaluations are neither coincidences nor counterexamples.
 
-The primary audit uses all six labellings of the acute shapes
-\[
- (4,6,7),\quad(13,20,21),\quad(29,30,31)
-\]
-and of the obtuse shapes
-\[
- (5,6,8),\quad(4,11,13),\quad(5,7,10).
-\]
-Thus a candidate receives 36 labelled tests but only six geometrically
-independent shapes.  A row passing this stage is therefore called a
-\emph{six-shape audit survivor}, not a universal identity.
-
-\section{Dataset, enumerated region, and evaluable coverage}
-
-The formula and barycentric-fingerprint snapshots each contain exactly 72807
-entries, indexed consecutively from 1 to 72807.  The cache builder found no
-index gap and no symbolic expansion failure.  This database completeness is
-not the same as numerical evaluability: on a particular triangle a formula
-may be complex, infinite, indeterminate, branch-incompatible, or may produce
-a degenerate derived triple.  An unavailable comparison is excluded from
-evaluable coverage and is never recorded as a disproved equality.
-
-The nominal index region is
+For each construction the enumerated region is
 \begin{equation}\label{eq:scope}
  \begin{split}
  &i=j,\quad 1\leq i\leq72807,\\
  &1\leq i,j\leq72807,\quad i\ne j,\quad \min(i,j)\leq1000.
  \end{split}
 \end{equation}
-The off-diagonal part is the union of two directed strips, not a rectangle.
-It contains
+The off-diagonal region consists of two directed strips, not the full
+square.  It has
 \[
  3\{1000(72807-1)+(72807-1000)1000\}=433839000
 \]
-nominal comparisons per discovery seed; the diagonal contains
-$3\cdot72807=218421$.  Discovery was performed independently on the obtuse
-triangle $(6,9,13)$ and the acute triangle $(4,6,7)$.
+nominal comparisons per discovery triangle; the diagonal has
+$3\cdot72807=218421$.  The discovery triangles are the obtuse
+$(6,9,13)$ and the acute $(4,6,7)$.
 
-\begin{table}[H]
+Discovery compares normalized barycentric triples using
+\begin{equation}\label{eq:projective-residual}
+ \rho(q,r)=\frac{\|q\times r\|}{\|q\|\|r\|}<10^{-9}.
+\end{equation}
+This screening is followed by direct evaluation of the symbolic ETC
+formulas, without using the discovery fingerprints.  The validation
+residual is the dimensionless Cartesian distance
+\begin{equation}\label{eq:cartesian-residual}
+ \varepsilon=\frac{\|P-X_j(\mathcal T_k(P))\|}{\operatorname{per}(ABC)}.
+\end{equation}
+The revised audit normalizes the source perimeter to one, uses 100-digit
+working precision, and retries insufficient-accuracy results at 180 digits.
+Acceptance requires $\varepsilon<10^{-40}$ and a reported absolute
+accuracy of at least 50 decimal digits.  Degeneracy is checked using
+area divided by the square of the largest derived side, and finite-point
+normalization using the barycentric sum divided by the triple's norm;
+the exclusion threshold is $10^{-60}$.  These are numerical safeguards,
+not exact domain tests.  An approximate zero is not an exact proof.
+The supplied root evaluator preserves input precision instead of
+truncating polynomial roots to the library's former 50 digits,
+while retaining its ordered-real-root convention.
+
+The baseline contains all six labellings of
+\[
+ (4,6,7),\ (13,20,21),\ (29,30,31),\
+ (5,6,8),\ (4,11,13),\ (5,7,10),
+\]
+and the 40 additional integer-sided shapes of the earlier audit
+(20 acute and 20 obtuse, sampled with fixed seed 20260831).
+Thus there are 76 labelled baseline instances, not 76 geometrically
+independent shapes.  These are different samples evaluated with a shared
+formula library, not independent software implementations.
+
+The 41 baseline survivors receive 76 further deterministic tests.
+For $j=2,\ldots,10$, put $e=10^{-j}$ and use
+\[
+\begin{gathered}
+ (1,1+e,1+2e),\qquad (1,1\pm e,3/2),\qquad
+ (1,3/2,5/2-e),\\
+ (3,4,5\pm e),\qquad (1,3/2,\sqrt{19}/2\pm e).
+\end{gathered}
+\]
+These approach equilateral, isosceles, flat, right-angle, and
+$120^\circ$ boundaries, respectively.  Four further shapes are
+$(100000,100001,100002)$, $(3,4,5)$, $(5,12,13)$, and
+$(4,13/2,15/2)$.  Exact ordered inputs and individual residuals are supplied.
+
+\subsection{Correction of acute-seed coverage}
+
+The historical workers could replace an unavailable acute source by its
+cached coordinates on the \emph{obtuse} discovery triangle.  An exhaustive
+source-cache audit identifies $X_{10221},X_{66870},X_{66871}$ as incompatible
+fallbacks.  The corrected worker preserves acute unavailability or retries
+the formula on the same acute triangle.  Comparison of the historical
+53700-entry expansion cache with the corresponding part of the expanded
+72807-entry cache found no changed first-coordinate formulas.
+
+The original search logs allow the affected comparisons to be removed
+without rerunning the entire search.  This removes 6000 acute strip
+comparisons and eight acute diagonal comparisons; already-excluded
+instances are not subtracted again.  None of the three indices occurs
+in the candidate union, which is therefore unchanged.
+Table~\ref{tab:coverage} is the corrected coverage of the historical run,
+not a claim that full discovery was repeated with the repaired workers.
+
+\begin{table}[ht]
 \centering
-\caption{Evaluable coverage of the nominal region \eqref{eq:scope}.}
+\caption{Corrected evaluable coverage of \eqref{eq:scope}.}
 \label{tab:coverage}
 \small
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
-seed & strip valid & strip coverage & diagonal valid & diagonal coverage\\
+seed & strip valid & coverage & diagonal valid & coverage\\
 \midrule
-obtuse $(6,9,13)$ & 388166091 & $89.4724\%$ & 210351 & $96.3053\%$\\
-acute $(4,6,7)$  & 388285438 & $89.4999\%$ & 210448 & $96.3497\%$\\
+$(6,9,13)$ & 388166091 & $89.4724\%$ & 210351 & $96.3053\%$\\
+$(4,6,7)$  & 388279438 & $89.4985\%$ & 210440 & $96.3460\%$\\
 \bottomrule
 \end{tabular}
 \end{table}
+The index enumeration is exhaustive within its stated bounds, but these
+exclusions prevent a complete classification of even that region.
 
-The two discovery seeds produced 161 distinct rows: 113 diagonal and 48
-off-diagonal.  The exclusions represented by Table~\ref{tab:coverage} are a
-substantive limitation.  The calculation exhaustively enumerates the stated
-indices, but it does not assign a true or false value to every nominal pair.
-
-\section{Results of the six-shape audit}
-
-Exactly 54 of the 161 discoveries pass all 36 labelled instances: 29 are
-diagonal and 25 off-diagonal.  The diagonal list is
-\begin{equation}\label{eq:diagonal-six-shape}
-\begin{aligned}
-M_1:\quad &X_2,\ X_{13};\\
-M_2:\quad &X_3,X_6,X_{13},X_{187},X_{368},X_{3513},X_{3514},X_{5467},X_{6104},\\
-&X_{6408},X_{6440},X_{6454},X_{6469},X_{6477},X_{6481},X_{6522},
- X_{8456},X_{9181},\\
-&X_{10138},X_{10140},X_{10142},X_{10144},X_{10146},X_{17851},X_{17852},
- X_{21906},X_{67371};\\
-M_3:\quad &\text{none}.
-\end{aligned}
-\end{equation}
-Here a displayed center under $M_k$ means the diagonal candidate
-$M_k:X_i\mapsto X_i$.  The off-diagonal list is
-\begin{equation}\label{eq:offdiagonal-six-shape}
-\begin{aligned}
-M_1:\quad &X_7\mapsto X_6;\\[2pt]
-M_2:\quad &X_1\mapsto X_4,\ X_{36}\mapsto X_{186},\ X_{61}\mapsto X_{62},
- X_{202}\mapsto X_{34321},\\
-&X_{203}\mapsto X_{34322},\ X_{371}\mapsto X_{372},
- X_{485}\mapsto X_{61083},\\
-&X_{34321}\mapsto X_{202},\ X_{39162}\mapsto X_2,
- X_{39163}\mapsto X_2;\\[2pt]
-M_3:\quad &X_1\mapsto X_3,\ X_3\mapsto X_4,\ X_6\mapsto X_2,
- X_{13}\mapsto X_{15},\\
-&X_{36}\mapsto X_{265},\ X_{61}\mapsto X_{18},
- X_{187}\mapsto X_{671},\\
-&X_{202}\mapsto X_{6671},\ X_{203}\mapsto X_{6672},
- X_{371}\mapsto X_{486},\\
-&X_{485}\mapsto X_{61084},\ X_{30335}\mapsto X_{175},
- X_{39162}\mapsto X_6,\ X_{39163}\mapsto X_6.
-\end{aligned}
-\end{equation}
-Equations \eqref{eq:diagonal-six-shape} and
-\eqref{eq:offdiagonal-six-shape} report a finite numerical audit.  They are
-not theorem statements.
-
-The $M_2$ and $M_3$ rows in \eqref{eq:offdiagonal-six-shape} must not be
-counted as independent discoveries.  The classical transfer principle pairs
-an $M_2$ target $X_j$ with the isogonal target $\iota(X_j)$ under $M_3$.
-Thus, for example,
-\[
- \begin{array}{c@{\qquad\Longleftrightarrow\qquad}c}
- M_2:X_{36}\mapsto X_{186}&M_3:X_{36}\mapsto X_{265},\\
- M_2:X_{61}\mapsto X_{62}&M_3:X_{61}\mapsto X_{18},\\
- M_2:X_{202}\mapsto X_{34321}&M_3:X_{202}\mapsto X_{6671},\\
- M_2:X_{203}\mapsto X_{34322}&M_3:X_{203}\mapsto X_{6672},\\
- M_2:X_{371}\mapsto X_{372}&M_3:X_{371}\mapsto X_{486},\\
- M_2:X_{485}\mapsto X_{61083}&M_3:X_{485}\mapsto X_{61084},\\
- M_2:X_{39162},X_{39163}\mapsto X_2&
- M_3:X_{39162},X_{39163}\mapsto X_6.
- \end{array}
-\]
-Both manifestations are retained in the numerical census for
-reproducibility, but each line represents one structural coincidence.
-
-The new high-index diagonal relation $M_2:X_{67371}\mapsto X_{67371}$ and
-the two forward candidates from $X_{485}$ first appear when the opposite or
-diagonal bound is extended beyond 53700.  Four reverse rows show a sharp
-split in the primary audit:
-\begin{equation}\label{eq:reverse-high}
-\begin{aligned}
-M_2:&\quad X_{61083}\mapsto X_{485},\qquad
-             X_{61084}\mapsto X_{486},\\
-M_3:&\quad X_{61083}\mapsto X_{371},\qquad
-             X_{61084}\mapsto X_{372}.
-\end{aligned}
-\end{equation}
-Each passes all 18 acute labelled instances and none of the 18 obtuse
-instances.  This is branch evidence, not an acute-triangle theorem.
-
-\section{Independent generic-shape stress test}
+\section{Final census and unresolved relations}
 \label{sec:generic-stress}
 
-To probe the two-dimensional triangle-shape domain more broadly, the 54
-six-shape survivors were tested, without further discovery, on 40 additional
-integer-sided scalene shapes.  A fixed Mersenne-Twister seed, 20260831,
-generated 20 acute and 20 obtuse shapes; the exact ordered triples are stored
-with the output.  All $54\cdot40=2160$ comparisons were evaluable.  There
-were 2111 passes and 49 failures.  Thus 41 candidates pass all 40 additional
-shapes and 13 do not.
+The discovery union has 161 rows (113 diagonal and 48 off-diagonal).
+Table~\ref{tab:stages} summarizes the successive filters.
+The fresh audit recomputes all 161 rows on the 76 baseline instances and
+the 41 baseline survivors on the 76 structured instances, a total of
+$161\cdot76+41\cdot76=15352$ comparisons.  It records 11194 passes,
+2181 failures, 1976 source-unavailable instances, and one target-unavailable
+instance; no final record has insufficient reported accuracy.
 
-\begin{table}[H]
+\begin{table}[ht]
 \centering
-\caption{Six-shape survivors rejected by the 40-shape stress test.  A and O
-denote acute and obtuse additional shapes.}
-\label{tab:stress-failures}
-\small
-\begin{tabular}{@{}clrrl@{}}
-\toprule
-map & candidate & passes & failures & location of failures\\
-\midrule
-$M_1$ & $X_{13}\mapsto X_{13}$       & 32 & 8 & 8 O\\
-$M_2$ & $X_{13}\mapsto X_{13}$       & 32 & 8 & 8 O\\
-$M_2$ & $X_{485}\mapsto X_{61083}$   & 38 & 2 & 2 O\\
-$M_2$ & $X_{6104}\mapsto X_{6104}$   & 32 & 8 & 8 O\\
-$M_2$ & $X_{6440}\mapsto X_{6440}$   & 39 & 1 & 1 A\\
-$M_2$ & $X_{6477}\mapsto X_{6477}$   & 39 & 1 & 1 A\\
-$M_2$ & $X_{6522}\mapsto X_{6522}$   & 39 & 1 & 1 A\\
-$M_2$ & $X_{8456}\mapsto X_{8456}$   & 33 & 7 & 4 A, 3 O\\
-$M_2$ & $X_{10138}\mapsto X_{10138}$ & 39 & 1 & 1 A\\
-$M_2$ & $X_{10142}\mapsto X_{10142}$ & 39 & 1 & 1 A\\
-$M_2$ & $X_{34321}\mapsto X_{202}$   & 39 & 1 & 1 O\\
-$M_3$ & $X_{13}\mapsto X_{15}$       & 32 & 8 & 8 O\\
-$M_3$ & $X_{485}\mapsto X_{61084}$   & 38 & 2 & 2 O\\
-\bottomrule
+\caption{Filtering the discovery union. Numerical survival is not proof.}
+\label{tab:stages}
+\begin{tabular}{@{}lr@{}}
+\toprule Stage & Retained rows\\\midrule
+Union of two discovery seeds & 161\\
+Historical six-shape, 36-labelled-instance audit & 54\\
+Additional 40 shapes; confirmed by the revised baseline & 41\\
+Structured tests and exact constant-family exclusions & 32\\
+\quad Mathematically established (20 proved here, 2 cited) & 22\\
+\quad Still unresolved & 10\\\bottomrule
 \end{tabular}
 \end{table}
 
-Both $X_{485}$ candidates fail on the ordered obtuse shapes $(60,33,90)$ and
-$(83,34,50)$.  Including the primary audit, each therefore passes 74 of 76
-labelled instances, but neither may be advertised as an unrestricted
-identity.  By contrast, $M_2:X_{67371}\mapsto X_{67371}$ passes all 76 stated
-instances and is proved exactly by Theorem~\ref{thm:x67371}.
+Thirteen of the 54 initial survivors fail on the additional 40 shapes.
+They are the diagonal rows $M_1:X_{13}$ and
+$M_2:X_{13},X_{6104},X_{6440},X_{6477},X_{6522},X_{8456},
+X_{10138},X_{10142}$, together with
+\[
+ M_2:X_{485}\mapsto X_{61083},\quad
+ M_2:X_{34321}\mapsto X_{202},\quad
+ M_3:X_{13}\mapsto X_{15},\quad
+ M_3:X_{485}\mapsto X_{61084}.
+\]
+Here a diagonal row abbreviates $X_i\mapsto X_i$.
+These are numerical rejections; the residual files are not presented as
+certified interval counterexamples.  Nine further diagonal rows are
+rejected \emph{exactly} as unrestricted identities by
+Table~\ref{tab:near-equilateral}; they remain valid on the outside-power
+branch of Theorem~\ref{thm:positive-branch}.  Thus 22 of the 54 initial
+survivors have been eliminated as unrestricted claims.
 
-The 41 random-test survivors are not the final unrestricted list.  The exact
-family analysis in Section~\ref{sec:families} supplies near-equilateral
-counterexamples to seven more fixed-point candidates.  Thus 20 of the 54
-six-shape survivors are now rejected and 34 rows remain after all stated
-tests.  The exact arguments in this paper prove 15 of these rows, while the
-classical cevian-centroid identity and Stothers's $X_{36}$ class account for
-three more.  Specifically, the 15 consist of the eight $F_\lambda$ family
-rows for $X_3,X_6,X_{61},X_{371}$, the two $X_{187}$ rows, the
-$X_{67371}$ fixed row, and the four Steiner-focus rows.  The remaining 16
-rows are unresolved computational candidates.
+Table~\ref{tab:final} is the definitive retained list.  Its source and
+target columns give ETC indices.  P and C assert equality on the admissible
+real domain, subject to the theorem's stated qualifications; U records
+only the finite tests, with no established universal domain.  The 20
+proofs include classical recoveries and are not 20 novelty claims.
 
-Table~\ref{tab:stress-failures} also shows that ``acute versus obtuse'' is not
-a sufficient branch classification: several candidates fail on only one of
-20 additional acute shapes, while passing the other 19.  Any definitive
-statement must identify discriminant curves and connected components in
-triangle-shape space.
+{\small
+\input{output/m1m2m3/revision_20260907/final_status_table.tex}
+}
+
+For $M_2:X_{203}\mapsto X_{34322}$ the target evaluation is unavailable
+at $(4,13/2,15/2)$; the other 151 instances pass.  This is retained as an
+unresolved candidate, not counted as a 152-test identity or as a failure.
+Every other retained row passes all 152 instances.
+
+The ten unresolved rows are not ten independent open problems.
+Isogonal transfer pairs
+$M_2:X_{202}\mapsto X_{34321}$ with
+$M_3:X_{202}\mapsto X_{6671}$, and
+$M_2:X_{203}\mapsto X_{34322}$ with
+$M_3:X_{203}\mapsto X_{6672}$ on common admissible domains.
+Likewise proved $M_2$ and $M_3$ manifestations of a single transfer
+relation are retained separately only to match the census convention.
+
+Finally, angle type alone is not a branch theorem.
+Some rejected rows pass most acute tests but fail on another acute shape.
+The near-equilateral exclusions are an explicit example:
+the correct distinction is a circumcircle-power sign, not whether $ABC$
+is acute or obtuse.  Numerical component evidence for other families must
+remain separate from classification by exact boundary equations.
 
 \section{Limits of the search}
 
@@ -912,25 +1020,28 @@ index bound without a structural invariant.
 
 \section{Reproducibility and logical status}
 
-The calculation used Wolfram 15.0.0 for Microsoft Windows (64-bit), dated
-May 19, 2026, and an ETC snapshot written on August 22, 2026.  The complete
-reproducibility bundle contains the database snapshots, unified search and
-validation scripts, all ordered test triangles and residuals, and independent
-exact checks for the symbolic theorems.  The machine-readable exact-check
-report has Boolean field \path{allChecksTrue} equal to \path{true}.  Appendix
-A records local filenames and SHA-256 checksums; these implementation details
-are kept out of the geometric narrative.
+The supplied supplement, version 1.1.0, fixes the ETC snapshot and provides
+portable programs, human-readable formulas alongside MX caches,
+historical discovery records, ordered test triangles, residuals, and
+machine-readable status tables.  A SHA-256 manifest identifies every
+distributed file.  The computations were checked using Wolfram 15.0.0
+for Microsoft Windows (64-bit); the snapshot was written on 22 August 2026.
+Python programs use only the standard library.
 
-Before submission, these files and the database snapshot should be deposited
-in a permanent public archive with a stable identifier.  Local filenames and
-checksums improve traceability but do not replace archival access.
+The small verification workflow reruns the exact polynomial checks, the
+$X_{795}$ degeneracy check, the 15352-comparison audit, the coverage
+correction, and the final tables without repeating discovery.
+The exact-check report has \path{allChecksTrue=true}, and all nine ETC
+constant-family identifications are exact.  The algebraic proofs are
+included in the article; software checks supplement, rather than replace,
+their domain arguments.
 
-Theorems~\ref{thm:isogonal-transfer}, \ref{thm:F-reversal},
-\ref{thm:x67371}, and \ref{thm:steiner-foci}, their corollaries, and
-Proposition~\ref{prop:x795} are exact.  A row not explicitly covered by
-these or by a cited classical argument remains a computational candidate,
-even if it belongs to the final set of 34 rows not eliminated by the stated
-tests.
+The full historical discovery pipeline and its checkpoints are supplied
+separately from the revised verification workflow.  Reproducing hundreds
+of millions of comparisons is optional and substantially more expensive.
+Appendix~A describes the provenance distinction.  The ten U rows in
+Table~\ref{tab:final} remain computational candidates irrespective of
+the number of passed tests.
 
 \section*{Acknowledgements}
 
@@ -943,62 +1054,46 @@ support.
 
 \section*{Declaration on the use of generative AI}
 
-During the preparation of this article, the author used ChatGPT, a
-generative-AI system developed by OpenAI, to assist with drafting symbolic
-computation code, checking algebraic manipulations computationally, editing
-language, and preparing \LaTeX.  The author independently reviewed and
-verified the mathematical arguments, computations, references, and final
-text, and accepts full responsibility for the contents of the article.  The
-AI system did not determine the research conclusions, does not meet the
-criteria for authorship, and is not a coauthor.
+During preparation, the author used ChatGPT and Codex, generative-AI
+tools developed by OpenAI, to assist in exploring arguments, drafting and
+testing symbolic and numerical code, interpreting computational results,
+editing language, and preparing \LaTeX.  The author accepts responsibility
+for the mathematical claims, computations, references, and final text.
+These tools are not authors or coauthors.  Their assistance does not
+constitute independent mathematical verification.
 
 \appendix
-\section{Relation to the preliminary computations}
+\section{Supplement inventory and provenance}
 
-The search was originally run in a first-500 block through $X_{53700}$ and a
-supplementary 501--1000 block.  Those checkpointed computations remain in
-\path{output/m1m2m3/offdiagonal_first500} and
-\path{output/m1m2m3/offdiagonal_501_1000}.  The final counts and lists in the
-main text are obtained from the unified $X_{72807}$ aggregation, with overlaps
-subtracted.  This appendix records provenance without asking the reader to
-follow superseded search scopes as part of the main argument.
+The supplement root contains \path{M1M2M3.tex}, the compiled article, its
+figure and generated table, and \path{README.md} with reproduction commands.
+\path{reproduce.py} runs the revised verification;
+\path{verify_bundle.py} verifies the manifest.
+The data subtree \path{data/LeJean-Kimberling} contains the fixed ETC
+snapshot, its supporting Wolfram source library, and the upstream license
+and attribution.  Readable snapshots permit rebuilding platform-dependent
+MX files with the supplied conversion program.
 
-\subsection{Local reproducibility record}
+Discovery began with first-500 and 501--1000 blocks through $X_{53700}$,
+then extended the opposite and diagonal bounds to $X_{72807}$.
+The directories \path{offdiagonal_first500},
+\path{offdiagonal_501_1000}, and \path{unified}, under
+\path{output/m1m2m3}, retain those records.  Their historical file
+\path{universal_candidates.csv} means only a six-shape audit survivor;
+it is superseded as a final classification by
+\path{revision_20260907/final_status.csv}.
 
-The ETC formula and normalized-barycentric snapshots have respective
-SHA-256 checksums
-\begin{center}
-\small\ttfamily
-B10F8A7FBF545F25DB2FCCC99D94022EA8325088BE15C9B06858610CE473F5C0\\
-2DFD39CB60A600B2E06750462F6187C9B8C03F647C5F08B8EEC7E69A9C8F2D67,
-\end{center}
-and the expanded 72807-entry cache has checksum
-\begin{center}
-\small\ttfamily
-ADD5F1F1686FB8EBC67942BA0052087CED2BA0EA0CEE4955703F705ACC622027.
-\end{center}
-
-The unified calculation is driven by
-\begin{center}
-\small
-\path{m1m2m3_unified_build_cache.wls},\quad
-\path{m1m2m3_unified_worker.wls},\\
-\path{run_m1m2m3_unified_workers.ps1},\\
-\path{m1m2m3_unified_validate.wls},\quad
-\path{m1m2m3_unified_aggregate.wls}.
-\end{center}
-Canonical outputs are in \path{output/m1m2m3/unified}.  The historical filename
-\path{universal_candidates.csv} means only ``passed the six-shape audit.''
-
-The exact $X_{795}$ check is
-\path{m1m2m3_referee_exact_checks.wls}.  The 40-shape audit and its residuals
-are stored under \path{output/m1m2m3/referee_revision}.  The exact reductions
-for the family and $X_{67371}$ theorems are checked by
-\path{m1m2m3_algebraic_revision_checks.wls}; its report is
-\path{output/m1m2m3/algebraic_revision/algebraic_revision_checks.json}.
-The root of the local \path{LeJean-Kimberling} data tree is supplied to that
-script as its first command-line argument or through
-\path{LEJEAN_KIMBERLING_ROOT}.
+The subdirectory \path{revision_20260907} contains the full source-cache
+audit, corrected coverage with row-level subtraction details, the fresh
+validation, and a status for all 161 discoveries.
+\path{algebraic_revision} contains the exact polynomial checks and
+nine near-equilateral branch certificates.
+\path{referee_revision} retains the earlier 40-shape experiment and the
+$X_{795}$ exact check.
+Pre-correction source programs are retained only in
+\path{provenance_sources}, explicitly distinguished from runnable revised
+programs.  The manifest and version identify the supplied release;
+no permanent-archive identifier is asserted here.
 
 \begin{thebibliography}{12}
 \footnotesize
@@ -1026,10 +1121,6 @@ B. Gibert, \emph{Table 38: Points with trilinears $\tan(A+t)$},
 \url{https://bernard-gibert.fr/Tables/table38.html}
 (accessed 31 August 2026).
 
-\bibitem{Hajja2006}
-M. Hajja, The arbitrariness of the cevian triangle,
-\emph{Amer. Math. Monthly} \textbf{113} (2006), 443--447.
-
 \bibitem{Marden}
 M. Marden, \emph{Geometry of Polynomials}, 2nd ed., Mathematical Surveys
 No.~3, American Mathematical Society, Providence, 1966.
@@ -1038,16 +1129,6 @@ No.~3, American Mathematical Society, Providence, 1966.
 D. Kalman, An elementary proof of Marden's theorem,
 \emph{Amer. Math. Monthly} \textbf{115} (2008), 330--338.
 
-\bibitem{Honsberger}
-R. Honsberger, \emph{Episodes in Nineteenth and Twentieth Century Euclidean
-Geometry}, Mathematical Association of America, 1995.
-
-\bibitem{Johnson}
-R. A. Johnson, \emph{Advanced Euclidean Geometry}, Dover, 1960 reprint.
-
-\bibitem{Yiu}
-P. Yiu, \emph{Introduction to the Geometry of the Triangle}, Florida
-Atlantic University lecture notes, 2001.
 \end{thebibliography}
 
 \end{document}
