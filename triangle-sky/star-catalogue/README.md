@@ -8,7 +8,7 @@ Move A, B and C in the XY editor, or edit all three coordinates for each vertex.
 
 Hover to inspect a star; click to pin its apex-to-foot perpendicular and tetrahedral edges. The searchable catalogue list lets you select overlapping stars and entries unavailable for the current triangle. Expand the details for every supplied coinciding definition and symbolic foot/height formula. These formulae and ETC identifications are author-supplied research metadata, not independently certified by this port.
 
-Markers use a bright blue–teal–gold scale on navy, with higher effective index toward gold. Constructive stars are circles; optimization stars are diamonds. The default nominal radius is 3 CSS pixels, slightly reduced at higher indices, with a 1.5–6 pixel control. Sizes remain independent of geometric zoom. The marker is a selection symbol, not a physical sphere. All numerical coordinates retain the supplied geometry.
+Markers use a dark blue–teal–ochre scale on white, with higher effective index toward gold. Constructive stars are circles; optimization stars are diamonds. The default nominal radius is 3 CSS pixels, slightly reduced at higher indices, with a 1.5–6 pixel control. Sizes remain independent of geometric zoom. The marker is a selection symbol, not a physical sphere. All numerical coordinates retain the supplied geometry.
 
 ## Free software and architecture
 
@@ -85,9 +85,9 @@ The optional center layer provides X(1), X(2), X(3), X(4), X(5), X(6), X(13), X(
 
 ### Numerical limits
 
-The display window is adjustable from one to six longest-edge lengths in both height and radial planar distance from the centroid. It is a finite window into potentially unbounded loci. Logarithmic radius sampling, gap detection and mesh-edge checks avoid connecting distant or invalid regions. The interface reports a missing *visible sampled* segment rather than asserting that an entire family is empty. Finer sampling improves small components and boundary shape but is not an exhaustive branch certificate.
+The display window is adjustable from one to six longest-edge lengths in both height and radial planar distance from the centroid. It is a finite window into potentially unbounded loci. The underlying radius domain is scanned to locate monotone height graphs, and domain boundaries and turning points are refined numerically. The interface reports a missing *visible sampled* segment rather than asserting that an entire family is empty. Finer sampling improves small components and boundary shape but is not an exhaustive branch certificate.
 
-Sheet facets linearly approximate valid sampled vertices and omit cells with invalid vertices, very long edges or extreme aspect ratios. Finite h=0 crossings on sampled strands are refined by bisection. Tangential contact and singular limiting branches may need finer sampling; no fabricated surface patches fill gaps. At equilateral collapse the zero-area facets are omitted. Symmetric inverse sections retain the previous numerical recovery tolerance and finite model-height bound (80).
+The browser sheet is now a numbered height-coordinate atlas (see below). It no longer deletes high-aspect-ratio facets at folds or clips boundaries by dropping whole grid cells. At equilateral collapse the zero-area facets are omitted. Symmetric inverse sections retain the previous numerical recovery tolerance and finite model-height bound (80).
 
 ### Julia family API
 
@@ -104,6 +104,19 @@ eisenstein_range(f)
 prekites(tri)
 ```
 
-This companion provides the power/Eisenstein numerical kernels, sampled sheets/strands and exact prekite arcs without external packages. The browser adds refined crossing endpoints, selected-k mesh rows and UI metadata; its triangulation need not match Julia facet-for-facet. The symmetrical-apex Julia implementation remains in `../../tetrahedral-sections/explorer/julia/`.
+This companion provides the power/Eisenstein numerical kernels, sampled sheets/strands and exact prekite arcs without external packages. The Julia `sheet` function retains the original radius-grid sampler as a numerical export; it is not the browser mesher. The corrected browser height-coordinate atlas lives in `height-mesh.mjs`. The symmetrical-apex Julia implementation remains in `../../tetrahedral-sections/explorer/julia/`.
 
 The additional regression checks validate the exact preset counts, family edge equations, all three prekite arcs, regular-star apex angles, planar center placement, 13–20–21 Eisenstein boundaries and covariance for tilted bases. These tests check the implemented formulas, not new global existence or uniqueness theorems.
+
+
+## Height-coordinate surface repair
+
+The interactive sheets use `(k,h)` as their coordinate atlas. For each k, the squared-height function of rho = |DA| / longest-edge is split at numerically refined turning points into monotone intervals. Its inverse is evaluated by bisection at requested heights. These intervals form graphs 1, 2, …, ordered by their rho interval. The separate graphs meet at common, explicitly shared fold vertices: a fold is a change of height chart, not a hole in the surface.
+
+Height rows include exact lower/upper boundaries, uniform h levels and endpoint refinement. Adjacent k columns are triangulated with an ordered zipper that follows their normalized boundary-to-boundary height positions; vertex coordinates still record the actual k and h. This accommodates curved graph domains instead of trimming them to a rectangular grid. The k grid is refined where graph counts or positions change rapidly. Spatial refinement within height columns resolves their round ends. Zero-area triangles alone are discarded; there is no aspect-ratio filter that tears open a rounded fold.
+
+Every displayed constant-k strand on a sheet uses the same vertices as the corresponding mesh column, including the selected k. Thin constant-h contours provide the second coordinate direction. Labels `k=… [1]` and `[2]` give k and graph number. Height labels use the actual base-coordinate length units, not normalized height. Label placement avoids simple overlaps; a strand component can always be identified in the inspection menu when an on-plot label is hidden by crowding.
+
+The white scientific view uses dark curve and marker colors. An optional square Cartesian grid is anchored at A, with u parallel to AB and v perpendicular to AB within the ABC plane; it rotates correctly with tilted triangles. Grid spacing is equal in both directions and ticks give actual lengths. Sheet opacity, height contours and labels remain independently adjustable.
+
+Regression test: `node tests/height-mesh.test.mjs` checks the height equations at mesh vertices, containment of displayed strand vertices in the mesh, shared edges along the folds of both families, and a bound on unresolved long mesh edges for the supplied 13–20–21 base. The atlas remains a finite numerical approximation; it does not certify arbitrarily small components near singular parameter values.
