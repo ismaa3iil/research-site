@@ -1,6 +1,6 @@
 # Attractive Centers — geometry explorer
 
-**Local revision 2 — not published.** The public app at https://ismaa3iil.fyi/attractive-centers/explorer/ remains unchanged and does not contain these additions.
+**Published revision 3.** The public app at https://ismaa3iil.fyi/attractive-centers/explorer/ includes the current repaired geometry and interaction model.
 
 Run `python serve.py` or `Start-Explorer.cmd`; browse to http://127.0.0.1:8791/ and stop with Ctrl+C. Do not open index.html using file://, because browser workers need a local web server.
 
@@ -10,7 +10,7 @@ White and light-gray plots replace the dark theme. `revision.mjs` adds edge-proj
 
 For the default 13–20–21 triangle plus its centroid, the default four-point intersection is now a four-vertex polygon retaining **5.93019060%** of the hull. The edge slabs alone retain **7.45701058%**. This agrees with the supplied revision-2 benchmark but does not prove optimality.
 
-The original Julia module below is retained as a baseline; the new revision-2 constructions have not been ported to Julia. Run `node tests.mjs` (338 checks) and `node tests-revision.mjs` (127 checks). The older baseline discussion below should be read with these revision notes.
+The original Julia module below is retained as a baseline; the new revision-2 constructions have not been ported to Julia. Run `node tests.mjs` (338 checks), `node tests-revision.mjs` (127 checks), `node tests-generic.mjs` (555 checks), and `node tests-state.mjs` (8 interaction-harness checks). The older baseline discussion below should be read with these revision notes.
 
 Free software by Ismail Hammoudeh, MIT license. The license covers this directory,
 not the PDF papers in its parent directory.
