@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-import {B41_DATA,B41_META} from './b41-data.mjs';
-import {norm,sub,hull,EPS,powerCenterND,POWER_MIN,POWER_MAX} from './geometry.mjs';
+import {B41_DATA,B41_META} from './b41-data.mjs?v=b36-2';
+import {norm,sub,hull,EPS,powerCenterND,POWER_MIN,POWER_MAX} from './geometry.mjs?v=b36-2';
 export {B41_META};
 
 // Use exact dyadic side inputs and integer polynomial arithmetic. This avoids

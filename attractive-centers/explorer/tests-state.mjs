@@ -4,7 +4,7 @@ const ctx=new Proxy({},{get:(t,p)=>t[p]??(()=>{}),set:(t,p,v)=>(t[p]=v,true)}),e
 const el=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',innerHTML:'',style:{},querySelectorAll:()=>[],setAttribute:()=>{},getBoundingClientRect:()=>({left:0,top:0}),setPointerCapture:()=>{},getContext:()=>ctx,parentElement:{}});return elements.get(id)};
 const document={getElementById:el,querySelectorAll:()=>[]},window={devicePixelRatio:1,addEventListener:()=>{}};
 class Worker{postMessage(q){this.sent=structuredClone(q)}}class ResizeObserver{observe(){}}
-let src=fs.readFileSync(new URL('./app.mjs',import.meta.url),'utf8').replace("import {add,sub,mul,dot,mean,norm,area} from './geometry.mjs';","const {add,sub,mul,dot,mean,norm,area}=deps;").replaceAll('import.meta.url',"'http://localhost/app.mjs'");
+let src=fs.readFileSync(new URL('./app.mjs',import.meta.url),'utf8').replace(/import \{add,sub,mul,dot,mean,norm,area\} from '\.\/geometry\.mjs(?:\?[^']+)?';/,"const {add,sub,mul,dot,mean,norm,area}=deps;").replaceAll('import.meta.url',"'http://localhost/app.mjs'");
 src+='\nreturn {get:()=>({seq,data,points:structuredClone(points),busy,pending}),worker,canvas,project,configure:()=>{mode="four";points=structuredClone(presets.four["Triangle + its centroid"]);options();request();}};';
 const app=new Function('deps','document','window','Worker','ResizeObserver',src)(deps,document,window,Worker,ResizeObserver);
 const respond=q=>app.worker.onmessage({data:{id:q.id,...compute(q)}});

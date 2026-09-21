@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Goal 1 revision 2. Unconditional transfer is distinct from absorption.
-import {add,sub,mul,dot,norm,mean,hp,polyHP,triangle,clipAll,tetraPlanes,polyhedron,four,fourCombined,tetra,pairPlanes,bisectors} from './geometry.mjs';
+import {add,sub,mul,dot,norm,mean,hp,polyHP,triangle,clipAll,tetraPlanes,polyhedron,four,fourCombined,tetra,pairPlanes,bisectors} from './geometry.mjs?v=b36-2';
 const cross3=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
 export function edgeSlabs(p){
   let hs=[];
