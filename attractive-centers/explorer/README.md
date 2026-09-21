@@ -1,6 +1,21 @@
 # Attractive Centers — geometry explorer
 
-**Published revision 3.** The public app at https://ismaa3iil.fyi/attractive-centers/explorer/ includes the current repaired geometry and interaction model.
+**B41 revision (21 September 2026).** The public app at https://ismaa3iil.fyi/attractive-centers/explorer/ now displays B41 by default and preserves the earlier power-center hull as an independent comparison layer. The in-app guide explains the definitions, methods, proof scope and remaining open questions.
+
+## B41: evidence and implementation
+
+B41 consists of 41 proved-attractive rational maps `G + lambda (Xi - G)`. Its sufficiency is relative to the audited endpoint catalogue, **not** the class of all attractive centers. Of 449 proved-attractive distinct rational maps in the X5001–X10000 shortlist, 447 have universal containment certificates in B39; the other two are included explicitly to form B41. Within B41, 34 members have indispensability certificates and seven remain undecided. Thus a minimum sufficient **subfamily of B41** has size between 34 and 41; neither minimality nor equality with the maximal Heart is established. The 99 area/radical records are outside this theorem.
+
+- `B41-catalogue.json`: source formulas, exact rational parameters and status of each member.
+- `B41-audit-report.md` and `B41-proof-package.zip`: research evidence and replay materials.
+- `b41-data.mjs`: exact integer polynomial coefficients after normalization and triangle-slack substitution.
+- `b41.mjs`: exact dyadic/BigInt polynomial evaluation followed by floating-point drawing coordinates. No formula text is evaluated in the browser.
+- `b41-reference.json`: independent exact normalized barycentrics at six test triangles, evaluated directly from the source formulas.
+- `tests-b41.mjs`: 1,633 checks covering source agreement, symmetry, similarity, thin triangles, chest containment and worker integration. These implementation tests are not a substitute for the global mathematical certificates.
+
+Run `node tests-b41.mjs` as well as the four pre-existing test suites listed below. On the default 13–20–21 triangle, the standard chest retains 5.93019060% of triangle area, B41 retains 2.01534576% (11 polygon vertices), and the earlier hull retains 0.39809257% (17 polygon vertices). The older family is unchanged; it is not claimed that B41 universally contains the continuous power family.
+
+The archived baseline discussion below describes the previous green power-family region. In the current app B41 is green; that older family is rose/dashed and initially hidden. The Julia module is still the older baseline and does not implement B41.
 
 Run `python serve.py` or `Start-Explorer.cmd`; browse to http://127.0.0.1:8791/ and stop with Ctrl+C. Do not open index.html using file://, because browser workers need a local web server.
 
