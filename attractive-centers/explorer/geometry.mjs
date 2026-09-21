@@ -34,6 +34,71 @@ export function fourCombined(d,on){let q=d.hull;if(on.para)q=d.para.poly;if(on.b
 // Convex power objective. Newton with backtracking in normalized coordinates.
 export function powerCenter(p,exponent){let x=mean(p);if(exponent===2)return {point:x,residual:0,converged:true};const val=q=>p.reduce((s,v)=>s+norm(sub(q,v))**exponent/exponent,0);let converged=false,residual=Infinity;for(let it=0;it<180;it++){let g=[0,0],H=[0,0,0];for(let v of p){let d=sub(x,v),r=Math.max(norm(d),1e-15),w=r**(exponent-2),k=(exponent-2)*w/(r*r);g=add(g,mul(d,w));H[0]+=w+k*d[0]*d[0];H[1]+=k*d[0]*d[1];H[2]+=w+k*d[1]*d[1];}residual=norm(g);if(residual<1e-10){converged=true;break;}let det=H[0]*H[2]-H[1]*H[1];let step=det>1e-24?[(H[2]*g[0]-H[1]*g[1])/det,(H[0]*g[1]-H[1]*g[0])/det]:mul(g,.01);let f=val(x),t=1;while(t>1e-12&&val(sub(x,mul(step,t)))>f-1e-4*t*dot(g,step))t/=2;let next=sub(x,mul(step,t));if(norm(sub(next,x))<1e-13){converged=residual<1e-7;break;}x=next;}return {point:x,residual,converged};}
 export function heart(p,count=49){let sides=p.map((_,i)=>norm(sub(p[(i+1)%3],p[(i+2)%3]))),L=sides.reduce((a,b)=>a+b,0);let weighted=w=>p.reduce((s,v,i)=>add(s,mul(v,w[i])),[0,0]);let centers=[{name:'X(1) · incenter',point:weighted(sides.map(a=>a/L))},{name:'X(10) · boundary-wire center',point:weighted(sides.map(a=>(L-a)/(2*L)))},{name:'X(2) · centroid',point:mean(p)}],failed=0;for(let i=0;i<count;i++){let exp=4-2*Math.sqrt(2)+4*Math.sqrt(2)*i/(count-1),r=powerCenter(p,exp);if(r.converged)centers.push({name:`M${exp.toFixed(4)} · power center`,p:exp,...r});else failed++;}let poly=hull(centers.map(c=>c.point)),boundary=centers.filter(c=>poly.some(q=>norm(sub(q,c.point))<EPS));return {centers,poly,boundary,failed};}
+
+// Dimension-independent Newton solver for the convex power objective
+//   Phi_p(x) = Sum_i ||x-p_i||^p / p.
+// It is used for four planar points and tetrahedra.  The older 2D routine is
+// retained above so the original comparison layer remains bit-for-bit stable.
+function linearSolve(A,b){
+  A=A.map((r,i)=>[...r,b[i]]);const n=b.length;
+  for(let k=0;k<n;k++){
+    let pivot=k;for(let i=k+1;i<n;i++)if(Math.abs(A[i][k])>Math.abs(A[pivot][k]))pivot=i;
+    if(Math.abs(A[pivot][k])<1e-14)return null;
+    [A[k],A[pivot]]=[A[pivot],A[k]];
+    for(let i=k+1;i<n;i++){let f=A[i][k]/A[k][k];for(let j=k;j<=n;j++)A[i][j]-=f*A[k][j];}
+  }
+  let x=Array(n).fill(0);for(let i=n-1;i>=0;i--){let s=A[i][n];for(let j=i+1;j<n;j++)s-=A[i][j]*x[j];x[i]=s/A[i][i];}return x;
+}
+export function powerCenterND(points,exponent){
+  const d=points[0].length;let x=mean(points);if(Math.abs(exponent-2)<1e-14)return {point:x,residual:0,converged:true};
+  const value=q=>points.reduce((s,v)=>s+norm(sub(q,v))**exponent/exponent,0);
+  let residual=Infinity,converged=false;
+  for(let it=0;it<240;it++){
+    let g=Array(d).fill(0),H=Array.from({length:d},()=>Array(d).fill(0));
+    for(const v of points){const z=sub(x,v),r=Math.max(norm(z),1e-14),w=r**(exponent-2),k=(exponent-2)*w/(r*r);for(let i=0;i<d;i++){g[i]+=w*z[i];for(let j=0;j<d;j++)H[i][j]+=w*(i===j?1:0)+k*z[i]*z[j];}}
+    residual=norm(g);if(residual<2e-11){converged=true;break;}
+    let step=linearSolve(H,g);if(!step)step=mul(g,.02);
+    const f=value(x),descent=dot(g,step);let t=1;
+    while(t>1e-13&&value(sub(x,mul(step,t)))>f-1e-4*t*descent)t/=2;
+    const next=sub(x,mul(step,t));if(norm(sub(next,x))<2e-13){x=next;converged=residual<2e-7;break;}x=next;
+  }
+  return {point:x,residual,converged};
+}
+
+// Incremental convex hull of a small three-dimensional point cloud.  A fixed
+// point inside the initial tetrahedron orients every triangular face, avoiding
+// the duplicate near-coplanar planes produced by brute-force triple scans.
+export function pointCloudHull3(input){
+  const points=unique(input,2e-10);if(points.length<4)return {vertices:points,faces:[],volume:0};
+  const i0=0;let i1=1;for(let i=2;i<points.length;i++)if(norm(sub(points[i],points[i0]))>norm(sub(points[i1],points[i0])))i1=i;
+  const line=sub(points[i1],points[i0]),lineLength=norm(line);if(lineLength<1e-11)return {vertices:[points[i0]],faces:[],volume:0};
+  let i2=-1,lineDistance=-1;for(let i=0;i<points.length;i++){if(i===i0||i===i1)continue;const d=norm(cross3(line,sub(points[i],points[i0])))/lineLength;if(d>lineDistance){lineDistance=d;i2=i;}}
+  if(lineDistance<2e-10)return {vertices:unique(points,2e-8),faces:[],volume:0};
+  let planeNormal=cross3(line,sub(points[i2],points[i0]));planeNormal=mul(planeNormal,1/norm(planeNormal));let i3=-1,planeDistance=-1;
+  for(let i=0;i<points.length;i++){if(i===i0||i===i1||i===i2)continue;const d=Math.abs(dot(planeNormal,sub(points[i],points[i0])));if(d>planeDistance){planeDistance=d;i3=i;}}
+  if(planeDistance<2e-10)return {vertices:unique(points,2e-8),faces:[],volume:0};
+  const initial=[i0,i1,i2,i3],interior=mean(initial.map(i=>points[i]));
+  const makeFace=(a,b,c)=>{let n=cross3(sub(points[b],points[a]),sub(points[c],points[a])),L=norm(n);if(L<1e-12)return null;n=mul(n,1/L);let plane=dot(n,points[a]);if(dot(n,interior)>plane){[b,c]=[c,b];n=mul(n,-1);plane=-plane;}return {ids:[a,b,c],n,b:plane};};
+  let faces=[[i0,i1,i2],[i0,i3,i1],[i0,i2,i3],[i1,i3,i2]].map(f=>makeFace(...f)).filter(Boolean);
+  for(let i=0;i<points.length;i++){
+    if(initial.includes(i))continue;const visible=faces.filter(f=>dot(f.n,points[i])-f.b>3e-10);if(!visible.length)continue;
+    const edgeMap=new Map();for(const f of visible)for(const [a,b] of [[f.ids[0],f.ids[1]],[f.ids[1],f.ids[2]],[f.ids[2],f.ids[0]]]){const key=a<b?`${a},${b}`:`${b},${a}`;edgeMap.set(key,(edgeMap.get(key)||{a,b,count:0}));edgeMap.get(key).count++;}
+    const gone=new Set(visible);faces=faces.filter(f=>!gone.has(f));for(const e of edgeMap.values())if(e.count===1){const f=makeFace(e.a,e.b,i);if(f)faces.push(f);}
+  }
+  const vertices=unique(faces.flatMap(f=>f.ids.map(i=>points[i])),2e-8),facePoints=faces.map(f=>f.ids.map(i=>points[i]));let volume=0;
+  for(const f of facePoints)volume+=Math.abs(dot(sub(f[0],interior),cross3(sub(f[1],interior),sub(f[2],interior))))/6;
+  return {vertices,faces:facePoints,volume};
+}
+
+export const POWER_MIN=4-2*Math.sqrt(2),POWER_MAX=4+2*Math.sqrt(2);
+export function powerHeart(points,count=49){
+  let exponents=Array.from({length:Math.max(2,count)},(_,i)=>POWER_MIN+(POWER_MAX-POWER_MIN)*i/(Math.max(2,count)-1));
+  if(!exponents.some(p=>Math.abs(p-2)<1e-12))exponents.push(2);exponents.sort((a,b)=>a-b);
+  let failed=0,centers=[];
+  for(const exponent of exponents){const r=powerCenterND(points,exponent);if(r.converged)centers.push({name:`M${exponent.toFixed(6)} · power center`,p:exponent,...r});else failed++;}
+  if(points[0].length===2){const poly=hull(centers.map(c=>c.point));return {centers,poly,boundary:centers.filter(c=>poly.some(q=>norm(sub(q,c.point))<2e-8)),failed};}
+  return {centers,...pointCloudHull3(centers.map(c=>c.point)),failed};
+}
 export function solve3(rows,bs){let [a,b,c]=rows,det=dot(a,cross3(b,c));if(Math.abs(det)<1e-11)return null;return mul(add(add(mul(cross3(b,c),bs[0]),mul(cross3(c,a),bs[1])),mul(cross3(a,b),bs[2])),1/det);}
 export function tetraPlanes(p){return p.map((v,i)=>{let f=p.filter((_,j)=>j!==i),n=cross3(sub(f[1],f[0]),sub(f[2],f[0]));if(dot(n,sub(v,f[0]))<0)n=mul(n,-1);return hp(n,dot(n,f[0]));}).filter(Boolean);}
 export function polyhedron(hs){let vertices=[];for(let i=0;i<hs.length;i++)for(let j=i+1;j<hs.length;j++)for(let k=j+1;k<hs.length;k++){let h=[hs[i],hs[j],hs[k]],x=solve3(h.map(h=>h.n),h.map(h=>h.b));if(x&&inside(x,hs,1e-8))vertices.push(x);}vertices=unique(vertices,1e-7);if(vertices.length<4)return {vertices,faces:[],volume:0};let faces=[],volume=0,g=mean(vertices);for(let h of hs){let f=vertices.filter(v=>Math.abs(dot(h.n,v)-h.b)<1e-7);if(f.length<3)continue;let center=mean(f),e=mul(sub(f[0],center),1/norm(sub(f[0],center))),v=cross3(h.n,e);f.sort((a,b)=>Math.atan2(dot(sub(a,center),v),dot(sub(a,center),e))-Math.atan2(dot(sub(b,center),v),dot(sub(b,center),e)));if(faces.some(old=>old.length===f.length&&old.every(a=>f.includes(a))))continue;faces.push(f);for(let j=1;j<f.length-1;j++)volume+=Math.abs(dot(sub(f[0],g),cross3(sub(f[j],g),sub(f[j+1],g))))/6;}return {vertices,faces,volume};}

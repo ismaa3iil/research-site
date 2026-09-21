@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 import {B41_DATA,B41_META} from './b41-data.mjs';
-import {norm,sub,hull,EPS} from './geometry.mjs';
+import {norm,sub,hull,EPS,powerCenterND,POWER_MIN,POWER_MAX} from './geometry.mjs';
 export {B41_META};
 
 // Use exact dyadic side inputs and integer polynomial arithmetic. This avoids
@@ -41,4 +41,20 @@ export function b41Heart(points){
   const centers=b41Weights(sides).map(row=>({...row,point:[0,1].map(j=>points.reduce((sum,p,i)=>sum+row.weights[i]*p[j],0))}));
   const poly=hull(centers.map(c=>c.point));
   return {centers,poly,boundary:centers.filter(c=>poly.some(p=>norm(sub(p,c.point))<EPS)),failed:0};
+}
+
+// B36 keeps the 34 rational maps that survived the corrected affine
+// redundancy audit and adds the two endpoint power maps.  The maps themselves
+// are attractive; the stronger claim that B36 always equals the B43 hull is a
+// numerical research conjecture, not used to justify this inner heart.
+const B36_REMOVED=new Set([17,26,29,35,38,40,41]);
+export function b36Heart(points){
+  let centers=b41Heart(points).centers.filter(c=>!B36_REMOVED.has(c.position));
+  for(const [tag,exponent] of [['−',POWER_MIN],['+',POWER_MAX]]){
+    const r=powerCenterND(points,exponent);
+    if(r.converged)centers.push({name:`M${tag} = M(${exponent.toFixed(8)})`,index:null,lambda:null,position:`P${tag}`,necessity:'power endpoint',p:exponent,...r});
+  }
+  centers=centers.map((c,i)=>({...c,b36Position:i+1}));
+  const poly=hull(centers.map(c=>c.point));
+  return {centers,poly,boundary:centers.filter(c=>poly.some(p=>norm(sub(p,c.point))<EPS)),failed:36-centers.length};
 }

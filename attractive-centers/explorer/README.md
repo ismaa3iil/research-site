@@ -1,6 +1,12 @@
 # Attractive Centers — geometry explorer
 
-**B41 revision (21 September 2026).** The public app at https://ismaa3iil.fyi/attractive-centers/explorer/ now displays B41 by default and preserves the earlier power-center hull as an independent comparison layer. The in-app guide explains the definitions, methods, proof scope and remaining open questions.
+**B36 and higher-arity power-heart revision (21 September 2026).** The public app at https://ismaa3iil.fyi/attractive-centers/explorer/ displays B36 by default for triangles, preserves the earlier power-family hull for comparison, and adds sampled power-center hearts for four planar points and tetrahedra. The in-app guide separates proved constructive hearts from conjectural reductions and outer chest bounds.
+
+## B36: current status
+
+B36 consists of the 34 certified rational B41 maps that survived the corrected affine-conditioned reduction plus the two endpoint power maps `M_(4-2sqrt(2))` and `M_(4+2sqrt(2))`. Each generator is attractive, so its convex hull is a valid heart. The seven omitted B41 maps were redundant on 1,288 audit shapes, 40 removal orders, and a larger stress scan. Universal equality of B36 with B43 is nevertheless still a conjecture pending symbolic containment certificates.
+
+`B36-redundancy-report.md` documents that distinction and `B43-sampled-reduction.json` preserves the sampled audit output. The rational B41 catalogue and certificates remain included as source material.
 
 ## B41: evidence and implementation
 
@@ -11,11 +17,11 @@ B41 consists of 41 proved-attractive rational maps `G + lambda (Xi - G)`. Its su
 - `b41-data.mjs`: exact integer polynomial coefficients after normalization and triangle-slack substitution.
 - `b41.mjs`: exact dyadic/BigInt polynomial evaluation followed by floating-point drawing coordinates. No formula text is evaluated in the browser.
 - `b41-reference.json`: independent exact normalized barycentrics at six test triangles, evaluated directly from the source formulas.
-- `tests-b41.mjs`: 1,633 checks covering source agreement, symmetry, similarity, thin triangles, chest containment and worker integration. These implementation tests are not a substitute for the global mathematical certificates.
+- `tests-b41.mjs`: 1,635 scalar-reference checks plus higher-arity hull and worker assertions covering source agreement, symmetry, similarity, thin triangles, chest containment, the B36 reduction, and power-heart integration. These implementation tests are not a substitute for global mathematical certificates.
 
-Run `node tests-b41.mjs` as well as the four pre-existing test suites listed below. On the default 13–20–21 triangle, the standard chest retains 5.93019060% of triangle area, B41 retains 2.01534576% (11 polygon vertices), and the earlier hull retains 0.39809257% (17 polygon vertices). The older family is unchanged; it is not claimed that B41 universally contains the continuous power family.
+Run `node tests-b41.mjs` as well as the four pre-existing test suites listed below. On the default 13–20–21 triangle, the standard chest retains 5.93019060% of triangle area, B36 retains 2.01639488% (12 polygon vertices), and the earlier hull retains 0.39809257% (17 polygon vertices). The small increase over B41 comes from adding the two power endpoints.
 
-The archived baseline discussion below describes the previous green power-family region. In the current app B41 is green; that older family is rose/dashed and initially hidden. The Julia module is still the older baseline and does not implement B41.
+The archived baseline discussion below describes the previous power-family region. In the current triangle tab B36 is green; that older family is rose/dashed and initially hidden. The Julia module is still the older baseline and does not implement B36.
 
 Run `python serve.py` or `Start-Explorer.cmd`; browse to http://127.0.0.1:8791/ and stop with Ctrl+C. Do not open index.html using file://, because browser workers need a local web server.
 
@@ -34,11 +40,12 @@ not the PDF papers in its parent directory.
 
 - **Triangle:** drag any vertex. Gold is the standard chest; green is the hull
   of the selected attractive family. Hover over green points for their names.
-- **Four planar points:** independently toggle parallelogram, bisector, network,
-  and stability constructions. Stability is OFF initially: it needs absorption.
+- **Four planar points:** a green sampled power-center heart is shown inside the
+  hull; independently toggle parallelogram, bisector, network, and stability
+  chest constructions. Stability is OFF initially: it needs absorption.
 - **Tetrahedron:** drag empty space to rotate; drag a vertex in the screen plane.
-  Exact x, y, z coordinates are editable. Scroll to zoom. Arrow keys rotate;
-  the `0` key fits the view.
+  The green polyhedron is a sampled power-center heart. Exact x, y, z
+  coordinates are editable. Scroll to zoom. Arrow keys rotate; the `0` key fits.
 
 Planar coordinate scales are equal. Vertex positions do not jump when overlays
 are selected. The viewport remains fixed during dragging; “Fit view” recenters it.
@@ -61,14 +68,13 @@ lies on the same side of a side as the opposite vertex. For an equilateral
 triangle, this construction reduces to the centroid. The strip overlay is clipped
 to the original triangle; the Napoleon triangle is shown unclipped.
 
-### Triangle: attractive inner family
+### Triangle: attractive inner families
 
-The green polygon is the convex hull of X(1), X(10), X(2), and 49 power centers
-M_p with equally spaced p in `[4−2√2, 4+2√2]`. M_p minimizes
-`sum(norm(x−p_i)^p)`; the computation uses its gradient, Hessian and a damped
-Newton method. Papers III and IV provide the attractivity results. “Best” means
-the extreme points of this sampled family for the current triangle, not a proof
-of extremality in the class of all attractive centers.
+The default green polygon is B36. The optional rose polygon is the older convex
+hull of X(1), X(10), X(2), and 49 power centers M_p with equally spaced p in
+`[4−2√2, 4+2√2]`. M_p minimizes `sum(norm(x−p_i)^p)`; the computation uses its
+gradient, Hessian and a damped Newton method. “Boundary” within either finite
+family is not a proof of extremality in the class of all attractive centers.
 
 The power interval is the sharp **universal** guarantee for the power family;
 this does not assert that every endpoint is a boundary point of each triangle's
@@ -82,7 +88,13 @@ centers also need not be analytic at every configuration: this green region
 uses the regularity/extension conventions for radial centers in Paper III,
 and is not labeled as an exact maximal **analytic** Heart.
 
-### Four points: four constructions
+### Four points: an inner heart and outer chest constructions
+
+The app evaluates 49 evenly spaced power exponents in the universal interval,
+adds p=2 when it is not already sampled, and draws their convex hull in green.
+Because the power-attractivity theorem is independent of the number of points
+and ambient dimension, this is a constructive four-point heart. It is only a
+finite approximation to the hull of the continuous power curve.
 
 1. **Parallelogram.** For each pair partition `ij | kl`, put
    `m=(p_i+p_j)/2`, `q=(p_k+p_l)/2`, `d=m−q`. Retain the slab
@@ -127,6 +139,11 @@ triple-plane intersections; faces are ordered in their planes. Volume is the
 sum of tetrahedra from an interior point to triangularized faces. These are
 outer constructions, not a claim to the OSC. Planar network and absorption
 algorithms are not silently extended to tetrahedra.
+
+The green tetrahedral layer is instead an inner heart: 41 evenly spaced power
+exponents plus p=2 are solved by a dimension-independent damped Newton method,
+then an incremental three-dimensional convex hull reconstructs its triangular
+faces and volume. A regular tetrahedron collapses the layer to its centroid.
 
 ### Percentages: a reproducible reference
 

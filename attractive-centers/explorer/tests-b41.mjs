@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {b41Heart,b41Weights} from './b41.mjs';
-import {normalize,triangle,area,inside,polyHP,norm,sub} from './geometry.mjs';
+import {b41Heart,b41Weights,b36Heart} from './b41.mjs';
+import {normalize,triangle,area,inside,polyHP,norm,sub,tetraPlanes} from './geometry.mjs';
 import {compute} from './worker.mjs';
 const reference=JSON.parse(fs.readFileSync(new URL('./b41-reference.json',import.meta.url)));
 const rational=str=>{const [n,d='1']=str.split('/');return Number(n)/Number(d);};
@@ -37,11 +37,22 @@ for(let k=0;k<160;k++){
  assert(r.centers.every(c=>inside(c.point,polyHP(d.poly),3e-7)),'all B41 values inside standard chest');
  assert(area(r.poly)<=area(d.poly)+1e-7);checks+=2;shapes++;
 }
-const response=compute({mode:'triangle',points:base,on:{b41:true,heart:false}});
-assert.equal(response.result.b41.centers.length,41);assert(response.result.heart.centers.length>=3);
+const response=compute({mode:'triangle',points:base,on:{b36:true,heart:false}});
+const b36=b36Heart(q);assert.equal(b36.centers.length,36);assert.equal(b36.poly.length,12);
+near(100*area(b36.poly)/area(q),2.0163948782136494,1e-10);
+assert(b36.centers.every(c=>inside(c.point,polyHP(triangle(q).poly),3e-7)),'all B36 values inside standard chest');
+assert.equal(response.result.b36.centers.length,36);assert(response.result.heart.centers.length>=3);
 assert(response.result.heart.poly.length>=3,'earlier family preserved');
+const fourResponse=compute({mode:'four',points:[[0,0],[4,0],[3,2],[0,3]],on:{para:true,bisector:true,network:true,orbit:false,edge:true,transfer:true,ball:false,stable:false}});
+assert.equal(fourResponse.result.power.failed,0);assert.equal(fourResponse.result.power.centers.length,50);assert(fourResponse.result.power.poly.length>=3);
+fourResponse.result.power.centers.forEach(c=>assert(inside(c.point,polyHP(fourResponse.result.hull),2e-7),'4-point power center lies in input hull'));
+const tetraPoints=[[0,0,0],[4,0,0],[0,3,0],[1,1,2]],tetraResponse=compute({mode:'tetra',points:tetraPoints,on:{para:true,bisector:true,orbit:false,edge:true,transfer:true,ball:false}});
+assert.equal(tetraResponse.result.power.failed,0);assert.equal(tetraResponse.result.power.centers.length,42);assert(tetraResponse.result.power.faces.length<=2*tetraResponse.result.power.vertices.length-4);
+const tetraHP=tetraPlanes(normalize(tetraPoints).p);tetraResponse.result.power.centers.forEach(c=>assert(inside(c.point,tetraHP,2e-7),'tetrahedral power center lies in input hull'));
+const regular=compute({mode:'tetra',points:[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]],on:{para:true,bisector:true,orbit:false,edge:true,transfer:true,ball:false}});
+assert.equal(regular.result.power.vertices.length,1);near(regular.result.power.volume,0);
 assert.throws(()=>b41Weights([1,1,2]));assert.throws(()=>b41Weights([0,1,1]));
 const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
-for(const id of ['guide','start','definitions','b41-status','methods','reproduce'])assert(html.includes(`id="${id}"`));
+for(const id of ['guide','start','definitions','b36-status','power-hearts','methods','reproduce'])assert(html.includes(`id="${id}"`));
 console.log(JSON.stringify({checks,randomShapes:shapes,referenceTriangles:reference.sides.length,
- B41Maps:41,defaultHullVertices:heart.poly.length,defaultPercent:100*area(heart.poly)/area(q),earlierFamilyPreserved:true},null,2));
+ B41ReferenceMaps:41,B36Maps:36,defaultB36HullVertices:b36.poly.length,defaultB36Percent:100*area(b36.poly)/area(q),fourPowerMaps:fourResponse.result.power.centers.length,tetraPowerMaps:tetraResponse.result.power.centers.length,earlierFamilyPreserved:true},null,2));
