@@ -1,3 +1,4 @@
+import {renderAtlas} from './atlas-core.mjs?v=atlas2';
 import * as M from './math.mjs';
 export function atlasData({h,metric='counts',resolution=40,range=2.5}){
   const cells={bary:[],complex:[]},classes=new Set();
@@ -13,6 +14,6 @@ export function atlasData({h,metric='counts',resolution=40,range=2.5}){
   return {h,metric,cells,classes:[...classes].sort()};
 }
 if(typeof WorkerGlobalScope!=='undefined'&&self instanceof WorkerGlobalScope)self.onmessage=({data})=>{
-  try{const result=data.kind==='strands'?M.strandData(data.tri,data.samples,data.maxH):atlasData(data);self.postMessage({id:data.id,result});}
+  try{const result=data.kind==='atlas-hi'?renderAtlas({...data,progress:value=>self.postMessage({id:data.id,progress:value})}):data.kind==='strands'?M.strandData(data.tri,data.samples,data.maxH):atlasData(data);self.postMessage({id:data.id,result},result.pixels?[result.pixels.buffer]:[]);}
   catch(e){self.postMessage({id:data.id,error:e.message});}
 };

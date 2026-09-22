@@ -100,3 +100,36 @@ original invariant formulas. It produces both JavaScript and Julia integer
 coefficient tables. No Wolfram session is required for the derivation.
 
 See [PORTING.md](PORTING.md) for mathematical changes, limitations and provenance.
+
+## Atlas rendering update (2.0.0)
+
+The Triangle-space atlases now offer 512², 1024² (default), and 2048² images.
+The thirteen-phase view uses the selected resolution for all 26 charts; there
+is no hidden 40-cell cap. Each chart has independently recomputed zoom, an
+equilateral-detail shortcut, enlargement, self-contained SVG export, and a
+4096-by-4096 PNG export that first recomputes the viewport at 4096².
+
+`atlas-core.mjs` uses a 128-tile baseline, nine probes per tile, recursive
+refinement at category changes, and extra refinement along the sampled
+physical fold, parabolic and escape curves. `atlas-view.mjs` puts the image
+under vector boundaries, reference loci, axes, titles and an embedded legend.
+All six side permutations are covered. Image resolution is not arithmetic
+precision: subpixel cells and nearly multiple roots remain numerical limits.
+SVG contains an embedded PNG for shading; it is not an exact vector cell map.
+
+The guide at `guide.html` introduces the forward and inverse problems, conics,
+Poncelet porisms, both shape charts, E/P/H counting, boundary events, five
+atlas metrics, thirteen height phases, strands, stars, centers and proof
+status. It cites the public 38-page v1.0.0 paper currently linked by this site.
+That PDF was checked against repository blob
+`a45d2ce9bd971329337b1f589aad792757905fce` when these references were prepared.
+It is distinct from the separately prepared free-software submission revision.
+
+Verification: `node --test tests/*.test.mjs` runs geometry and atlas checks,
+including the eight regular-case paper witnesses and 4,000 comparisons of
+adaptive image pixels with direct classification across the two charts.
+DOM integration additionally checked atlas controls, recomputed zoom, all
+26 phase panels preserving the requested resolution, and return to section
+views. SVG output was independently rasterized and visually inspected.
+The remote browser preview was unavailable during this update; those DOM
+checks are not a claim of an end-to-end live-browser test.

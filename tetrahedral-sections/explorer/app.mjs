@@ -1,11 +1,13 @@
 import * as M from './math.mjs';
+import {AtlasExplorer} from './atlas-view.mjs?v=atlas2';
 import {Plot,projector,fit,download,esc} from './plot.mjs';
 const $=s=>document.querySelector(s),controls=$('#controls'),plots=$('#plots'),status=$('#status'),legend=$('#legend'),dataEl=$('#data');
 const colors={phi:'#3679bb',alpha:'#b55687',par:'#c19700',fold:'#17233a',C1:'#2475b0',C2:'#a43f29',C3:'#7e46a2',C4:'#2a855c',E:'#17233a',H:'#d13f3f'};
-const state={tab:'sections',h:Math.SQRT2,alpha:.55,phi:.45,range:2.5,samples:240,porism:true,porismStep:15,euler:false,steiner:false,kiepert:false,kimberling:false,isosceles:true,right:true,regions:false,views:[true,true,true,true],tri:[[-1,0],[1,0],[.25,1.35]],strandSamples:144,maxH:120,radius:1.3,showCenters:[true,true,true,true],showTransitionCenters:[true,false,false,false],showParabolic:true,showTransitions:true,showLabels:true,showEdges:false,metric:'counts',resolution:40,yaw:.55,pitch:.55};
+const state={tab:'sections',h:Math.SQRT2,alpha:.55,phi:.45,range:2.5,samples:240,porism:true,porismStep:15,euler:false,steiner:false,kiepert:false,kimberling:false,isosceles:true,right:true,regions:false,views:[true,true,true,true],tri:[[-1,0],[1,0],[.25,1.35]],strandSamples:144,maxH:120,radius:1.3,showCenters:[true,true,true,true],showTransitionCenters:[true,false,false,false],showParabolic:true,showTransitions:true,showLabels:true,showEdges:false,metric:'counts',resolution:1024,yaw:.55,pitch:.55};
+const atlas=new AtlasExplorer({plots,status,legend,data:dataEl});
 let cachedStrands=null,strandKey='',cachedBoundary=null,boundaryH=-1,cachedRegion=null,regionKey='',lastAtlas=null,job=0,worker=null;
 function request(kind,extra,done){
-  if(worker)worker.terminate();const id=++job;worker=new Worker(new URL('./worker.mjs',import.meta.url),{type:'module'});
+  if(worker)worker.terminate();const id=++job;worker=new Worker(new URL('./worker.mjs?v=atlas2',import.meta.url),{type:'module'});
   worker.onmessage=({data})=>{if(data.id!==job)return;worker.terminate();worker=null;if(data.error){status.textContent=data.error;return;}done(data.result);};
   worker.onerror=()=>{status.textContent='The calculation could not finish. Reduce the sampling resolution and try again.';};
   worker.postMessage({kind,id,...extra});
@@ -45,11 +47,13 @@ function buildControls(){
     const c=group('Center loci');['C1 · apex shadow','C2 · axis intersection','C3 · circumconic center','C4 · inconic center'].forEach((label,i)=>{check(label,state.showCenters[i],v=>{state.showCenters[i]=v;render();},c);check('Transition markers on C'+(i+1),state.showTransitionCenters[i],v=>{state.showTransitionCenters[i]=v;render();},c);});
   }else{
     select('Classification',state.metric,[['counts','Physical E / P / H counts'],['parabolic','Positive parabolic-height count'],['planar','Planar-apex endpoint count'],['structural','Structural strand phase'],['t9','T9 physical section counts']],v=>{state.metric=v;render();});
-    range('Height h','h',.03,8,.001);range('Complex plot range','range',1.5,5,.25);range('Grid resolution','resolution',24,96,8);
+    range('Height h','h',.03,8,.001);range('Complex plot range','range',1.5,5,.25);select('Atlas image resolution',String(state.resolution),[['512','512 × 512 · quick'],['1024','1024 × 1024 · detailed'],['2048','2048 × 2048 · very fine']],v=>{state.resolution=Number(v);render();});
     select('Transition slice','', [['','Choose a transition…'],...M.transitions.map((H,i)=>[i,`T${i+1} · h = ${Math.sqrt(H).toFixed(6)}`])],v=>{if(v==='')return;state.h=Math.sqrt(M.transitions[+v]);buildControls();render();});
     const b=el('div','','buttons');controls.append(b);button('Just below',()=>{state.h*=.999;buildControls();render();},b);button('Just above',()=>{state.h*=1.001;buildControls();render();},b);
     button('Build 13-phase height atlas',heightAtlas,controls);
-    hint('Colors sample cell centers. Narrow regions may need a higher resolution. E/P/H counts are unordered shapes, not labeled spatial apices.');
+    hint('Zoom recomputes the chosen region. Both single and 13-phase atlases honor the selected resolution. PNG export computes 4096² detail. E/P/H counts are unordered inverse shapes.');
+    const overlays=group('Atlas overlays');for(const [key,label] of [['events','Parabolic, fold and escape curves'],['references','Isosceles and right-triangle references']])check(label,atlas.options[key],v=>{atlas.options[key]=v;render();},overlays);
+    button('Regular tetrahedron · h = √2',()=>{state.h=Math.SQRT2;state.metric='counts';buildControls();render();},controls);
   }
   const actions=el('div','','buttons');controls.append(actions);button('Export data',exportData,actions);button('Reset',()=>location.reload(),actions);
 }
@@ -147,22 +151,9 @@ function renderStrands(){const key=JSON.stringify([state.tri,state.strandSamples
   if(cachedStrands&&strandKey===key){drawStrands(cachedStrands);return;}
   status.textContent='Tracing inverse-apex strands…';request('strands',{tri:state.tri,samples:state.strandSamples,maxH:state.maxH},result=>{strandKey=key;cachedStrands=result;render();});
 }
-function drawAtlas(result){
-  for(const mode of ['bary','complex']){const r=state.range,p=new Plot((mode==='bary'?'Angle-barycentric':'Complex')+` · h = ${result.h.toFixed(5)}`,mode==='bary'?[-1.12,1.12,-.08,1.9]:[-r,r,-.1,r],{caption:'Cell colors are numerical samples; use SVG to download this view.'});fill(p,result.cells[mode],mode);triangleBackground(mode,p);if(['counts','t9'].includes(result.metric))drawBoundary(mode,p,result.metric==='t9'?Math.sqrt(3):result.h);addPlot(p);}
-  showLegend(result.classes.map(l=>[l,classColor(l)]));
-}
-function renderAtlas(){lastAtlas=null;status.textContent='Computing triangle-space classifications…';request('atlas',{h:state.h,metric:state.metric,resolution:state.resolution,range:state.range},result=>{lastAtlas=result;plots.replaceChildren();drawAtlas(result);status.textContent=`${state.resolution} × ${state.resolution} sample grid · h = ${state.h.toFixed(6)} · ${result.classes.length} sampled classes`;});}
-async function heightAtlas(){
-  if(worker)worker.terminate();const token=++job;plots.replaceChildren();dataEl.replaceChildren();
-  const H=[.25,...M.transitions.slice(0,-1).map((v,i)=>(v+M.transitions[i+1])/2),8];
-  const {atlasData}=await import('./worker.mjs');lastAtlas=[];
-  for(let i=0;i<H.length;i++){
-    if(token!==job)return;status.textContent=`Building phase ${i+1} of 13…`;
-    await new Promise(r=>setTimeout(r,0));const result=atlasData({h:Math.sqrt(H[i]),metric:'counts',resolution:Math.min(state.resolution,40),range:state.range});
-    lastAtlas.push(result);const title=el('h2',`Phase ${i+1} · h = ${Math.sqrt(H[i]).toFixed(6)}`,'atlas-title');plots.append(title);drawAtlas(result);
-  }status.textContent='13 open height phases · one representative height in each interval between transitions. Cell colors are sampled.';
-}
-function exportData(){const mu=Math.tan(state.alpha)/state.h;if(worker){status.textContent='Wait for the current calculation to finish before exporting.';return;}const content=state.tab==='strands'?cachedStrands:state.tab==='atlas'?lastAtlas:{parameters:state,vertices:M.section(state.h,mu,state.phi),physical:M.physical(mu,state.phi)};download('tetrahedral-'+state.tab+'.json',JSON.stringify(content,null,2));}
-function render(){plots.replaceChildren();legend.replaceChildren();dataEl.replaceChildren();try{if(state.tab==='sections')renderSections();else if(state.tab==='strands')renderStrands();else renderAtlas();}catch(e){status.textContent='Calculation unavailable: '+e.message;}}
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(worker){worker.terminate();worker=null;}job++;state.tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));buildControls();render();});
+function renderAtlas(){atlas.render(state);}
+function heightAtlas(){atlas.render(state,true);}
+function exportData(){if(state.tab==='atlas'){atlas.exportData();return;}const mu=Math.tan(state.alpha)/state.h;if(worker){status.textContent='Wait for the current calculation to finish before exporting.';return;}const content=state.tab==='strands'?cachedStrands:state.tab==='atlas'?lastAtlas:{parameters:state,vertices:M.section(state.h,mu,state.phi),physical:M.physical(mu,state.phi)};download('tetrahedral-'+state.tab+'.json',JSON.stringify(content,null,2));}
+function render(){plots.classList.toggle('atlas-plots',state.tab==='atlas');document.querySelector('#atlas-intro').hidden=state.tab!=='atlas';plots.replaceChildren();legend.replaceChildren();dataEl.replaceChildren();try{if(state.tab==='sections')renderSections();else if(state.tab==='strands')renderStrands();else renderAtlas();}catch(e){status.textContent='Calculation unavailable: '+e.message;}}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{atlas.cancel();if(worker){worker.terminate();worker=null;}job++;state.tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));buildControls();render();});
 buildControls();render();

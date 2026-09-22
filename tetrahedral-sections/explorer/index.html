@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Interactive tetrahedral sections, inverse-apex strands and triangle-space atlases. Free software by Ismail Hammoudeh, with a Julia mathematical package.">
   <title>Tetrahedral sections · Interactive explorer</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=atlas2">
 </head>
 <body>
 <header>
@@ -16,7 +16,10 @@
   <button type="button" data-tab="sections" aria-pressed="true">Section explorer</button>
   <button type="button" data-tab="strands" aria-pressed="false">Inverse-apex strands</button>
   <button type="button" data-tab="atlas" aria-pressed="false">Triangle-space atlases</button>
+<a class="guide-link" href="guide.html">Background &amp; paper guide ↗</a>
 </nav>
+<section class="intro-strip"><h2>From a cutting plane to a sky of triangle shapes</h2><p>Cut a symmetric three-ray cone, ask which triangle shapes it can produce, or reverse the question and trace the possible apex positions. <a href="guide.html">Start with the concepts, glossary and guided investigations →</a></p></section>
+<details id="atlas-intro" class="atlas-intro" hidden open><summary>How to read these atlases</summary><p>Every point is a triangle <em>shape</em>. In the angle chart its weights are A/π, B/π, C/π; in the complex chart its third vertex is C = (ξ, η), with A = (−1, 0), B = (1, 0). The same classifications appear in two coordinate systems. E/P/H counts distinguish elliptic, parabolic and hyperbolic inverse shapes at the chosen cone height.</p><p>Gold curves mark μ = 1, dark curves mark physical folds, and purple dashed curves mark escape to the boundary of the physical domain. Zoom recomputes detail; use “Enlarge” or export a 4096-pixel PNG. A finely sampled image is still numerical evidence. <a href="guide.html#boundaries">Read the boundary guide</a> · <a href="guide.html#atlases">Understand all five classifications</a> · <a href="../tetrahedral-sections.pdf#page=11">Paper Figures 3–4</a>.</p></details>
 <main>
   <aside id="controls" aria-label="Visualization controls"></aside>
   <div class="workspace">
@@ -29,10 +32,10 @@
 <details class="notes"><summary>Mathematical conventions, numerical limits, and downloads</summary>
   <p>The cone apex is S = (0, 0, h), its base circumradius is 1, and the cutting plane is z = −hμ(x + 1), with μ = tan(α)/h. The regular height is √2. The circumsection is elliptic for μ &lt; 1, parabolic for μ = 1, and hyperbolic for μ &gt; 1. Only intersections with all three forward rays are accepted.</p>
   <p>Triangle-space coordinates use A = (−1, 0), B = (1, 0), C = (ξ, η), or angle-barycentric weights θᵢ/π. E/P/H counts identify unordered section shapes; symmetric targets can have several labeled spatial apices for one inverse shape. The axial equilateral family is shown together with its off-axis solutions.</p>
-  <p>These are numerical explorations. Counts can be uncertain very close to folds, symmetry seams, or degenerate triangles. Raster cell colors sample cell centers and do not locate exact boundaries. Curves are sampled; the view clips distant branches and centers at infinity. Use the original exact certificates for proofs and Julia with higher precision for numerical investigation.</p>
+  <p>These are numerical explorations. Counts can be uncertain very close to folds, symmetry seams, or degenerate triangles. Atlas colors use adaptive sampling with event-curve refinement and do not certify exact cell topology. Curves are sampled; the view clips distant branches and centers at infinity. Use the paper’s exact certificates for proof-level claims; the Julia and browser numerical implementations have finite precision.</p>
   <p>The browser runs locally on your device; it requires no Mathematica license or calculation server. The Julia package provides the mathematical API. <a href="https://github.com/ismaa3iil/research-site/tree/main/tetrahedral-sections/explorer">Download the source</a> · <a href="https://github.com/ismaa3iil/research-site/blob/main/tetrahedral-sections/explorer/PORTING.md">Porting and verification notes</a> · <a href="LICENSE.txt">MIT license for this port</a>.</p>
 </details>
 <noscript><p>This explorer needs JavaScript enabled. The paper and Julia source remain available through the links above.</p></noscript>
-<script type="module" src="app.mjs"></script>
+<script type="module" src="app.mjs?v=atlas2"></script>
 </body>
 </html>
