@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Triangle Centers Inspired by Physics — a survey, computational atlas, and reproducibility companion by Ismail Hammoudeh.">
+  <title>Triangle Centers Inspired by Physics — Ismaa3iil Research</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #edf4f7;
+      --muted: #9aaeba;
+      --line: rgba(171, 207, 216, .20);
+      --line-strong: rgba(171, 207, 216, .38);
+      --paper: #101b27;
+      --paper-raised: #152533;
+      --wash: #09121d;
+      --accent: #f0b35d;
+      --accent-cool: #78d1d4;
+      --accent-ink: #1d2430;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 85% 0%, rgba(58, 132, 146, .16), transparent 33rem),
+        linear-gradient(180deg, #0a1520 0%, var(--wash) 48rem);
+      font: 17px/1.65 Georgia, "Times New Roman", serif;
+    }
+    a { color: var(--accent); text-underline-offset: 4px; }
+    a:hover { color: #ffd18b; }
+    :focus-visible { outline: 3px solid var(--accent-cool); outline-offset: 4px; }
+    main { width: min(1080px, calc(100% - 34px)); margin: 32px auto 88px; }
+    .topline { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-bottom: 64px; }
+    .topline a { color: var(--muted); font-size: .95rem; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent-cool);
+      font: 700 .77rem/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 30px; height: 1px; background: var(--accent-cool); }
+    h1, h2, h3 { color: var(--ink); line-height: 1.08; }
+    h1 { max-width: 850px; margin: 18px 0 18px; font-size: clamp(2.65rem, 7vw, 6.2rem); letter-spacing: -.045em; }
+    h2 { margin: 0 0 14px; font-size: clamp(1.6rem, 3vw, 2.4rem); letter-spacing: -.025em; }
+    h3 { margin: 0 0 7px; font-size: 1.15rem; }
+    p { margin: 0 0 16px; }
+    .deck { max-width: 720px; margin: 0; color: var(--muted); font-size: clamp(1.15rem, 2vw, 1.42rem); }
+    .meta { margin-top: 20px; color: var(--muted); font-size: .95rem; }
+    .hero { position: relative; padding-bottom: 58px; border-bottom: 1px solid var(--line); }
+    .hero::after {
+      content: "∴";
+      position: absolute;
+      right: 2vw;
+      bottom: 22px;
+      color: rgba(120, 209, 212, .45);
+      font: 5rem/1 Georgia, serif;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 46px;
+      padding: 10px 16px;
+      border: 1px solid var(--line-strong);
+      border-radius: 5px;
+      color: var(--ink);
+      background: rgba(255,255,255,.02);
+      text-decoration: none;
+      font-size: .98rem;
+    }
+    .button:hover { border-color: var(--accent); color: var(--ink); background: rgba(240,179,93,.08); }
+    .button.primary { border-color: var(--accent); color: var(--accent-ink); background: var(--accent); font-weight: 700; }
+    .button.primary:hover { background: #ffd18b; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin: 40px 0 72px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+    .stat { min-height: 126px; padding: 22px 24px; background: var(--paper); }
+    .stat strong { display: block; margin-bottom: 5px; color: var(--accent); font: 700 clamp(1.75rem, 4vw, 2.55rem)/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: -.06em; }
+    .stat span { color: var(--muted); font-size: .92rem; }
+    .section { margin-top: 72px; }
+    .section-intro { max-width: 730px; color: var(--muted); }
+    .abstract {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, .42fr);
+      gap: 42px;
+      padding: clamp(24px, 5vw, 44px);
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(120,209,212,.07), rgba(255,255,255,.015));
+    }
+    .abstract p:last-child { margin-bottom: 0; }
+    .side-note { align-self: start; padding-left: 24px; border-left: 2px solid var(--accent); color: var(--muted); font-size: .97rem; }
+    .side-note strong { display: block; margin-bottom: 8px; color: var(--ink); font-size: 1rem; }
+    .catalogue {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .catalogue article { min-height: 160px; padding: 22px; border: 1px solid var(--line); background: var(--paper); }
+    .catalogue article:nth-child(2n) { background: var(--paper-raised); }
+    .catalogue .chapter { display: block; margin-bottom: 28px; color: var(--accent-cool); font: .78rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .catalogue p { color: var(--muted); font-size: .96rem; }
+    .evidence {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .evidence article { padding: 24px; border-top: 2px solid var(--accent-cool); background: var(--paper); }
+    .evidence p { color: var(--muted); font-size: .96rem; }
+    .reader { margin-top: 72px; }
+    .reader-head { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 18px; }
+    .reader-head p { margin: 0; color: var(--muted); }
+    .pdf-viewer { display: block; width: 100%; height: min(86vh, 1120px); border: 1px solid var(--line-strong); background: #fff; }
+    .fallback { padding: 20px; color: var(--ink); background: #fff; }
+    footer { display: flex; justify-content: space-between; gap: 18px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    @media (max-width: 760px) {
+      main { width: min(100% - 24px, 640px); margin-top: 22px; }
+      .topline { margin-bottom: 42px; }
+      .hero { padding-bottom: 42px; }
+      .stats, .catalogue, .evidence, .abstract { grid-template-columns: 1fr; }
+      .stats { gap: 1px; }
+      .stat { min-height: auto; }
+      .abstract { gap: 22px; }
+      .side-note { padding: 18px 0 0; border-top: 2px solid var(--accent); border-left: 0; }
+      .catalogue article { min-height: auto; }
+      .catalogue .chapter { margin-bottom: 18px; }
+      .reader-head, footer { align-items: start; flex-direction: column; }
+      .pdf-viewer { height: 78vh; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topline">
+      <a href="../">← All research</a>
+      <span class="eyebrow">Physics × geometry</span>
+    </div>
+
+    <header class="hero">
+      <span class="eyebrow">Research reference manuscript</span>
+      <h1>Triangle Centers<br>Inspired by Physics</h1>
+      <p class="deck">A survey, computational atlas, and reproducibility companion for physical laws that select natural points of a triangle.</p>
+      <p class="meta">Ismail Hammoudeh · 24 September 2026 · First draft · 162 pages</p>
+      <div class="actions">
+        <a class="button primary" href="Triangle_Centers_Inspired_by_Physics.pdf">Read the PDF</a>
+        <a class="button" href="Triangle_Centers_Inspired_by_Physics.pdf" download>Download PDF</a>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="Manuscript at a glance">
+      <div class="stat"><strong>58</strong><span>numerical entries, counted as parameter instances rather than distinct new centers</span></div>
+      <div class="stat"><strong>6–9</strong><span>chapters tracing quantum, electromagnetic, thermal, mechanical, reaction, and optical constructions</span></div>
+      <div class="stat"><strong>4</strong><span>complementary shape fingerprints used for comparison and attractivity evidence</span></div>
+    </section>
+
+    <section class="abstract" aria-labelledby="abstract-title">
+      <div>
+        <h2 id="abstract-title">What the draft studies</h2>
+        <p>Physical laws and measurement protocols select points through equilibria, maxima, probability means, and singular limits. The manuscript organizes quantum, conformal, electrostatic, magnetic, thermal, fluid, mechanical, reaction, and optical constructions, including parameter families and exact classical reductions.</p>
+        <p>Accessible derivations are followed by numerical methods, individual contour atlases, Encyclopedia of Triangle Centers location comparisons, shape fingerprints, and vertex-motion attractivity evidence.</p>
+      </div>
+      <aside class="side-note">
+        <strong>How to read the evidence</strong>
+        The draft separates analytic certificates, validated finite computations, refined numerical observations, screens, and conditional constructions. Passing a finite screen is not presented as a global theorem.
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="catalogue-title">
+      <h2 id="catalogue-title">The physical catalogue</h2>
+      <p class="section-intro">Start with the classical realizations, then follow the result sheets through increasingly specialized physical selectors.</p>
+      <div class="catalogue">
+        <article><span class="chapter">CHAPTER 3</span><h3>Classical centers</h3><p>Centroid, incenter, Spieker center, symmedian point, circumcenter, orthocenter, nine-point center, and Fermat center.</p></article>
+        <article><span class="chapter">CHAPTER 4</span><h3>Quantum &amp; billiards</h3><p>Ground and excited-state selectors, thermal quantum means, and classical billiard fluctuations.</p></article>
+        <article><span class="chapter">CHAPTER 5</span><h3>Conformal &amp; field models</h3><p>Diffusion, electrostatics, conducting plates, skeleton charge centroids, and a magnetic-field minimum.</p></article>
+        <article><span class="chapter">CHAPTER 6</span><h3>Fluids &amp; temperature</h3><p>Poisson models, survival, fluid torsion, heat maxima, nonlinear membranes, and density means.</p></article>
+        <article><span class="chapter">CHAPTER 7</span><h3>Plates &amp; fluctuations</h3><p>Gravity-loaded plates, buckling modes, compliance, thermal variance, and bending-energy centroids.</p></article>
+        <article><span class="chapter">CHAPTERS 8–9</span><h3>Reaction &amp; imaging</h3><p>Production-removal, logistic population, darkness, fluorescence, inverse-square illumination, and solid angle.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="companion-title">
+      <h2 id="companion-title">A reference draft with a reproducibility companion</h2>
+      <p class="section-intro">The manuscript is self-contained for definitions, derivations, and interpretation. Large coefficient arrays, sample records, executable verifiers, figures, checksums, and demonstrations belong to the companion archive.</p>
+      <div class="evidence">
+        <article><h3>Claims stay qualified</h3><p>Some constructions have no convenient closed form; the draft makes no blanket transcendence or ETC nonmembership assertion. Uniqueness, branch conventions, dimensions, and limiting procedures remain part of each model.</p></article>
+        <article><h3>Publication status</h3><p>This is a research reference manuscript prepared from the supplied draft and computational studies. Authorship and submission metadata are intentionally not assigned, and no submission to arXiv or another service is claimed.</p></article>
+      </div>
+    </section>
+
+    <section class="reader" aria-labelledby="reader-title">
+      <div class="reader-head">
+        <div>
+          <h2 id="reader-title">Read the manuscript</h2>
+          <p>The supplied PDF is published unchanged for in-browser reading.</p>
+        </div>
+        <a href="Triangle_Centers_Inspired_by_Physics.pdf" download>Download the 162-page draft</a>
+      </div>
+      <object class="pdf-viewer" data="Triangle_Centers_Inspired_by_Physics.pdf" type="application/pdf" title="Triangle Centers Inspired by Physics PDF">
+        <div class="fallback">Your browser does not support inline PDF viewing. <a href="Triangle_Centers_Inspired_by_Physics.pdf">Open or download the manuscript PDF</a>.</div>
+      </object>
+    </section>
+
+    <footer>
+      <span>Only the supplied first-draft PDF is published here; the research archive can grow alongside it.</span>
+      <a href="../">Ismaa3iil Research</a>
+    </footer>
+  </main>
+</body>
+</html>

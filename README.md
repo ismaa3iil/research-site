@@ -1,6 +1,10 @@
 # research-site
 Mathematical, Physical, Historical & Theological Investigations
 
+## Triangle Centers Inspired by Physics
+
+The [first-draft reference manuscript](https://ismaa3iil.fyi/physically-inspired-triangle-centers/) is a 162-page survey, computational atlas, and reproducibility companion for physical constructions of triangle centers.
+
 ## Attractive Centers
 
 PDF-only collection:
