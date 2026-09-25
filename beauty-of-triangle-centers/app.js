@@ -307,7 +307,7 @@
 
   async function initialize() {
     try {
-      const response = await fetch("data/atlas.json");
+      const response = await fetch("data/atlas.json?v=20260925-compression");
       if (!response.ok) throw new Error(`Atlas data returned ${response.status}`);
       atlas = await response.json();
       buildSearchIndex();
