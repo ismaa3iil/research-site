@@ -51,7 +51,10 @@
         "pngRelativeToRandom": 0.166363636,
         "fittedTaste": -0.312807411,
         "referenceSimilarity": 0.939710611,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X29935_M1_50k-tight.png",
+        "displayWidth": 2182,
+        "displayHeight": 1891
       }
     },
     {
@@ -88,7 +91,10 @@
         "pngRelativeToRandom": 0.168190128,
         "fittedTaste": -0.439724566,
         "referenceSimilarity": 0.962540717,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X35951_M1_50k-tight.png",
+        "displayWidth": 2186,
+        "displayHeight": 1895
       }
     },
     {
@@ -125,7 +131,10 @@
         "pngRelativeToRandom": 0.165013526,
         "fittedTaste": -0.559664731,
         "referenceSimilarity": 0.965918537,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X71803_M1_50k-tight.png",
+        "displayWidth": 2078,
+        "displayHeight": 1801
       }
     },
     {
@@ -162,7 +171,10 @@
         "pngRelativeToRandom": 0.16713352,
         "fittedTaste": -0.560124273,
         "referenceSimilarity": 0.967715232,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X72137_M1_50k-tight.png",
+        "displayWidth": 2078,
+        "displayHeight": 1801
       }
     },
     {
@@ -199,7 +211,10 @@
         "pngRelativeToRandom": 0.172124265,
         "fittedTaste": -0.00398708,
         "referenceSimilarity": 0.927595628,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X6658_M1_50k-tight.png",
+        "displayWidth": 2430,
+        "displayHeight": 2106
       }
     },
     {
@@ -236,7 +251,10 @@
         "pngRelativeToRandom": 0.166151468,
         "fittedTaste": 0.172554379,
         "referenceSimilarity": 0.944475921,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X71803_M3_50k-tight.png",
+        "displayWidth": 2500,
+        "displayHeight": 2167
       }
     },
     {
@@ -273,7 +291,10 @@
         "pngRelativeToRandom": 0.171641791,
         "fittedTaste": -0.492226701,
         "referenceSimilarity": 0.971784232,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X33007_M1_50k-tight.png",
+        "displayWidth": 2154,
+        "displayHeight": 1867
       }
     },
     {
@@ -310,7 +331,10 @@
         "pngRelativeToRandom": 0.178656126,
         "fittedTaste": 0.097625436,
         "referenceSimilarity": 0.901408451,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X29914_M1_50k-tight.png",
+        "displayWidth": 2570,
+        "displayHeight": 2228
       }
     },
     {
@@ -347,7 +371,10 @@
         "pngRelativeToRandom": 0.174427782,
         "fittedTaste": 0.175717264,
         "referenceSimilarity": 0.911534155,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X19245_M1_50k-tight.png",
+        "displayWidth": 2603,
+        "displayHeight": 2256
       }
     },
     {
@@ -384,7 +411,10 @@
         "pngRelativeToRandom": 0.167118338,
         "fittedTaste": -0.514344253,
         "referenceSimilarity": 0.963295269,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X37173_M1_50k-tight.png",
+        "displayWidth": 2185,
+        "displayHeight": 1894
       }
     },
     {
@@ -421,7 +451,10 @@
         "pngRelativeToRandom": 0.16864175,
         "fittedTaste": -0.529254362,
         "referenceSimilarity": 0.946254072,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X66435_M1_50k-tight.png",
+        "displayWidth": 2127,
+        "displayHeight": 1844
       }
     },
     {
@@ -458,7 +491,10 @@
         "pngRelativeToRandom": 0.182533438,
         "fittedTaste": 0.306066916,
         "referenceSimilarity": 0.930803571,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X33280_M1_50k-tight.png",
+        "displayWidth": 2712,
+        "displayHeight": 2351
       }
     },
     {
@@ -495,7 +531,10 @@
         "pngRelativeToRandom": 0.164772727,
         "fittedTaste": 0.330211347,
         "referenceSimilarity": 0.846635368,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X57844_M3_50k-tight.png",
+        "displayWidth": 2915,
+        "displayHeight": 2527
       }
     },
     {
@@ -532,7 +571,10 @@
         "pngRelativeToRandom": 0.165396341,
         "fittedTaste": 0.25050044,
         "referenceSimilarity": 0.945823928,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X72137_M3_50k-tight.png",
+        "displayWidth": 2500,
+        "displayHeight": 2167
       }
     },
     {
@@ -569,7 +611,10 @@
         "pngRelativeToRandom": 0.169856459,
         "fittedTaste": 0.142628479,
         "referenceSimilarity": 0.936758893,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X25296_M3_50k-tight.png",
+        "displayWidth": 2431,
+        "displayHeight": 2107
       }
     },
     {
@@ -606,7 +651,10 @@
         "pngRelativeToRandom": 0.183691756,
         "fittedTaste": -0.118629771,
         "referenceSimilarity": 0.885752688,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X45593_M3_50k-tight.png",
+        "displayWidth": 2503,
+        "displayHeight": 2170
       }
     },
     {
@@ -643,7 +691,10 @@
         "pngRelativeToRandom": 0.178825623,
         "fittedTaste": -0.351486723,
         "referenceSimilarity": 0.923676012,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X37465_M1_50k-tight.png",
+        "displayWidth": 2263,
+        "displayHeight": 1962
       }
     },
     {
@@ -680,7 +731,10 @@
         "pngRelativeToRandom": 0.180129241,
         "fittedTaste": 0.210211473,
         "referenceSimilarity": 0.906726964,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X29567_M1_50k-tight.png",
+        "displayWidth": 2613,
+        "displayHeight": 2265
       }
     },
     {
@@ -717,7 +771,10 @@
         "pngRelativeToRandom": 0.132366274,
         "fittedTaste": -0.133829148,
         "referenceSimilarity": 0.268664297,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X60168_M1_50k-tight.png",
+        "displayWidth": 4158,
+        "displayHeight": 3604
       }
     },
     {
@@ -754,7 +811,10 @@
         "pngRelativeToRandom": 0.169724771,
         "fittedTaste": 0.158699934,
         "referenceSimilarity": 0.832920178,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X35302_M1_50k-tight.png",
+        "displayWidth": 2486,
+        "displayHeight": 2155
       }
     },
     {
@@ -791,7 +851,10 @@
         "pngRelativeToRandom": 0.172261484,
         "fittedTaste": -0.213474914,
         "referenceSimilarity": 0.925058548,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X18539_M3_50k-tight.png",
+        "displayWidth": 2445,
+        "displayHeight": 2119
       }
     },
     {
@@ -828,7 +891,10 @@
         "pngRelativeToRandom": 0.163310962,
         "fittedTaste": 0.625377041,
         "referenceSimilarity": 0.924785462,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X37765_M3_50k-tight.png",
+        "displayWidth": 3041,
+        "displayHeight": 2636
       }
     },
     {
@@ -865,7 +931,10 @@
         "pngRelativeToRandom": 0.177888612,
         "fittedTaste": -0.152616915,
         "referenceSimilarity": 0.930278884,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X16414_M1_50k-tight.png",
+        "displayWidth": 2428,
+        "displayHeight": 2105
       }
     },
     {
@@ -902,7 +971,10 @@
         "pngRelativeToRandom": 0.169614148,
         "fittedTaste": 0.126097407,
         "referenceSimilarity": 0.912080961,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X56022_M1_50k-tight.png",
+        "displayWidth": 2650,
+        "displayHeight": 2297
       }
     },
     {
@@ -939,7 +1011,10 @@
         "pngRelativeToRandom": 0.189010989,
         "fittedTaste": 0.623402071,
         "referenceSimilarity": 0.932735426,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X22819_M3_50k-tight.png",
+        "displayWidth": 2927,
+        "displayHeight": 2537
       }
     },
     {
@@ -976,7 +1051,10 @@
         "pngRelativeToRandom": 0.179723502,
         "fittedTaste": 0.298128979,
         "referenceSimilarity": 0.927131783,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X21742_M3_50k-tight.png",
+        "displayWidth": 2495,
+        "displayHeight": 2163
       }
     },
     {
@@ -1013,7 +1091,10 @@
         "pngRelativeToRandom": 0.186868687,
         "fittedTaste": 0.168999713,
         "referenceSimilarity": 0.866171004,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X20843_M1_50k-tight.png",
+        "displayWidth": 2531,
+        "displayHeight": 2194
       }
     },
     {
@@ -1050,7 +1131,10 @@
         "pngRelativeToRandom": 0.180568286,
         "fittedTaste": -0.535116247,
         "referenceSimilarity": 0.839595376,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X6959_M1_50k-tight.png",
+        "displayWidth": 2157,
+        "displayHeight": 1870
       }
     },
     {
@@ -1087,7 +1171,10 @@
         "pngRelativeToRandom": 0.173847317,
         "fittedTaste": 0.347770906,
         "referenceSimilarity": 0.893887531,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X20958_M3_50k-tight.png",
+        "displayWidth": 2520,
+        "displayHeight": 2184
       }
     },
     {
@@ -1124,7 +1211,10 @@
         "pngRelativeToRandom": 0.168110919,
         "fittedTaste": 0.141601698,
         "referenceSimilarity": 0.721071864,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X56361_M3_50k-tight.png",
+        "displayWidth": 3111,
+        "displayHeight": 2697
       }
     },
     {
@@ -1161,7 +1251,10 @@
         "pngRelativeToRandom": 0.196598639,
         "fittedTaste": 0.749946952,
         "referenceSimilarity": 0.886777821,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X16414_M3_50k-tight.png",
+        "displayWidth": 3036,
+        "displayHeight": 2632
       }
     },
     {
@@ -1198,7 +1291,10 @@
         "pngRelativeToRandom": 0.187914517,
         "fittedTaste": 0.590646541,
         "referenceSimilarity": 0.891989664,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X6959_M3_50k-tight.png",
+        "displayWidth": 2760,
+        "displayHeight": 2392
       }
     },
     {
@@ -1235,7 +1331,10 @@
         "pngRelativeToRandom": 0.174174174,
         "fittedTaste": 0.564085966,
         "referenceSimilarity": 0.938429964,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X55480_M3_50k-tight.png",
+        "displayWidth": 2946,
+        "displayHeight": 2554
       }
     },
     {
@@ -1272,7 +1371,10 @@
         "pngRelativeToRandom": 0.166522865,
         "fittedTaste": 0.222229657,
         "referenceSimilarity": 0.766320927,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X64993_M3_50k-tight.png",
+        "displayWidth": 2792,
+        "displayHeight": 2420
       }
     },
     {
@@ -1309,7 +1411,10 @@
         "pngRelativeToRandom": 0.150903294,
         "fittedTaste": 0.047620224,
         "referenceSimilarity": 0.829039813,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X54594_M3_50k-tight.png",
+        "displayWidth": 3522,
+        "displayHeight": 3053
       }
     },
     {
@@ -1346,7 +1451,10 @@
         "pngRelativeToRandom": 0.188290086,
         "fittedTaste": 0.924457778,
         "referenceSimilarity": 0.888143966,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X26655_M3_50k-tight.png",
+        "displayWidth": 3385,
+        "displayHeight": 2934
       }
     },
     {
@@ -1383,7 +1491,10 @@
         "pngRelativeToRandom": 0.197530864,
         "fittedTaste": 1.110149585,
         "referenceSimilarity": 0.956692913,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X56587_M3_50k-tight.png",
+        "displayWidth": 3497,
+        "displayHeight": 3031
       }
     },
     {
@@ -1420,7 +1531,10 @@
         "pngRelativeToRandom": 0.173022599,
         "fittedTaste": 0.747575129,
         "referenceSimilarity": 0.894659481,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X56360_M3_50k-tight.png",
+        "displayWidth": 3423,
+        "displayHeight": 2967
       }
     },
     {
@@ -1457,7 +1571,10 @@
         "pngRelativeToRandom": 0.183486239,
         "fittedTaste": 0.372684207,
         "referenceSimilarity": 0.925907001,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X21756_M3_50k-tight.png",
+        "displayWidth": 2501,
+        "displayHeight": 2168
       }
     },
     {
@@ -1494,7 +1611,10 @@
         "pngRelativeToRandom": 0.16070008,
         "fittedTaste": -0.276076609,
         "referenceSimilarity": 0.715707965,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X12227_M1_50k-tight.png",
+        "displayWidth": 2431,
+        "displayHeight": 2107
       }
     },
     {
@@ -1531,7 +1651,10 @@
         "pngRelativeToRandom": 0.186902134,
         "fittedTaste": 0.590036074,
         "referenceSimilarity": 0.875779376,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X45383_M1_50k-tight.png",
+        "displayWidth": 2986,
+        "displayHeight": 2588
       }
     },
     {
@@ -1568,7 +1691,10 @@
         "pngRelativeToRandom": 0.204081633,
         "fittedTaste": 0.977250174,
         "referenceSimilarity": 0.94470377,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X55558_M3_50k-tight.png",
+        "displayWidth": 3455,
+        "displayHeight": 2995
       }
     },
     {
@@ -1605,7 +1731,10 @@
         "pngRelativeToRandom": 0.199205824,
         "fittedTaste": 0.902565148,
         "referenceSimilarity": 0.950725745,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X33280_M3_50k-tight.png",
+        "displayWidth": 3245,
+        "displayHeight": 2813
       }
     },
     {
@@ -1642,7 +1771,10 @@
         "pngRelativeToRandom": 0.195393169,
         "fittedTaste": 0.16581015,
         "referenceSimilarity": 0.894438138,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X33239_M3_50k-tight.png",
+        "displayWidth": 2482,
+        "displayHeight": 2151
       }
     },
     {
@@ -1679,7 +1811,10 @@
         "pngRelativeToRandom": 0.203588682,
         "fittedTaste": 0.834177049,
         "referenceSimilarity": 0.902927581,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X25484_M3_50k-tight.png",
+        "displayWidth": 3154,
+        "displayHeight": 2734
       }
     },
     {
@@ -1716,7 +1851,10 @@
         "pngRelativeToRandom": 0.166795966,
         "fittedTaste": 0.187944653,
         "referenceSimilarity": 0.657041315,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X47852_M3_50k-tight.png",
+        "displayWidth": 2544,
+        "displayHeight": 2205
       }
     },
     {
@@ -1753,7 +1891,10 @@
         "pngRelativeToRandom": 0.148977605,
         "fittedTaste": 0.565401049,
         "referenceSimilarity": 0.674418605,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X2672_M3_50k-tight.png",
+        "displayWidth": 3539,
+        "displayHeight": 3068
       }
     },
     {
@@ -1790,7 +1931,10 @@
         "pngRelativeToRandom": 0.166311301,
         "fittedTaste": 0.534395429,
         "referenceSimilarity": 0.780059906,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X23558_M3_50k-tight.png",
+        "displayWidth": 2850,
+        "displayHeight": 2470
       }
     },
     {
@@ -1827,7 +1971,10 @@
         "pngRelativeToRandom": 0.186466165,
         "fittedTaste": 0.401784229,
         "referenceSimilarity": 0.90835851,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X33694_M3_50k-tight.png",
+        "displayWidth": 2502,
+        "displayHeight": 2169
       }
     },
     {
@@ -1864,7 +2011,10 @@
         "pngRelativeToRandom": 0.186131387,
         "fittedTaste": 0.39190032,
         "referenceSimilarity": 0.86849711,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X20976_M3_50k-tight.png",
+        "displayWidth": 2557,
+        "displayHeight": 2216
       }
     },
     {
@@ -1901,7 +2051,10 @@
         "pngRelativeToRandom": 0.168238994,
         "fittedTaste": 0.323418992,
         "referenceSimilarity": 0.824570536,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X10603_M3_50k-tight.png",
+        "displayWidth": 2896,
+        "displayHeight": 2510
       }
     },
     {
@@ -1938,7 +2091,10 @@
         "pngRelativeToRandom": 0.164133739,
         "fittedTaste": 0.414244068,
         "referenceSimilarity": 0.818082192,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X71310_M1_50k-tight.png",
+        "displayWidth": 2738,
+        "displayHeight": 2373
       }
     },
     {
@@ -1975,7 +2131,10 @@
         "pngRelativeToRandom": 0.199544765,
         "fittedTaste": 0.550472349,
         "referenceSimilarity": 0.948717949,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X37173_M3_50k-tight.png",
+        "displayWidth": 2727,
+        "displayHeight": 2364
       }
     },
     {
@@ -2012,7 +2171,10 @@
         "pngRelativeToRandom": 0.177300201,
         "fittedTaste": 0.868066554,
         "referenceSimilarity": 0.703675048,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X23418_M3_50k-tight.png",
+        "displayWidth": 3114,
+        "displayHeight": 2699
       }
     },
     {
@@ -2049,7 +2211,10 @@
         "pngRelativeToRandom": 0.162132753,
         "fittedTaste": -0.213051749,
         "referenceSimilarity": 0.888190955,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X57721_M3_50k-tight.png",
+        "displayWidth": 3513,
+        "displayHeight": 3045
       }
     },
     {
@@ -2086,7 +2251,10 @@
         "pngRelativeToRandom": 0.169064748,
         "fittedTaste": 0.565096154,
         "referenceSimilarity": 0.79500657,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X71281_M3_50k-tight.png",
+        "displayWidth": 2780,
+        "displayHeight": 2410
       }
     },
     {
@@ -2123,7 +2291,10 @@
         "pngRelativeToRandom": 0.185425685,
         "fittedTaste": 0.425962515,
         "referenceSimilarity": 0.826967326,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X23648_M3_50k-tight.png",
+        "displayWidth": 2663,
+        "displayHeight": 2308
       }
     },
     {
@@ -2160,7 +2331,10 @@
         "pngRelativeToRandom": 0.215273206,
         "fittedTaste": 0.858318127,
         "referenceSimilarity": 0.9053407,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X29914_M3_50k-tight.png",
+        "displayWidth": 3185,
+        "displayHeight": 2761
       }
     },
     {
@@ -2197,7 +2371,10 @@
         "pngRelativeToRandom": 0.204766108,
         "fittedTaste": -0.245067947,
         "referenceSimilarity": 0.927595628,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X3552_M3_50k-tight.png",
+        "displayWidth": 2267,
+        "displayHeight": 1965
       }
     },
     {
@@ -2234,7 +2411,10 @@
         "pngRelativeToRandom": 0.1987997,
         "fittedTaste": 0.524179641,
         "referenceSimilarity": 0.950844854,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X35951_M3_50k-tight.png",
+        "displayWidth": 2731,
+        "displayHeight": 2367
       }
     },
     {
@@ -2271,7 +2451,10 @@
         "pngRelativeToRandom": 0.203271028,
         "fittedTaste": 0.293857332,
         "referenceSimilarity": 0.891989664,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X4188_M3_50k-tight.png",
+        "displayWidth": 2613,
+        "displayHeight": 2265
       }
     },
     {
@@ -2308,7 +2491,10 @@
         "pngRelativeToRandom": 0.149130833,
         "fittedTaste": 0.024476961,
         "referenceSimilarity": 0.456803456,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X15560_M3_50k-tight.png",
+        "displayWidth": 2450,
+        "displayHeight": 2124
       }
     },
     {
@@ -2345,7 +2531,10 @@
         "pngRelativeToRandom": 0.217623498,
         "fittedTaste": 0.882415587,
         "referenceSimilarity": 0.853829937,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X6970_M3_50k-tight.png",
+        "displayWidth": 3227,
+        "displayHeight": 2797
       }
     },
     {
@@ -2382,7 +2571,10 @@
         "pngRelativeToRandom": 0.181699346,
         "fittedTaste": -0.510100456,
         "referenceSimilarity": 0.837878788,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X4271_M1_50k-tight.png",
+        "displayWidth": 6667,
+        "displayHeight": 5779
       }
     },
     {
@@ -2419,7 +2611,10 @@
         "pngRelativeToRandom": 0.185595568,
         "fittedTaste": 0.755047946,
         "referenceSimilarity": 0.735655738,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X23454_M3_50k-tight.png",
+        "displayWidth": 2921,
+        "displayHeight": 2532
       }
     },
     {
@@ -2456,7 +2651,10 @@
         "pngRelativeToRandom": 0.145505097,
         "fittedTaste": -0.033038189,
         "referenceSimilarity": 0.453369272,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X14669_M3_50k-tight.png",
+        "displayWidth": 2452,
+        "displayHeight": 2125
       }
     },
     {
@@ -2493,7 +2691,10 @@
         "pngRelativeToRandom": 0.137176938,
         "fittedTaste": 0.479416845,
         "referenceSimilarity": 0.476593345,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X32297_M3_50k-tight.png",
+        "displayWidth": 2958,
+        "displayHeight": 2564
       }
     },
     {
@@ -2530,7 +2731,10 @@
         "pngRelativeToRandom": 0.216064257,
         "fittedTaste": 0.237098314,
         "referenceSimilarity": 0.903628118,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X16400_M3_50k-tight.png",
+        "displayWidth": 2514,
+        "displayHeight": 2179
       }
     },
     {
@@ -2567,7 +2771,10 @@
         "pngRelativeToRandom": 0.197810219,
         "fittedTaste": 0.69181107,
         "referenceSimilarity": 0.874940334,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X43981_M3_50k-tight.png",
+        "displayWidth": 3057,
+        "displayHeight": 2650
       }
     },
     {
@@ -2604,7 +2811,10 @@
         "pngRelativeToRandom": 0.157245632,
         "fittedTaste": 0.080385659,
         "referenceSimilarity": 0.868715084,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X54597_M3_50k-tight.png",
+        "displayWidth": 3529,
+        "displayHeight": 3059
       }
     },
     {
@@ -2641,7 +2851,10 @@
         "pngRelativeToRandom": 0.193930422,
         "fittedTaste": 1.054867347,
         "referenceSimilarity": 0.713140312,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X60623_M3_50k-tight.png",
+        "displayWidth": 3597,
+        "displayHeight": 3118
       }
     },
     {
@@ -2678,7 +2891,10 @@
         "pngRelativeToRandom": 0.195850622,
         "fittedTaste": -0.093511393,
         "referenceSimilarity": 0.771177118,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X25273_M1_50k-tight.png",
+        "displayWidth": 2206,
+        "displayHeight": 1912
       }
     },
     {
@@ -2715,7 +2931,10 @@
         "pngRelativeToRandom": 0.22398346,
         "fittedTaste": 0.811546379,
         "referenceSimilarity": 0.896551724,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X16438_M3_50k-tight.png",
+        "displayWidth": 3086,
+        "displayHeight": 2675
       }
     },
     {
@@ -2752,7 +2971,10 @@
         "pngRelativeToRandom": 0.18383659,
         "fittedTaste": -0.083055104,
         "referenceSimilarity": 0.771513353,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X39024_M3_50k-tight.png",
+        "displayWidth": 2675,
+        "displayHeight": 2319
       }
     },
     {
@@ -2789,7 +3011,10 @@
         "pngRelativeToRandom": 0.216400911,
         "fittedTaste": 0.637903758,
         "referenceSimilarity": 0.924201408,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X18407_M3_50k-tight.png",
+        "displayWidth": 2821,
+        "displayHeight": 2445
       }
     },
     {
@@ -2826,7 +3051,10 @@
         "pngRelativeToRandom": 0.214494876,
         "fittedTaste": 0.667708579,
         "referenceSimilarity": 0.906460945,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X37465_M3_50k-tight.png",
+        "displayWidth": 2861,
+        "displayHeight": 2480
       }
     },
     {
@@ -2863,7 +3091,10 @@
         "pngRelativeToRandom": 0.192447349,
         "fittedTaste": 0.403831464,
         "referenceSimilarity": 0.82052462,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X25273_M3_50k-tight.png",
+        "displayWidth": 2557,
+        "displayHeight": 2216
       }
     },
     {
@@ -2900,7 +3131,10 @@
         "pngRelativeToRandom": 0.217795485,
         "fittedTaste": 0.924662043,
         "referenceSimilarity": 0.962000775,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X29567_M3_50k-tight.png",
+        "displayWidth": 3200,
+        "displayHeight": 2774
       }
     },
     {
@@ -2937,7 +3171,10 @@
         "pngRelativeToRandom": 0.209984152,
         "fittedTaste": 0.782709941,
         "referenceSimilarity": 0.612173913,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X45202_M3_50k-tight.png",
+        "displayWidth": 3583,
+        "displayHeight": 3106
       }
     },
     {
@@ -2974,7 +3211,10 @@
         "pngRelativeToRandom": 0.172972973,
         "fittedTaste": -0.510729108,
         "referenceSimilarity": 0.59584036,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X46482_M3_50k-tight.png",
+        "displayWidth": 2320,
+        "displayHeight": 2011
       }
     },
     {
@@ -3011,7 +3251,10 @@
         "pngRelativeToRandom": 0.172850679,
         "fittedTaste": -0.465288655,
         "referenceSimilarity": 0.623941276,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X61594_M3_50k-tight.png",
+        "displayWidth": 2319,
+        "displayHeight": 2010
       }
     },
     {
@@ -3048,7 +3291,10 @@
         "pngRelativeToRandom": 0.12962963,
         "fittedTaste": 0.537836202,
         "referenceSimilarity": 0.559680639,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X27881_M3_50k-tight.png",
+        "displayWidth": 3557,
+        "displayHeight": 3083
       }
     },
     {
@@ -3085,7 +3331,10 @@
         "pngRelativeToRandom": 0.144024515,
         "fittedTaste": 0.10202834,
         "referenceSimilarity": 0.486039886,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X12743_M3_50k-tight.png",
+        "displayWidth": 2928,
+        "displayHeight": 2538
       }
     },
     {
@@ -3122,7 +3371,10 @@
         "pngRelativeToRandom": 0.192575406,
         "fittedTaste": 0.588663319,
         "referenceSimilarity": 0.790818741,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X324_M3_50k-tight.png",
+        "displayWidth": 2898,
+        "displayHeight": 2512
       }
     },
     {
@@ -3159,7 +3411,10 @@
         "pngRelativeToRandom": 0.200701139,
         "fittedTaste": -0.025035196,
         "referenceSimilarity": 0.888813559,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X43129_M1_50k-tight.png",
+        "displayWidth": 2455,
+        "displayHeight": 2128
       }
     },
     {
@@ -3196,7 +3451,10 @@
         "pngRelativeToRandom": 0.174576271,
         "fittedTaste": -0.215225341,
         "referenceSimilarity": 0.695676906,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X32245_M1_50k-tight.png",
+        "displayWidth": 2400,
+        "displayHeight": 2080
       }
     },
     {
@@ -3233,7 +3491,10 @@
         "pngRelativeToRandom": 0.209690894,
         "fittedTaste": 0.486946435,
         "referenceSimilarity": 0.71302578,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X54535_M3_50k-tight.png",
+        "displayWidth": 3575,
+        "displayHeight": 3099
       }
     },
     {
@@ -3270,7 +3531,10 @@
         "pngRelativeToRandom": 0.240577386,
         "fittedTaste": -0.584211851,
         "referenceSimilarity": 0.488005483,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X22237_M1_50k-tight.png",
+        "displayWidth": 5212,
+        "displayHeight": 4518
       }
     },
     {
@@ -3307,7 +3571,10 @@
         "pngRelativeToRandom": 0.220285261,
         "fittedTaste": 0.356388254,
         "referenceSimilarity": 0.89607518,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X59816_M3_50k-tight.png",
+        "displayWidth": 2608,
+        "displayHeight": 2261
       }
     },
     {
@@ -3344,7 +3611,10 @@
         "pngRelativeToRandom": 0.193891102,
         "fittedTaste": -0.455643017,
         "referenceSimilarity": 0.837878788,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X4276_M1_50k-tight.png",
+        "displayWidth": 6627,
+        "displayHeight": 5744
       }
     },
     {
@@ -3381,7 +3651,10 @@
         "pngRelativeToRandom": 0.183216783,
         "fittedTaste": -0.590913057,
         "referenceSimilarity": 0.89233279,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X54323_M1_50k-tight.png",
+        "displayWidth": 6643,
+        "displayHeight": 5758
       }
     },
     {
@@ -3418,7 +3691,10 @@
         "pngRelativeToRandom": 0.176190476,
         "fittedTaste": 0.914110266,
         "referenceSimilarity": 0.593487395,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X5460_M3_50k-tight.png",
+        "displayWidth": 3646,
+        "displayHeight": 3160
       }
     },
     {
@@ -3455,7 +3731,10 @@
         "pngRelativeToRandom": 0.191832858,
         "fittedTaste": -0.188422454,
         "referenceSimilarity": 0.659192825,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X36998_M3_50k-tight.png",
+        "displayWidth": 2878,
+        "displayHeight": 2495
       }
     },
     {
@@ -3492,7 +3771,10 @@
         "pngRelativeToRandom": 0.202209006,
         "fittedTaste": -0.170571906,
         "referenceSimilarity": 0.837508028,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X12774_M3_50k-tight.png",
+        "displayWidth": 2303,
+        "displayHeight": 1996
       }
     },
     {
@@ -3529,7 +3811,10 @@
         "pngRelativeToRandom": 0.243330639,
         "fittedTaste": -0.585621644,
         "referenceSimilarity": 0.489201234,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X60304_M1_50k-tight.png",
+        "displayWidth": 5152,
+        "displayHeight": 4466
       }
     },
     {
@@ -3566,7 +3851,10 @@
         "pngRelativeToRandom": 0.206216831,
         "fittedTaste": -0.575775255,
         "referenceSimilarity": 0.576144835,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X47571_M3_50k-tight.png",
+        "displayWidth": 2843,
+        "displayHeight": 2464
       }
     },
     {
@@ -3603,7 +3891,10 @@
         "pngRelativeToRandom": 0.149450549,
         "fittedTaste": -0.584722204,
         "referenceSimilarity": 0.408789886,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X49836_M3_50k-tight.png",
+        "displayWidth": 2403,
+        "displayHeight": 2083
       }
     },
     {
@@ -3640,7 +3931,10 @@
         "pngRelativeToRandom": 0.212669683,
         "fittedTaste": -0.114843549,
         "referenceSimilarity": 0.644859813,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X5556_M1_50k-tight.png",
+        "displayWidth": 4923,
+        "displayHeight": 4267
       }
     },
     {
@@ -3677,7 +3971,10 @@
         "pngRelativeToRandom": 0.157379518,
         "fittedTaste": 0.932094658,
         "referenceSimilarity": 0.723868955,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X11642_M3_50k-tight.png",
+        "displayWidth": 3377,
+        "displayHeight": 2927
       }
     },
     {
@@ -3714,7 +4011,10 @@
         "pngRelativeToRandom": 0.234575835,
         "fittedTaste": 1.272605201,
         "referenceSimilarity": 0.807944846,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X45097_M3_50k-tight.png",
+        "displayWidth": 3615,
+        "displayHeight": 3134
       }
     },
     {
@@ -3751,7 +4051,10 @@
         "pngRelativeToRandom": 0.203751617,
         "fittedTaste": -0.035389666,
         "referenceSimilarity": 0.833828873,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X55922_M1_50k-tight.png",
+        "displayWidth": 4927,
+        "displayHeight": 4271
       }
     },
     {
@@ -3788,7 +4091,10 @@
         "pngRelativeToRandom": 0.204772902,
         "fittedTaste": 1.332563425,
         "referenceSimilarity": 0.459974037,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X68356_M1_50k-tight.png",
+        "displayWidth": 5977,
+        "displayHeight": 5181
       }
     },
     {
@@ -3825,7 +4131,10 @@
         "pngRelativeToRandom": 0.181472081,
         "fittedTaste": -0.035049913,
         "referenceSimilarity": 0.466756212,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X52393_M1_50k-tight.png",
+        "displayWidth": 5637,
+        "displayHeight": 4886
       }
     },
     {
@@ -3862,7 +4171,10 @@
         "pngRelativeToRandom": 0.228307255,
         "fittedTaste": 1.099008826,
         "referenceSimilarity": 0.742223811,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X60153_M3_50k-tight.png",
+        "displayWidth": 3603,
+        "displayHeight": 3123
       }
     },
     {
@@ -3899,7 +4211,10 @@
         "pngRelativeToRandom": 0.239145907,
         "fittedTaste": 0.718892866,
         "referenceSimilarity": 0.844840962,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X68515_M3_50k-tight.png",
+        "displayWidth": 3002,
+        "displayHeight": 2602
       }
     },
     {
@@ -3936,7 +4251,10 @@
         "pngRelativeToRandom": 0.226676947,
         "fittedTaste": 0.373629527,
         "referenceSimilarity": 0.907945205,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X53006_M3_50k-tight.png",
+        "displayWidth": 2604,
+        "displayHeight": 2257
       }
     },
     {
@@ -3973,7 +4291,10 @@
         "pngRelativeToRandom": 0.198058252,
         "fittedTaste": -0.263802266,
         "referenceSimilarity": 0.668401487,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X26731_M1_50k-tight.png",
+        "displayWidth": 2922,
+        "displayHeight": 2533
       }
     },
     {
@@ -4010,7 +4331,10 @@
         "pngRelativeToRandom": 0.217670683,
         "fittedTaste": 0.370282125,
         "referenceSimilarity": 0.833241303,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X38320_M1_50k-tight.png",
+        "displayWidth": 2645,
+        "displayHeight": 2293
       }
     },
     {
@@ -4047,7 +4371,10 @@
         "pngRelativeToRandom": 0.222510823,
         "fittedTaste": -0.072775793,
         "referenceSimilarity": 0.790960452,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X11647_M3_50k-tight.png",
+        "displayWidth": 3144,
+        "displayHeight": 2725
       }
     },
     {
@@ -4084,7 +4411,10 @@
         "pngRelativeToRandom": 0.227608874,
         "fittedTaste": 0.22900244,
         "referenceSimilarity": 0.879077615,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X33822_M3_50k-tight.png",
+        "displayWidth": 2515,
+        "displayHeight": 2180
       }
     },
     {
@@ -4121,7 +4451,10 @@
         "pngRelativeToRandom": 0.095238095,
         "fittedTaste": -0.463556493,
         "referenceSimilarity": 0.250486192,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X31863_M1_50k-tight.png",
+        "displayWidth": 3789,
+        "displayHeight": 3284
       }
     },
     {
@@ -4158,7 +4491,10 @@
         "pngRelativeToRandom": 0.197556008,
         "fittedTaste": 0.029091859,
         "referenceSimilarity": 0.62977707,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X68664_M1_50k-tight.png",
+        "displayWidth": 6525,
+        "displayHeight": 5656
       }
     },
     {
@@ -4195,7 +4531,10 @@
         "pngRelativeToRandom": 0.215587681,
         "fittedTaste": -0.088209723,
         "referenceSimilarity": 0.699370709,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X33602_M3_50k-tight.png",
+        "displayWidth": 5284,
+        "displayHeight": 4580
       }
     },
     {
@@ -4232,7 +4571,10 @@
         "pngRelativeToRandom": 0.215408805,
         "fittedTaste": 0.837569665,
         "referenceSimilarity": 0.612485277,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X55968_M3_50k-tight.png",
+        "displayWidth": 3595,
+        "displayHeight": 3116
       }
     },
     {
@@ -4269,7 +4611,10 @@
         "pngRelativeToRandom": 0.211247296,
         "fittedTaste": 0.746623096,
         "referenceSimilarity": 0.888252149,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X49356_M3_50k-tight.png",
+        "displayWidth": 3904,
+        "displayHeight": 3384
       }
     },
     {
@@ -4306,7 +4651,10 @@
         "pngRelativeToRandom": 0.23840627,
         "fittedTaste": 1.329643708,
         "referenceSimilarity": 0.925399028,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X3378_M3_50k-tight.png",
+        "displayWidth": 3509,
+        "displayHeight": 3042
       }
     },
     {
@@ -4343,7 +4691,10 @@
         "pngRelativeToRandom": 0.218809981,
         "fittedTaste": -0.435329386,
         "referenceSimilarity": 0.630677587,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X40694_M1_50k-tight.png",
+        "displayWidth": 3126,
+        "displayHeight": 2710
       }
     },
     {
@@ -4380,7 +4731,10 @@
         "pngRelativeToRandom": 0.158636898,
         "fittedTaste": 0.525370458,
         "referenceSimilarity": 0.762806236,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X3382_M3_50k-tight.png",
+        "displayWidth": 3503,
+        "displayHeight": 3036
       }
     },
     {
@@ -4417,7 +4771,10 @@
         "pngRelativeToRandom": 0.189619377,
         "fittedTaste": 0.656720016,
         "referenceSimilarity": 0.664453125,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X32282_M1_50k-tight.png",
+        "displayWidth": 3088,
+        "displayHeight": 2677
       }
     },
     {
@@ -4454,7 +4811,10 @@
         "pngRelativeToRandom": 0.241305891,
         "fittedTaste": 0.904546144,
         "referenceSimilarity": 0.861962001,
-        "exactOrNearDuplicate": false
+        "exactOrNearDuplicate": false,
+        "displayImage": "images/quadtree-tight/X28452_M3_50k-tight.png",
+        "displayWidth": 3096,
+        "displayHeight": 2684
       }
     }
   ]
