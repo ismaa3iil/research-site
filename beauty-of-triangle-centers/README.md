@@ -1,6 +1,6 @@
 # Beauty of Triangle Centers
 
-Static web atlas for the 120 highest-ranked symmetry-aware interestingness diagrams and the 120 highest-ranked quadtree Wundt-gate diagrams generated from the Extended Triangle Center search.
+Static web atlas for the 120 highest-ranked symmetry-aware interestingness diagrams and the 120 most quadtree-compressible diagrams generated from the Extended Triangle Center search.
 
 The application is dependency-free and is published by GitHub Pages as part of the `research-site` repository. It loads only the current pair of full-resolution PNGs, then preloads the adjacent pair.
 
@@ -18,6 +18,6 @@ The script applies the same ranking rules used by the PDF atlas:
 
 - completed orbit and interestingness results only;
 - neural interestingness ordered by its stored global rank;
-- quadtree rank ordered by `4 q (1-q)`, with diagram identifier as the deterministic tie-breaker.
+- quadtree compressibility rank ordered by `q` ascending, with diagram identifier as the deterministic tie-breaker; lower `q` means stronger compression relative to an equal-density random raster.
 
 The two downloadable PDFs are unmodified copies of the completed atlases.

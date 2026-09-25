@@ -42,11 +42,6 @@ $validRows = @(
   }
 )
 
-foreach ($row in $validRows) {
-  $q = Convert-ToDouble $row.QuadtreeRelativeToRandom
-  $row | Add-Member -NotePropertyName QuadtreeGate -NotePropertyValue (4.0 * $q * (1.0 - $q))
-}
-
 $interestingnessRows = @(
   $validRows |
     Sort-Object @{ Expression = { [int]$_.InterestingnessRank }; Ascending = $true },
@@ -56,14 +51,14 @@ $interestingnessRows = @(
 
 $quadtreeRows = @(
   $validRows |
-    Sort-Object @{ Expression = { $_.QuadtreeGate }; Descending = $true },
+    Sort-Object @{ Expression = { Convert-ToDouble $_.QuadtreeRelativeToRandom }; Ascending = $true },
                 @{ Expression = { $_.DiagramID }; Ascending = $true } |
     Select-Object -First 120
 )
 
 $allQuadtreeRows = @(
   $validRows |
-    Sort-Object @{ Expression = { $_.QuadtreeGate }; Descending = $true },
+    Sort-Object @{ Expression = { Convert-ToDouble $_.QuadtreeRelativeToRandom }; Ascending = $true },
                 @{ Expression = { $_.DiagramID }; Ascending = $true }
 )
 
@@ -86,7 +81,7 @@ function Convert-ToDiagram([object]$row) {
     interestingnessRank = [int]$row.InterestingnessRank
     quadtreeRank = [int]$quadtreeRanks[$row.DiagramID]
     interestingnessScore = Convert-ToDouble $row.InterestingnessScore
-    quadtreeGate = [double]$row.QuadtreeGate
+    quadtreeCodeBits = [int]$row.QuadtreeCodeBits
     quadtreeRelativeToRandom = Convert-ToDouble $row.QuadtreeRelativeToRandom
     pngRelativeToRandom = Convert-ToDouble $row.PNGRelativeToRandom
     fittedTaste = Convert-ToDouble $row.FittedTasteScore
@@ -119,7 +114,7 @@ $output = [ordered]@{
   }
   scoring = [ordered]@{
     analysisPoints = 20000
-    quadtreeGateDefinition = "4q(1-q), where q is quadtree compression relative to an equal-density random image"
+    quadtreeRankingDefinition = "Quadtree compression relative to an equal-density random image, ranked ascending; lower q means stronger compression"
   }
   pairs = $pairs
 }

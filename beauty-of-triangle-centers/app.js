@@ -40,6 +40,7 @@
   const format = {
     score: value => Number(value).toFixed(3),
     ratio: value => Number(value).toFixed(4),
+    integer: value => Number(value).toLocaleString("en-US", { maximumFractionDigits: 0 }),
     rank: value => `#${Number(value).toLocaleString("en-US")}`
   };
 
@@ -75,7 +76,7 @@
     const isInterestingness = side === "interestingness";
     const primaryRank = isInterestingness ? diagram.interestingnessRank : diagram.quadtreeRank;
     const otherRank = isInterestingness ? diagram.quadtreeRank : diagram.interestingnessRank;
-    const otherLabel = isInterestingness ? "Quadtree" : "Interestingness";
+    const otherLabel = isInterestingness ? "Compression" : "Interestingness";
 
     card.querySelector('[data-field="primary-rank"]').textContent = format.rank(primaryRank);
     card.querySelector('[data-field="other-rank"]').textContent = `${otherLabel} ${format.rank(otherRank)}`;
@@ -97,8 +98,8 @@
     const metrics = card.querySelector('[data-field="metrics"]');
     metrics.replaceChildren(
       metricElement("Neural interestingness", format.score(diagram.interestingnessScore)),
-      metricElement("Quadtree Wundt gate", format.ratio(diagram.quadtreeGate)),
       metricElement("Quadtree / random", format.ratio(diagram.quadtreeRelativeToRandom)),
+      metricElement("Quadtree code bits", format.integer(diagram.quadtreeCodeBits)),
       metricElement("PNG / random", format.ratio(diagram.pngRelativeToRandom)),
       metricElement("Fitted taste", format.score(diagram.fittedTaste)),
       metricElement("Reference similarity", format.ratio(diagram.referenceSimilarity))
