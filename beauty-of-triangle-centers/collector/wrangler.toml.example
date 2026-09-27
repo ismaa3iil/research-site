@@ -1,0 +1,11 @@
+name = "triangle-beauty-preferences"
+main = "src/worker.mjs"
+compatibility_date = "2026-09-27"
+
+[vars]
+ALLOWED_ORIGINS = "https://ismaa3iil.fyi,http://127.0.0.1:8765,http://localhost:8765"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "triangle-beauty-preferences"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
