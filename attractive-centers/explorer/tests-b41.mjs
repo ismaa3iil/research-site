@@ -53,6 +53,6 @@ const regular=compute({mode:'tetra',points:[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1
 assert.equal(regular.result.power.vertices.length,1);near(regular.result.power.volume,0);
 assert.throws(()=>b41Weights([1,1,2]));assert.throws(()=>b41Weights([0,1,1]));
 const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
-for(const id of ['guide','start','definitions','b36-status','power-hearts','methods','reproduce'])assert(html.includes(`id="${id}"`));
+for(const id of ['guide','start','definitions','b46-status','power-hearts','methods','reproduce'])assert(html.includes(`id="${id}"`));
 console.log(JSON.stringify({checks,randomShapes:shapes,referenceTriangles:reference.sides.length,
  B41ReferenceMaps:41,B36Maps:36,defaultB36HullVertices:b36.poly.length,defaultB36Percent:100*area(b36.poly)/area(q),fourPowerMaps:fourResponse.result.power.centers.length,tetraPowerMaps:tetraResponse.result.power.centers.length,earlierFamilyPreserved:true},null,2));

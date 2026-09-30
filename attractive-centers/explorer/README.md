@@ -208,3 +208,30 @@ transmits geometry. Unsupported browsers simply use the normal UI.
 The theory follows the four [Attractive Centers papers](../), especially
 Paper I (symmetry-displacement chests), Paper III (radial attractivity), and
 Paper IV (analytic inner families and nonlocal constraints).
+# B46 publication update — 1 October 2026
+
+The default triangle layer is now B46: 44 certified rational ray maps and
+two attractive endpoint power minimizers. `b46.mjs` uses the independently
+audited ordered-side integer polynomials, exact BigInt arithmetic on dyadic
+side inputs, and normalized numerical minimization for the powers. It does
+not clip or project generators into the chest. Failed power evaluations are
+omitted and explicitly counted rather than silently replaced by the centroid.
+
+B46 is proved hull-equivalent to the fixed B76 reference on every proper
+triangle. All 1,142 currently proved native ETC maps have universal containment
+certificates in R44, the rational part of B46. Minimum subset size within B76
+is bounded by 44 and 46. The proposed B44 retains the powers and deletes two
+rational maps; it is not proved sufficient. Neither B46 minimality nor equality
+with the maximal Heart is claimed. Powers use the regular radial-center class;
+analytic extension at collision strata must not be presumed.
+
+Historical B36 and the earlier sampled power-family hull remain optional
+comparisons. Four-point and tetrahedron constructions are unchanged. Current
+definitions, native indices, candidate-only indices and the cumulative proof
+handoff are linked from the guide. `node tests-b46.mjs` checks exact-reference
+weights, vertex permutations, similarities, symmetry collapse, random chest
+inclusion and both power separation witnesses. The regression tests are not
+substitutes for the universal certificates.
+
+The remainder of this README documents earlier development stages and is
+historical where it disagrees with this update.
