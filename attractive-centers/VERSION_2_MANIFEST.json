@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "date": "2026-10-01",
+  "papers": {
+    "I": {
+      "pages": 26,
+      "pdf_sha256": "c9d8af1dc24a723a6a2962cc24ae0554c2c367bd7e82a5e1e01a3707cfa41578",
+      "source_sha256": "2c763a3558be44223e9bd8d0ea2a4eb4775332048a33f9928ca089bb3d8bcc3f"
+    },
+    "II": {
+      "pages": 22,
+      "pdf_sha256": "77a9fa00a2da68c55bfa0b53bc91db0307691d182b94835fd5535ffa15a18adf",
+      "source_sha256": "8e789624b7182dc6a25e1ac11ec7cb7a1bfaf35ef71290347c3507db41fd69d4"
+    },
+    "III": {
+      "pages": 25,
+      "pdf_sha256": "1444898043d215aae83fa5c78a609120c908b9efcabb50bb060f67b153fb5f52",
+      "source_sha256": "fd440349ff81c97d63dc3bf6256b122e3c32f5c3b551c6a3e98ff32b6715cb04"
+    },
+    "IV": {
+      "pages": 25,
+      "pdf_sha256": "91add1867e7516259afb5dc47aefd45330f92a6611650a35c8ee3f3f7780dfc7",
+      "source_sha256": "e662c254d083526b0dae080b2c9fc12f1b2b735ac587dbd1d2d5cf6b3bc36fd6"
+    }
+  },
+  "version_1_preservation": {
+    "I": {
+      "sha256": "c746d6c97fd78996bbcc2528f9c7580405f87d8448520d864fd45001dec2f44c",
+      "unchanged": true
+    },
+    "II": {
+      "sha256": "f304685f064dee8ea1af99e53890826c2748382a0603ccfbaaf93af50a9adf03",
+      "unchanged": true
+    },
+    "III": {
+      "sha256": "5e87be5bdeedf6b64a2cba55986282b349a86b8c05bc20351545e29d99e96d32",
+      "unchanged": true
+    },
+    "IV": {
+      "sha256": "7f6ba66b46f1813ee5413142d8dbac147b71767d4e627c5cf19930fb4ec3cc3e",
+      "unchanged": true
+    }
+  }
+}

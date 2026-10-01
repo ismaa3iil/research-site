@@ -7,12 +7,23 @@ The [first-draft reference manuscript](https://ismaa3iil.fyi/physically-inspired
 
 ## Attractive Centers
 
-PDF-only collection:
+PDF-only collection. Version 2, 1 October 2026:
 
-- [Download Attractive Centers I](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_I.pdf)
-- [Download Attractive Centers II](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_II.pdf)
-- [Download Attractive Centers III](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_III.pdf)
-- [Download Attractive Centers IV](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_IV.pdf)
+- [Download Attractive Centers I - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_I_v2.pdf)
+- [Download Attractive Centers II - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_II_v2.pdf)
+- [Download Attractive Centers III - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_III_v2.pdf)
+- [Download Attractive Centers IV - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_IV_v2.pdf)
+
+The earlier editions are preserved unchanged:
+[I](attractive-centers/Attractive_Centers_I.pdf),
+[II](attractive-centers/Attractive_Centers_II.pdf),
+[III](attractive-centers/Attractive_Centers_III.pdf),
+[IV](attractive-centers/Attractive_Centers_IV.pdf).
+See the [Version 2 revision record](attractive-centers/VERSION_2_NOTES.md).
+
+The new papers include the certified B46 finite family, all-1,142 native ETC
+containment and rigorous power-endpoint separation. B46 is not asserted
+minimal or equal to the maximal Heart; numerical survivors are not proofs.
 
 Website: <https://ismaa3iil.fyi/attractive-centers/>
 
