@@ -3,7 +3,14 @@ Mathematical, Physical, Historical & Theological Investigations
 
 ## Triangle Centers Inspired by Physics
 
-The [first-draft reference manuscript](https://ismaa3iil.fyi/physically-inspired-triangle-centers/) is a 162-page survey, computational atlas, and reproducibility companion for physical constructions of triangle centers.
+The [project page](https://ismaa3iil.fyi/physically-inspired-triangle-centers/) provides freely accessible research and teaching resources:
+
+- [Triangle Physics Explorer](https://ismaa3iil.fyi/physically-inspired-triangle-centers/explorer/): 66 physical selectors, classical centers, theory and evidence cards, and seven shape-fingerprint diagrams.
+- [Research atlas, Version 2](https://ismaa3iil.fyi/physically-inspired-triangle-centers/Triangle_Centers_Inspired_by_Physics.pdf?v=2): 187 pages, dated 30 September 2026.
+- [Lecture Notes](https://ismaa3iil.fyi/physically-inspired-triangle-centers/lecture-notes/PITC_Lecture_Notes.pdf): 93 pages, first teaching edition, 1 October 2026.
+- [Lecture companion ZIP](https://ismaa3iil.fyi/physically-inspired-triangle-centers/lecture-notes/PITC_Lecture_Notes_Companion.zip): complete LaTeX source, offline demonstrations, coverage and evidence records.
+
+The original explorer software is MIT licensed; external ETC material retains its attribution. The original complete explorer handoff is also downloadable from the project page.
 
 ## Attractive Centers
 

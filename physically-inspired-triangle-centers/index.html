@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Triangle Centers Inspired by Physics — a survey, computational atlas, and reproducibility companion by Ismail Hammoudeh.">
+  <meta name="description" content="Physically inspired triangle centers: a free interactive explorer, the Version 2 research atlas, and downloadable lecture notes with source and companion demonstrations.">
+  <link rel="canonical" href="https://ismaa3iil.fyi/physically-inspired-triangle-centers/">
   <title>Triangle Centers Inspired by Physics — Ismaa3iil Research</title>
   <style>
     :root {
@@ -89,6 +90,12 @@
     .stat strong { display: block; margin-bottom: 5px; color: var(--accent); font: 700 clamp(1.75rem, 4vw, 2.55rem)/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: -.06em; }
     .stat span { color: var(--muted); font-size: .92rem; }
     .section { margin-top: 72px; }
+    .resources { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+    .resource { padding: clamp(24px, 4vw, 34px); border: 1px solid var(--line); background: var(--paper); }
+    .resource p { color: var(--muted); }
+    .resource .eyebrow { margin-bottom: 18px; }
+    .resource .actions { margin-top: 22px; }
+    .downloads { display: flex; flex-wrap: wrap; gap: 12px 22px; margin-top: 18px; font-size: .95rem; }
     .section-intro { max-width: 730px; color: var(--muted); }
     .abstract {
       display: grid;
@@ -129,7 +136,7 @@
       main { width: min(100% - 24px, 640px); margin-top: 22px; }
       .topline { margin-bottom: 42px; }
       .hero { padding-bottom: 42px; }
-      .stats, .catalogue, .evidence, .abstract { grid-template-columns: 1fr; }
+      .stats, .catalogue, .evidence, .abstract, .resources { grid-template-columns: 1fr; }
       .stats { gap: 1px; }
       .stat { min-height: auto; }
       .abstract { gap: 22px; }
@@ -149,31 +156,64 @@
     </div>
 
     <header class="hero">
-      <span class="eyebrow">Research reference manuscript</span>
+      <span class="eyebrow">Physically Inspired Triangle Centers</span>
       <h1>Triangle Centers<br>Inspired by Physics</h1>
-      <p class="deck">A survey, computational atlas, and reproducibility companion for physical laws that select natural points of a triangle.</p>
-      <p class="meta">Ismail Hammoudeh · 24 September 2026 · First draft · 162 pages</p>
+      <p class="deck">Explore how physical experiments select a triangle’s centers, with an interactive geometry lab, a research atlas, and undergraduate lecture notes.</p>
+      <p class="meta">Ismail Hammoudeh · Atlas Version 2 · 30 September 2026 · 187 pages</p>
       <div class="actions">
-        <a class="button primary" href="Triangle_Centers_Inspired_by_Physics.pdf">Read the PDF</a>
-        <a class="button" href="Triangle_Centers_Inspired_by_Physics.pdf" download>Download PDF</a>
+        <a class="button primary" href="explorer/">Open the explorer</a>
+        <a class="button" href="Triangle_Centers_Inspired_by_Physics.pdf?v=2">Read atlas · Version 2</a>
+        <a class="button" href="lecture-notes/PITC_Lecture_Notes.pdf">Read lecture notes</a>
       </div>
     </header>
 
+    <section class="resources" aria-label="Explore and learn">
+      <article class="resource">
+        <span class="eyebrow">Interactive visualization</span>
+        <h2>Triangle Physics Explorer</h2>
+        <p>Drag the triangle’s vertices and compare 66 physical selectors with classical centers. Read the theory and evidence behind each point, or compare seven shape-fingerprint diagrams with optional ETC neighbors.</p>
+        <p>Most physical-center locations use the research atlas’s interpolation; the app identifies its direct solvers, exact aliases, and unavailable cases. The methods guide explains the evidence and numerical limits.</p>
+        <div class="actions">
+          <a class="button primary" href="explorer/">Explore the geometry</a>
+          <a class="button" href="explorer/README.html">Methods &amp; provenance</a>
+        </div>
+        <div class="downloads">
+          <a href="explorer/Triangle_Physics_Explorer_Source.zip" download>Download free explorer source</a>
+          <a href="Triangle_Physics_Explorer_GitHub_Handoff.zip" download>Download complete explorer handoff</a>
+        </div>
+      </article>
+      <article class="resource">
+        <span class="eyebrow">Six undergraduate lectures</span>
+        <h2>Lecture Notes</h2>
+        <p class="meta">First teaching edition · 1 October 2026 · 93 pages</p>
+        <p>A self-contained introduction to balance, charges and currents, membranes and fluids, quantum and random motion, heat and reaction, and optics. Includes 32 vector figures and 83 questions and exercises with answers.</p>
+        <p>The companion ZIP contains the complete LaTeX source, offline interactive demonstrations, coverage records, and selected evidence files.</p>
+        <div class="actions">
+          <a class="button primary" href="lecture-notes/PITC_Lecture_Notes.pdf">Read lecture notes</a>
+          <a class="button" href="lecture-notes/PITC_Lecture_Notes.pdf" download>Download PDF</a>
+        </div>
+        <div class="downloads">
+          <a href="lecture-notes/PITC_Lecture_Notes_Companion.zip" download>Download companion ZIP</a>
+          <a href="lecture-notes/PITC_Lecture_Notes.tex" download>Download LaTeX source</a>
+        </div>
+      </article>
+    </section>
+
     <section class="stats" aria-label="Manuscript at a glance">
-      <div class="stat"><strong>58</strong><span>numerical entries, counted as parameter instances rather than distinct new centers</span></div>
-      <div class="stat"><strong>4–9</strong><span>chapters tracing quantum, electromagnetic, thermal, mechanical, reaction, and optical constructions</span></div>
-      <div class="stat"><strong>4</strong><span>complementary shape fingerprints used for comparison and attractivity evidence</span></div>
+      <div class="stat"><strong>66</strong><span>physical entries, counted as parameter instances rather than distinct new centers</span></div>
+      <div class="stat"><strong>187</strong><span>pages in the Version 2 research atlas, including the mass, charge, and magnetic extension</span></div>
+      <div class="stat"><strong>93</strong><span>pages of lecture notes, with a downloadable source and demonstration companion</span></div>
     </section>
 
     <section class="abstract" aria-labelledby="abstract-title">
       <div>
-        <h2 id="abstract-title">What the draft studies</h2>
+        <h2 id="abstract-title">What the atlas studies</h2>
         <p>Physical laws and measurement protocols select points through equilibria, maxima, probability means, and singular limits. The manuscript organizes quantum, conformal, electrostatic, magnetic, thermal, fluid, mechanical, reaction, and optical constructions, including parameter families and exact classical reductions.</p>
         <p>Accessible derivations are followed by numerical methods, individual contour atlases, Encyclopedia of Triangle Centers location comparisons, shape fingerprints, and vertex-motion attractivity evidence.</p>
       </div>
       <aside class="side-note">
         <strong>How to read the evidence</strong>
-        The draft separates analytic certificates, validated finite computations, refined numerical observations, screens, and conditional constructions. Passing a finite screen is not presented as a global theorem.
+        The atlas separates analytic certificates, validated finite computations, refined numerical observations, screens, and conditional constructions. Passing a finite screen is not presented as a global theorem.
       </aside>
     </section>
 
@@ -187,33 +227,38 @@
         <article><span class="chapter">CHAPTER 6</span><h3>Fluids &amp; temperature</h3><p>Poisson models, survival, fluid torsion, heat maxima, nonlinear membranes, and density means.</p></article>
         <article><span class="chapter">CHAPTER 7</span><h3>Plates &amp; fluctuations</h3><p>Gravity-loaded plates, buckling modes, compliance, thermal variance, and bending-energy centroids.</p></article>
         <article><span class="chapter">CHAPTERS 8–9</span><h3>Reaction &amp; imaging</h3><p>Production-removal, logistic population, darkness, fluorescence, inverse-square illumination, and solid angle.</p></article>
+        <article><span class="chapter">CHAPTER 10 · VERSION 2</span><h3>Mass, charge &amp; magnetic extension</h3><p>Additional vertex, surface, and volume-current selectors M2–M7, prism Robin centers L3–L4, and updated electrostatic and magnetic attractivity evidence.</p></article>
       </div>
     </section>
 
     <section class="section" aria-labelledby="companion-title">
-      <h2 id="companion-title">A reference draft with a reproducibility companion</h2>
-      <p class="section-intro">The manuscript is self-contained for definitions, derivations, and interpretation. Large coefficient arrays, sample records, executable verifiers, figures, checksums, and demonstrations belong to the companion archive.</p>
+      <h2 id="companion-title">The research atlas · Version 2</h2>
+      <p class="section-intro">The 30 September 2026 atlas extends the original 58 entries to 66 with M2–M7 and L3–L4. It provides definitions, derivations, contour atlases, ETC comparisons, and revised electrostatic and magnetic attractivity evidence.</p>
+      <div class="actions">
+        <a class="button primary" href="Triangle_Centers_Inspired_by_Physics.pdf?v=2">Read atlas · Version 2</a>
+        <a class="button" href="Triangle_Centers_Inspired_by_Physics.pdf?v=2" download="Triangle_Centers_Inspired_by_Physics_v2.pdf">Download atlas · Version 2</a>
+      </div>
       <div class="evidence">
-        <article><h3>Claims stay qualified</h3><p>Some constructions have no convenient closed form; the draft makes no blanket transcendence or ETC nonmembership assertion. Uniqueness, branch conventions, dimensions, and limiting procedures remain part of each model.</p></article>
-        <article><h3>Publication status</h3><p>This is a research reference manuscript prepared from the supplied draft and computational studies. Authorship and submission metadata are intentionally not assigned, and no submission to arXiv or another service is claimed.</p></article>
+        <article><h3>Claims stay qualified</h3><p>Some constructions have no convenient closed form; the atlas makes no blanket transcendence or ETC nonmembership assertion. Uniqueness, branch conventions, dimensions, and limiting procedures remain part of each model.</p></article>
+        <article><h3>Reference manuscript</h3><p>The atlas is prepared from the project’s draft and computational studies. Its title page leaves authorship and submission metadata unassigned. The lecture notes and explorer carry their own dated evidence and methods guidance.</p></article>
       </div>
     </section>
 
     <section class="reader" aria-labelledby="reader-title">
       <div class="reader-head">
         <div>
-          <h2 id="reader-title">Read the manuscript</h2>
-          <p>The supplied PDF is published unchanged for in-browser reading.</p>
+          <h2 id="reader-title">Read the Version 2 atlas</h2>
+          <p>Triangle Centers Inspired by Physics · 30 September 2026</p>
         </div>
-        <a href="Triangle_Centers_Inspired_by_Physics.pdf" download>Download the 162-page draft</a>
+        <a href="Triangle_Centers_Inspired_by_Physics.pdf?v=2" download="Triangle_Centers_Inspired_by_Physics_v2.pdf">Download the 187-page atlas</a>
       </div>
-      <object class="pdf-viewer" data="Triangle_Centers_Inspired_by_Physics.pdf" type="application/pdf" title="Triangle Centers Inspired by Physics PDF">
-        <div class="fallback">Your browser does not support inline PDF viewing. <a href="Triangle_Centers_Inspired_by_Physics.pdf">Open or download the manuscript PDF</a>.</div>
+      <object class="pdf-viewer" data="Triangle_Centers_Inspired_by_Physics.pdf?v=2" type="application/pdf" title="Triangle Centers Inspired by Physics — Version 2 PDF">
+        <div class="fallback">Your browser does not support inline PDF viewing. <a href="Triangle_Centers_Inspired_by_Physics.pdf?v=2">Open or download the Version 2 atlas PDF</a>.</div>
       </object>
     </section>
 
     <footer>
-      <span>Only the supplied first-draft PDF is published here; the research archive can grow alongside it.</span>
+      <span>The explorer, Version 2 atlas, lecture notes, and companion downloads are freely accessible. Original explorer software is MIT licensed; external ETC material retains its attribution.</span>
       <a href="../">Ismaa3iil Research</a>
     </footer>
   </main>

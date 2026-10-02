@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-01",
+  "passed": 1973,
+  "max_ETC_equivalence_error_over_D": 8.602901018053878e-13,
+  "max_atlas_permutation_error": 1.2412670766236366e-16,
+  "M1_reference": [
+    1.10397652302021,
+    0.9985762245021699
+  ],
+  "Illum_reference": [
+    1.13200739394343,
+    0.9959147508286531
+  ],
+  "scope": "Exact geometry identities, all 153 selected ETC expression evaluations against exported Python samples, six vertex permutations, reflection/scaling/translation covariance, quantum doublet guards, live solver reference checks, atlas profiles and Taylor-record coverage. These are software verification checks, not continuum certificates."
+}

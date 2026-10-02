@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "date": "2026-10-01",
+  "checks": 22,
+  "scope": "Angular round trips and units, chain-rule conversion per degree, unchanged thin abscissa, common-abscissa interpolation, missing-data gaps, no extrapolation, distinct comparison colors."
+}

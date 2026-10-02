@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "PITCs": 66,
+  "dragged_apex_x": 0.50595,
+  "plots": 7,
+  "checks": [
+    "dragging",
+    "geometry neighbor overlay",
+    "equilateral doublet",
+    "E0 certificate badge",
+    "math in all 66 theory cards",
+    "Taylor ambiguity",
+    "angular axis and chain-rule units",
+    "distinct bright comparison colors",
+    "one shared hover abscissa with color-matched ordinates",
+    "independent PITC neighbor switches and deduplication",
+    "angular JSON export",
+    "range and epsilon controls",
+    "90-degree endpoint guard",
+    "chart click maps 45 degrees to h=1",
+    "guide",
+    "mobile overflow"
+  ],
+  "browser": "Chromium",
+  "WebMCP": "Native API unavailable in this browser; structured-tool validation unavailable",
+  "errors": []
+}

@@ -1,0 +1,512 @@
+[
+  {
+    "slide": 1,
+    "chapter": 1,
+    "section": "opening"
+  },
+  {
+    "slide": 2,
+    "chapter": 1,
+    "section": "Several centers of one triangle"
+  },
+  {
+    "slide": 3,
+    "chapter": 1,
+    "section": "Triangle centers"
+  },
+  {
+    "slide": 4,
+    "chapter": 1,
+    "section": "Barycentric coordinates"
+  },
+  {
+    "slide": 5,
+    "chapter": 1,
+    "section": "Barycentric center functions"
+  },
+  {
+    "slide": 6,
+    "chapter": 1,
+    "section": "Classical centers with physical meanings"
+  },
+  {
+    "slide": 7,
+    "chapter": 1,
+    "section": "Vertex attractivity"
+  },
+  {
+    "slide": 8,
+    "chapter": 1,
+    "section": "The 3\u20134\u20135 laboratory"
+  },
+  {
+    "slide": 9,
+    "chapter": 1,
+    "section": "Uniform area and uniform wire"
+  },
+  {
+    "slide": 10,
+    "chapter": 1,
+    "section": "Covariance and inertia"
+  },
+  {
+    "slide": 11,
+    "chapter": 1,
+    "section": "Principal axes"
+  },
+  {
+    "slide": 12,
+    "chapter": 1,
+    "section": "The Steiner inellipse"
+  },
+  {
+    "slide": 13,
+    "chapter": 1,
+    "section": "Affine deformation of the conic"
+  },
+  {
+    "slide": 14,
+    "chapter": 1,
+    "section": "The skeleton has a different inertia ellipse"
+  },
+  {
+    "slide": 15,
+    "chapter": 1,
+    "section": "Central lines and central conics"
+  },
+  {
+    "slide": 16,
+    "chapter": 2,
+    "section": "opening"
+  },
+  {
+    "slide": 17,
+    "chapter": 2,
+    "section": "Fixed charge and mobile charge"
+  },
+  {
+    "slide": 18,
+    "chapter": 2,
+    "section": "Electrostatic equilibrium energy"
+  },
+  {
+    "slide": 19,
+    "chapter": 2,
+    "section": "E2 and E3: conducting charge centroids"
+  },
+  {
+    "slide": 20,
+    "chapter": 2,
+    "section": "E0: equal probability of first exit"
+  },
+  {
+    "slide": 21,
+    "chapter": 2,
+    "section": "E1: least boundary influence"
+  },
+  {
+    "slide": 22,
+    "chapter": 2,
+    "section": "A current around the perimeter"
+  },
+  {
+    "slide": 23,
+    "chapter": 2,
+    "section": "M1: the weakest interior loop field"
+  },
+  {
+    "slide": 24,
+    "chapter": 2,
+    "section": "A cutoff selects the loop-field centroid"
+  },
+  {
+    "slide": 25,
+    "chapter": 2,
+    "section": "Three vertex currents reveal the Steiner foci"
+  },
+  {
+    "slide": 26,
+    "chapter": 2,
+    "section": "M3: angle-weighted magnetic energy"
+  },
+  {
+    "slide": 27,
+    "chapter": 2,
+    "section": "M6: a uniformly current-filled prism"
+  },
+  {
+    "slide": 28,
+    "chapter": 2,
+    "section": "Field stability and vertex response"
+  },
+  {
+    "slide": 29,
+    "chapter": 2,
+    "section": "A certified failure for E0"
+  },
+  {
+    "slide": 30,
+    "chapter": 2,
+    "section": "Properties of a physical center"
+  },
+  {
+    "slide": 31,
+    "chapter": 3,
+    "section": "opening"
+  },
+  {
+    "slide": 32,
+    "chapter": 3,
+    "section": "A stretched membrane under gravity"
+  },
+  {
+    "slide": 33,
+    "chapter": 3,
+    "section": "Force balance gives a Poisson equation"
+  },
+  {
+    "slide": 34,
+    "chapter": 3,
+    "section": "The energy formulation"
+  },
+  {
+    "slide": 35,
+    "chapter": 3,
+    "section": "F1: the deepest membrane point"
+  },
+  {
+    "slide": 36,
+    "chapter": 3,
+    "section": "One field, several centers"
+  },
+  {
+    "slide": 37,
+    "chapter": 3,
+    "section": "Laminar flow through a triangular duct"
+  },
+  {
+    "slide": 38,
+    "chapter": 3,
+    "section": "Brownian mean exit time"
+  },
+  {
+    "slide": 39,
+    "chapter": 3,
+    "section": "Membrane tension and plate bending"
+  },
+  {
+    "slide": 40,
+    "chapter": 3,
+    "section": "Pgrav: a clamped plate under gravity"
+  },
+  {
+    "slide": 41,
+    "chapter": 3,
+    "section": "Heating can cause buckling"
+  },
+  {
+    "slide": 42,
+    "chapter": 3,
+    "section": "A restricted sheet selects the incenter"
+  },
+  {
+    "slide": 43,
+    "chapter": 3,
+    "section": "Finite elements as local physics"
+  },
+  {
+    "slide": 44,
+    "chapter": 3,
+    "section": "Fingerprints of the torsion center"
+  },
+  {
+    "slide": 45,
+    "chapter": 3,
+    "section": "What the elastic models establish"
+  },
+  {
+    "slide": 46,
+    "chapter": 4,
+    "section": "opening"
+  },
+  {
+    "slide": 47,
+    "chapter": 4,
+    "section": "A particle in a triangular infinite well"
+  },
+  {
+    "slide": 48,
+    "chapter": 4,
+    "section": "The ground state minimizes gradient energy"
+  },
+  {
+    "slide": 49,
+    "chapter": 4,
+    "section": "Q0m and Q0"
+  },
+  {
+    "slide": 50,
+    "chapter": 4,
+    "section": "The first energy states"
+  },
+  {
+    "slide": 51,
+    "chapter": 4,
+    "section": "Degeneracy and symmetry"
+  },
+  {
+    "slide": 52,
+    "chapter": 4,
+    "section": "Repeated position measurements"
+  },
+  {
+    "slide": 53,
+    "chapter": 4,
+    "section": "Numerical eigenstates"
+  },
+  {
+    "slide": 54,
+    "chapter": 4,
+    "section": "Quantum fingerprints and ETC neighbors"
+  },
+  {
+    "slide": 55,
+    "chapter": 4,
+    "section": "Four ways to probe triangle shape"
+  },
+  {
+    "slide": 56,
+    "chapter": 4,
+    "section": "Reflecting Brownian motion"
+  },
+  {
+    "slide": 57,
+    "chapter": 4,
+    "section": "Absorption changes the conditioning"
+  },
+  {
+    "slide": 58,
+    "chapter": 4,
+    "section": "A classical billiard at speed one"
+  },
+  {
+    "slide": 59,
+    "chapter": 4,
+    "section": "Convergence of billiard means"
+  },
+  {
+    "slide": 60,
+    "chapter": 4,
+    "section": "Quantum and classical limits"
+  },
+  {
+    "slide": 61,
+    "chapter": 5,
+    "section": "opening"
+  },
+  {
+    "slide": 62,
+    "chapter": 5,
+    "section": "A uniformly hot triangular plate"
+  },
+  {
+    "slide": 63,
+    "chapter": 5,
+    "section": "The same eigenmodes describe cooling"
+  },
+  {
+    "slide": 64,
+    "chapter": 5,
+    "section": "H(\u0394): the hottest point"
+  },
+  {
+    "slide": 65,
+    "chapter": 5,
+    "section": "Cooling changes the whole field"
+  },
+  {
+    "slide": 66,
+    "chapter": 5,
+    "section": "Heat fingerprints"
+  },
+  {
+    "slide": 67,
+    "chapter": 5,
+    "section": "Heat content and a temperature mean"
+  },
+  {
+    "slide": 68,
+    "chapter": 5,
+    "section": "Production and removal: Abs(\u03bc)"
+  },
+  {
+    "slide": 69,
+    "chapter": 5,
+    "section": "Thin domains change the concentration profile"
+  },
+  {
+    "slide": 70,
+    "chapter": 5,
+    "section": "A failure of the attractive-family conjecture"
+  },
+  {
+    "slide": 71,
+    "chapter": 5,
+    "section": "The shape space of triangles"
+  },
+  {
+    "slide": 72,
+    "chapter": 5,
+    "section": "Location ranks and behavioral fingerprints"
+  },
+  {
+    "slide": 73,
+    "chapter": 5,
+    "section": "ETC membership is not an algebraic test"
+  },
+  {
+    "slide": 74,
+    "chapter": 5,
+    "section": "Certificates and numerical evidence"
+  },
+  {
+    "slide": 75,
+    "chapter": 5,
+    "section": "The revised attractivity picture"
+  },
+  {
+    "slide": 76,
+    "chapter": 6,
+    "section": "opening"
+  },
+  {
+    "slide": 77,
+    "chapter": 6,
+    "section": "Solid-angle illumination"
+  },
+  {
+    "slide": 78,
+    "chapter": 6,
+    "section": "Solid-angle limits"
+  },
+  {
+    "slide": 79,
+    "chapter": 6,
+    "section": "Inverse-square illumination in the plane"
+  },
+  {
+    "slide": 80,
+    "chapter": 6,
+    "section": "Illum: unique but nonattractive numerically"
+  },
+  {
+    "slide": 81,
+    "chapter": 6,
+    "section": "Fresnel diffraction through a triangle"
+  },
+  {
+    "slide": 82,
+    "chapter": 6,
+    "section": "There is no exact interior Fresnel null"
+  },
+  {
+    "slide": 83,
+    "chapter": 6,
+    "section": "A clean darkness-weighted center"
+  },
+  {
+    "slide": 84,
+    "chapter": 6,
+    "section": "Wavelength independence needs a convention"
+  },
+  {
+    "slide": 85,
+    "chapter": 6,
+    "section": "Gaussian images and nonlinear fluorescence"
+  },
+  {
+    "slide": 86,
+    "chapter": 6,
+    "section": "Optical fingerprints and ETC neighbors"
+  },
+  {
+    "slide": 87,
+    "chapter": 6,
+    "section": "The most useful physical definitions"
+  },
+  {
+    "slide": 88,
+    "chapter": 6,
+    "section": "Demonstrations students can reproduce"
+  },
+  {
+    "slide": 89,
+    "chapter": 6,
+    "section": "Attractivity after the new investigation"
+  },
+  {
+    "slide": 90,
+    "chapter": 6,
+    "section": "A physical atlas of triangle geometry"
+  },
+  {
+    "slide": 91,
+    "chapter": "appendix",
+    "section": "Coordinates and normalization"
+  },
+  {
+    "slide": 92,
+    "chapter": "appendix",
+    "section": "Fingerprints need more than one family"
+  },
+  {
+    "slide": 93,
+    "chapter": "appendix",
+    "section": "Why the Steiner inellipse has maximum area"
+  },
+  {
+    "slide": 94,
+    "chapter": "appendix",
+    "section": "An axis ratio is not a moment ratio"
+  },
+  {
+    "slide": 95,
+    "chapter": "appendix",
+    "section": "The skeleton has a covariance ellipse"
+  },
+  {
+    "slide": 96,
+    "chapter": "appendix",
+    "section": "M3: angle-weighted vertex mean"
+  },
+  {
+    "slide": 97,
+    "chapter": "appendix",
+    "section": "Least capacity and the Robin function"
+  },
+  {
+    "slide": 98,
+    "chapter": "appendix",
+    "section": "Finite elements in one slide"
+  },
+  {
+    "slide": 99,
+    "chapter": "appendix",
+    "section": "Degenerate quantum states"
+  },
+  {
+    "slide": 100,
+    "chapter": "appendix",
+    "section": "What a counterexample certificate proves"
+  },
+  {
+    "slide": 101,
+    "chapter": "appendix",
+    "section": "Why large removal can fail attractivity"
+  },
+  {
+    "slide": 102,
+    "chapter": "appendix",
+    "section": "Continue the investigation"
+  }
+]
