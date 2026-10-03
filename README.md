@@ -6,6 +6,9 @@ Mathematical, Physical, Historical & Theological Investigations
 The [project page](https://ismaa3iil.fyi/physically-inspired-triangle-centers/) provides freely accessible research and teaching resources:
 
 - [Triangle Physics Explorer](https://ismaa3iil.fyi/physically-inspired-triangle-centers/explorer/): 66 physical selectors, classical centers, theory and evidence cards, and seven shape-fingerprint diagrams.
+- [Research monograph](https://ismaa3iil.fyi/physically-inspired-triangle-centers/monograph/PITC_Monograph.pdf): 274-page consolidated research edition, dated 3 October 2026.
+- [Monograph source and evidence ZIP](https://ismaa3iil.fyi/physically-inspired-triangle-centers/monograph/PITC_Monograph_Source_and_Evidence.zip): complete editable manuscript and figures, selected computational records, and integrity manifest.
+- [Improved PowerPoint lectures](https://ismaa3iil.fyi/physically-inspired-triangle-centers/lectures/Triangle_Centers_Physics_Miniseries_Improved.pptx): 102 editable slides, six lectures and an optional appendix, dated 3 October 2026.
 - [Research atlas, Version 2](https://ismaa3iil.fyi/physically-inspired-triangle-centers/Triangle_Centers_Inspired_by_Physics.pdf?v=2): 187 pages, dated 30 September 2026.
 - [Lecture Notes](https://ismaa3iil.fyi/physically-inspired-triangle-centers/lecture-notes/PITC_Lecture_Notes.pdf): 93 pages, first teaching edition, 1 October 2026.
 - [Lecture companion ZIP](https://ismaa3iil.fyi/physically-inspired-triangle-centers/lecture-notes/PITC_Lecture_Notes_Companion.zip): complete LaTeX source, offline demonstrations, coverage and evidence records.
