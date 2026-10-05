@@ -6,7 +6,7 @@
   "description": "Interactive triangle and tetrahedron power-center explorer by Ismail Hammoudeh",
   "scripts": {
     "start": "node scripts/serve.mjs",
-    "test": "node --test --test-isolation=none tests/math.test.mjs",
+    "test": "node --test --test-isolation=none tests/math.test.mjs tests/etc.test.mjs",
     "build": "node scripts/build.mjs"
   },
   "engines": { "node": ">=20" },

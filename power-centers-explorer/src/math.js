@@ -3,7 +3,8 @@
  * Developed with extensive use of ChatGPT. Floating results are not certificates.
  */
 export const P_MIN = 4 - 2 * Math.SQRT2;
-export const LIMITS = { triangle: 21.63, tetrahedron: 19.95 };
+export const RANGE_MIN = { triangle: 1.01, tetrahedron: P_MIN };
+export const LIMITS = { triangle: 24.99, tetrahedron: 19.95 };
 export const dot = (a,b) => a.reduce((s,x,i) => s+x*b[i],0);
 export const norm = a => Math.hypot(...a);
 export const sub = (a,b) => a.map((x,i) => x-b[i]);
@@ -102,7 +103,7 @@ function pointEvaluation(samples,x,p,reference) {
 }
 
 function edgePanels(a,b,x,p) {
-  if(p>=4)return [[0,1]];
+  if(p>=8||(p>=4&&Math.abs(p/2-Math.round(p/2))<1e-12))return [[0,1]];
   const delta=sub(b,a),length2=dot(delta,delta);
   const projection=Math.max(0,Math.min(1,dot(sub(x,a),delta)/length2));
   const separation=norm(sub(add(a,mul(delta,projection)),x))/Math.sqrt(length2);
@@ -169,6 +170,17 @@ export function powerCenter(vertices,p,{hull=false,order,guess,tolerance=2e-11,m
   const evaluate=useBoundary?boundaryEvaluator(shape,effectiveOrder,p):(x,r)=>pointEvaluation(samples,x,p,r);
   let x=guess?guess.map((q,i)=>(q-origin[i])/scale):zero(d);
   if(useBoundary&&(!barycentrics(v,x)||Math.min(...barycentrics(v,x))<=1e-9))x=zero(d);
+  // For 1<p<2, quadratic majorization (generalized Weiszfeld) supplies a
+  // stable starting point even when the minimizer is extremely near a vertex.
+  // A direct Newton start can oscillate there as p approaches one.
+  if(!hull&&p<2){
+    for(let k=0;k<1500;k++){
+      const reference=Math.max(...v.map(q=>norm(sub(q,x))),1e-6);
+      const weights=v.map(q=>Math.pow(Math.max(dot(sub(q,x),sub(q,x)),1e-28)/(reference*reference),(p-2)/2));
+      const total=weights.reduce((s,q)=>s+q,0),next=zero(d).map((_,i)=>v.reduce((s,q,j)=>s+weights[j]*q[i],0)/total);
+      const difference=norm(sub(next,x));x=next;if(difference<Math.max(2e-16,tolerance*1e-4))break;
+    }
+  }
   let converged=false,residual=Infinity,iterations=0,reason='iteration limit';
   for(let iteration=0;iteration<maxIterations;iteration++) {
     iterations=iteration+1;
@@ -212,8 +224,8 @@ export function verifyPair(vertices,p,options={}) {
 }
 
 export function powerSamples(mode,count=65) {
-  const last=LIMITS[mode];
-  const values=Array.from({length:count},(_,i)=>P_MIN+(last-P_MIN)*i/(count-1));
-  for(const p of [2,4,4+2*Math.SQRT2,8,10,12,14,16,18,20,21])if(p<last)values.push(p);
+  const first=RANGE_MIN[mode],last=LIMITS[mode];
+  const values=Array.from({length:count},(_,i)=>first+(last-first)*i/(count-1));
+  for(const p of [P_MIN,2,4,4+2*Math.SQRT2,8,10,12,14,16,18,20,21,21.63,22,24])if(p>=first&&p<last)values.push(p);
   return [...new Set(values)].sort((a,b)=>a-b);
 }

@@ -46,6 +46,6 @@ The [explorer source](attractive-centers/explorer/) is MIT-licensed free softwar
 
 ## Power Centers and Hull-Power Centers
 
-[Open the Power Centers Explorer](https://ismaa3iil.fyi/power-centers-explorer/): draggable triangles and tetrahedra, both power-center curves, a motion attractivity probe, coordinate charts, shareable shapes, and CSV/PNG exports. The power range starts at 4−2√2 and reaches 21.63 for triangles or 19.95 for tetrahedra. Numerical exploration limits are distinguished from proved attractivity intervals.
+[Open the Power Centers Explorer](https://ismaa3iil.fyi/power-centers-explorer/): draggable triangles and tetrahedra, both power-center curves, a motion attractivity probe, coordinate charts, shareable shapes, and CSV/PNG exports. Triangles cover 1.01 to 24.99 with 33 ETC neighbor comparisons, overlays, independent attractivity proofs and certified motion replay. Tetrahedra cover 4−2√2 to 19.95. Numerical exploration limits are distinguished from proved attractivity intervals.
 
 Research and authorship: **Ismail Hammoudeh**, with **extensive use of ChatGPT** acknowledged. The [software and mathematical tools](power-centers-explorer/) are free under the MIT license and run locally in the browser without a paid package or service. The numerical regression tests and real-browser interaction checks passed before publication.

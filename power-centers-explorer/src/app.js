@@ -1,4 +1,6 @@
-import {P_MIN,LIMITS,centroid,dot,norm,sub,cross} from './math.js';
+import {P_MIN,RANGE_MIN,LIMITS,centroid,dot,norm,sub,cross} from './math.js';
+import {etcCenter,etcURL,sampledRanking,closestSample} from './etc.js';
+import {etcResponse} from './etc-response.js';
 
 const $=id=>document.getElementById(id);
 const COLORS={atomic:'#8355ba',hull:'#078b82',ink:'#163345',muted:'#7b8c96'};
@@ -22,6 +24,10 @@ const state={mode:'triangle',p:8,vertices:clone(presets.triangle[0].v),yaw:.58,p
 let camera={target:[0,0,0],scale:160},dimensions={width:800,height:540},pointId=0,curveId=0,curveTimer,pointTimer,drag=null,animation=null,toastTimer;
 const canvas=$('geometry'),ctx=canvas.getContext('2d'),chart=$('coordinate-chart'),cc=chart.getContext('2d');
 let pointWorker,curveWorker;
+let etcData=null;
+let etcWitness=null;
+const minimum=()=>RANGE_MIN[state.mode];
+const ETC_COLORS={atomic:['#b2762b','#a65c6d','#b89b25'],hull:['#3578bd','#62899f','#5963aa']};
 const order=()=>state.mode==='triangle'?(state.quality==='high'?32:20):(state.quality==='high'?22:12);
 const pad=v=>[v[0],v[1],v[2]||0];
 const fmt=n=>Math.abs(n)<5e-8?'0':Number(n.toPrecision(7)).toString();
@@ -69,6 +75,10 @@ function draw(){
     for(let i=0;i<4;i++)for(let j=0;j<i;j++)line(ctx,[points[i],points[j]],'#8ba1a9',1.6);
   }
   curveLines(ctx,v=>project(v));
+  for(const q of etcOverlays()){
+    const point=project(q.center);ctx.beginPath();ctx.arc(point[0],point[1],4.5,0,Math.PI*2);ctx.fillStyle=q.color;ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=1.5;ctx.stroke();ctx.font='600 10px system-ui';ctx.fillStyle=q.color;
+    const labelX=point[0]+10,labelY=point[1]+(q.kind==='atomic'?-22-13*q.rank:28+13*q.rank);line(ctx,[point,[labelX-3,labelY-4]],q.color,.6);ctx.fillText('X('+q.X+')',labelX,labelY);
+  }
   if(state.pair)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&state.pair[kind].converged){const p=project(state.pair[kind].center);mark(ctx,p,kind,7);ctx.fillStyle=COLORS[kind];ctx.font='600 12px system-ui';ctx.fillText(kind==='atomic'?'Mₚ':'Uₚ',p[0]+12,p[1]+(kind==='atomic'?-10:18));}
   points.forEach((p,i)=>{ctx.beginPath();ctx.arc(p[0],p[1],state.selected===i?10:8,0,Math.PI*2);ctx.fillStyle=state.selected===i?'#163345':'#486876';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=3;ctx.stroke();ctx.font='600 13px system-ui';ctx.fillStyle=COLORS.ink;ctx.fillText(String.fromCharCode(65+i),p[0]+13,p[1]-12);});
   ctx.fillStyle=COLORS.muted;ctx.font='12px system-ui';ctx.textAlign='right';ctx.fillText('p = '+fmt(state.p),w-20,25);ctx.textAlign='left';
@@ -82,7 +92,7 @@ function drawAxes(){
   const b=basis(),x=45,y=dimensions.height-67;ctx.font='600 11px system-ui';
   for(const [i,color] of ['#d2756d','#658d50','#627ec5'].entries()){const end=[x+b.right[i]*25,y-b.up[i]*25];line(ctx,[[x,y],end],color,2);ctx.fillStyle=color;ctx.fillText('xyz'[i],end[0]+3,end[1]-3);}
 }
-function curvePoints(){const points=[];for(const q of state.curves)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&q[kind].converged)points.push(q[kind].center);if(state.pair)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&state.pair[kind].converged)points.push(state.pair[kind].center);return points;}
+function curvePoints(){const points=[];for(const q of state.curves)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&q[kind].converged)points.push(q[kind].center);if(state.pair)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&state.pair[kind].converged)points.push(state.pair[kind].center);points.push(...etcOverlays().map(q=>q.center));return points;}
 function drawInset(){
   const points=curvePoints();if(!points.length)return;
   const w=Math.min(220,dimensions.width*.43),h=148,left=dimensions.width-w-16,top=dimensions.height-h-16;
@@ -93,6 +103,7 @@ function drawInset(){
   const span=Math.max(max[0]-min[0],max[1]-min[1],.0001),scale=Math.min((w-38)/span,(h-52)/span),mid=min.map((q,i)=>(q+max[i])/2);
   const projection=v=>[left+w/2+(dot(pad(v),b.right)-mid[0])*scale,top+34+(h-44)/2-(dot(pad(v),b.up)-mid[1])*scale];
   curveLines(ctx,projection);if(state.pair)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&state.pair[kind].converged)mark(ctx,projection(state.pair[kind].center),kind,4.5);
+  for(const q of etcOverlays()){const point=projection(q.center);ctx.beginPath();ctx.arc(point[0],point[1],3,0,Math.PI*2);ctx.fillStyle=q.color;ctx.fill();}
   ctx.restore();
 }
 let chartBounds;
@@ -100,10 +111,10 @@ function drawChart(){
   const rect=chart.getBoundingClientRect(),w=rect.width,h=rect.height,axis=Number($('chart-axis').value),left=53,right=w-18,top=17,bottom=h-32;
   cc.clearRect(0,0,w,h);let values=[];for(const pair of state.curves)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&pair[kind].converged)values.push(pair[kind].center[axis]);
   if(!values.length)values=[-.1,.1];let min=Math.min(...values),max=Math.max(...values),span=Math.max(max-min,.00001);min-=span*.15;max+=span*.15;
-  const xp=p=>left+(p-P_MIN)/(LIMITS[state.mode]-P_MIN)*(right-left),yp=y=>bottom-(y-min)/(max-min)*(bottom-top);chartBounds={left,right};
+  const xp=p=>left+(p-minimum())/(LIMITS[state.mode]-minimum())*(right-left),yp=y=>bottom-(y-min)/(max-min)*(bottom-top);chartBounds={left,right};
   cc.font='11px system-ui';cc.fillStyle=COLORS.muted;cc.textAlign='right';
   for(let i=0;i<4;i++){const y=min+(max-min)*i/3;line(cc,[[left,yp(y)],[right,yp(y)]],'#e7ecee',1);cc.fillText(Number(y.toPrecision(3)).toString(),left-9,yp(y)+4);}
-  cc.textAlign='center';for(const p of [P_MIN,4,8,12,16,LIMITS[state.mode]]){cc.fillText(p===P_MIN?'1.17':fmt(p),xp(p),h-12);}
+  cc.textAlign='center';for(const p of [minimum(),4,8,12,16,LIMITS[state.mode]]){cc.fillText(p===minimum()?minimum().toFixed(2):fmt(p),xp(p),h-12);}
   for(const kind of ['atomic','hull'])if(checked('show-'+kind)){let segment=[];for(const pair of state.curves){if(pair[kind].converged)segment.push([xp(pair.p),yp(pair[kind].center[axis])]);else{line(cc,segment,COLORS[kind],2);segment=[];}}line(cc,segment,COLORS[kind],2);}
   line(cc,[[xp(state.p),top],[xp(state.p),bottom]],'#789099',1,[4,4]);
   if(state.pair)for(const kind of ['atomic','hull'])if(checked('show-'+kind)&&state.pair[kind].converged)mark(cc,[xp(state.p),yp(state.pair[kind].center[axis])],kind,4);
@@ -118,7 +129,7 @@ function createWorkers(){
 function requestPoint(){clearTimeout(pointTimer);pointId++;pointWorker.postMessage({kind:'point',id:pointId,vertices:state.vertices,p:state.p,order:order(),baseline:state.baseline});}
 function requestCurve(){clearTimeout(curveTimer);curveId++;state.curveComplete=false;state.curves=[];curveWorker.postMessage({kind:'curve',id:curveId,vertices:state.vertices,mode:state.mode,order:order(),count:state.quality==='high'?91:65});updateStatus();}
 function geometryChanged({defer=false}={}){
-  pointId++;state.pair=null;state.curves=[];state.curveComplete=false;curveId++;setStatus('Calculating centers…');updateVertexInputs();draw();drawChart();
+  pointId++;state.pair=null;state.curves=[];state.curveComplete=false;curveId++;setStatus('Calculating centers…');updateVertexInputs();updateETC();draw();drawChart();
   clearTimeout(pointTimer);pointTimer=setTimeout(requestPoint,defer?45:0);clearTimeout(curveTimer);curveTimer=setTimeout(requestCurve,defer?200:20);
 }
 function setStatus(message,warning=false){$('calculation-status').textContent=message;$('calculation-status').classList.toggle('warning',warning);}
@@ -133,6 +144,7 @@ function updateStatus(total){
 }
 function updateReadouts(baseline){
   const pair=state.pair;for(const kind of ['atomic','hull'])$(kind+'-coordinates').textContent=pair[kind].converged?coords(pair[kind].center):'Calculation unresolved';
+  updateETC();
   $('center-distance').textContent=pair.atomic.converged&&pair.hull.converged?fmt(norm(sub(pair.atomic.center,pair.hull.center))):'—';
   $('accuracy-info').textContent=`The selected hull center is checked at quadrature orders ${order()} and ${order()+(state.mode==='triangle'?12:6)}. Their centers differ by ${pair.hull.relativeOrderDifference.toExponential(2)} of the longest edge. This is a numerical stability estimate, not a rigorous error bound. Flat shapes use the fixed barycentric measure.`;
   if(!baseline||state.probeVertex===null)return;
@@ -149,12 +161,13 @@ function updateReadouts(baseline){
 }
 function clearProbe(){state.baseline=null;state.probeVertex=null;for(const kind of ['atomic','hull']){$(kind+'-probe').textContent='Drag a vertex to begin';$(kind+'-probe').classList.remove('negative','positive');}$('probe-note').textContent='The quantity is h · (center after − center before), evaluated at the current power. A negative value is a numerical indication of failure for that motion.';}
 function updatePowerUI(){
-  const max=LIMITS[state.mode];$('power-slider').max=$('power-number').max=max;$('power-slider').value=state.p;$('power-number').value=Number(state.p.toFixed(5));$('range-max').textContent=max;
+  const max=LIMITS[state.mode];$('power-slider').min=$('power-number').min=minimum();$('power-slider').max=$('power-number').max=max;$('power-slider').value=state.p;$('power-number').value=Number(state.p.toFixed(5));$('range-max').textContent=max;
+  $('range-min').innerHTML=state.mode==='triangle'?'1.01 <small>selected powers in 1 &lt; p &lt; 25</small>':'4 − 2√2 <small>≈ 1.1716</small>';
   document.querySelectorAll('[data-power]').forEach(button=>{button.hidden=Number(button.dataset.power)>max;button.classList.toggle('chosen',Math.abs(Number(button.dataset.power)-state.p)<.003);});
 }
-function setPower(value,{animate=false}={}){if(!Number.isFinite(value))return;if(!animate)stopAnimation();state.p=Math.max(P_MIN,Math.min(LIMITS[state.mode],value));updatePowerUI();pointId++;state.pair=null;draw();drawChart();clearTimeout(pointTimer);pointTimer=setTimeout(requestPoint,animate?0:35);}
+function setPower(value,{animate=false}={}){if(!Number.isFinite(value))return;if(!animate)stopAnimation();state.p=Math.max(minimum(),Math.min(LIMITS[state.mode],value));updatePowerUI();pointId++;state.pair=null;updateETC();draw();drawChart();clearTimeout(pointTimer);pointTimer=setTimeout(requestPoint,animate?0:35);}
 function stopAnimation(){if(animation!==null)cancelAnimationFrame(animation);animation=null;$('play').textContent='▶';$('play').setAttribute('aria-label','Animate power');}
-function animate(){if(animation!==null){stopAnimation();return;}let last=performance.now(),sample=last;$('play').textContent='Ⅱ';$('play').setAttribute('aria-label','Pause animation');const step=now=>{state.p+=(now-last)/1000*(LIMITS[state.mode]-P_MIN)/20;last=now;if(state.p>LIMITS[state.mode])state.p=P_MIN;updatePowerUI();if(now-sample>120){sample=now;setPower(state.p,{animate:true});}animation=requestAnimationFrame(step);};animation=requestAnimationFrame(step);}
+function animate(){if(animation!==null){stopAnimation();return;}let last=performance.now(),sample=last;$('play').textContent='Ⅱ';$('play').setAttribute('aria-label','Pause animation');const step=now=>{state.p+=(now-last)/1000*(LIMITS[state.mode]-minimum())/20;last=now;if(state.p>LIMITS[state.mode])state.p=minimum();updatePowerUI();if(now-sample>120){sample=now;setPower(state.p,{animate:true});}animation=requestAnimationFrame(step);};animation=requestAnimationFrame(step);}
 function renderVertexEditor(){
   const box=$('vertex-editor');box.replaceChildren();const labels=document.createElement('div');labels.className='vertex-axis-labels';labels.innerHTML='<span></span>'+['x','y','z'].slice(0,state.vertices[0].length).map(a=>'<span>'+a+'</span>').join('');box.append(labels);
   state.vertices.forEach((v,i)=>{const row=document.createElement('div');row.className='vertex-row';row.style.gridTemplateColumns=`30px repeat(${v.length},minmax(0,1fr))`;const button=document.createElement('button');button.textContent=String.fromCharCode(65+i);button.type='button';button.setAttribute('aria-label','Select vertex '+button.textContent);button.classList.toggle('selected',i===state.selected);button.onclick=()=>{state.selected=i;renderVertexEditor();canvas.focus();draw();};row.append(button);
@@ -163,7 +176,8 @@ function renderVertexEditor(){
 function updateVertexInputs(){for(const input of document.querySelectorAll('#vertex-editor input'))if(document.activeElement!==input)input.value=Number(state.vertices[Number(input.dataset.vertex)][Number(input.dataset.axis)].toFixed(6));}
 function setMode(mode,{reset=true}={}){
   stopAnimation();state.mode=mode;state.selected=0;clearProbe();
-  if(reset)state.vertices=clone(presets[mode][0].v);state.p=Math.min(state.p,LIMITS[mode]);
+  if(reset)state.vertices=clone(presets[mode][0].v);state.p=Math.max(minimum(),Math.min(state.p,LIMITS[mode]));
+  $('etc-panel').hidden=mode!=='triangle';
   for(const m of ['triangle','tetrahedron']){$(m+'-mode').classList.toggle('active',m===mode);$(m+'-mode').setAttribute('aria-pressed',m===mode);}
   $('shape-label').textContent=mode==='triangle'?'Triangle':'Tetrahedron';$('plane-field').hidden=$('view-front').hidden=mode==='triangle';$('chart-axis').querySelector('[value="2"]').hidden=mode==='triangle';if(mode==='triangle'&&$('chart-axis').value==='2')$('chart-axis').value='0';
   $('canvas-hint').textContent=mode==='triangle'?'Drag a vertex':'Drag vertices · Orbit the solid';$('canvas-help').textContent=mode==='triangle'?'Drag a vertex · Scroll to zoom':'Drag a vertex · Drag empty space to orbit · Scroll to zoom';canvas.setAttribute('aria-label',`Draggable ${mode} vertices and center curves. Coordinate controls provide a keyboard alternative.`);
@@ -210,7 +224,7 @@ $('zoom-in').onclick=()=>{camera.scale=Math.min(20000,camera.scale*1.35);draw();
 $('focus').onclick=()=>{const points=curvePoints();if(points.length)fit(points,.6);else toast('Wait for the centers to finish calculating.');};
 $('view-front').onclick=()=>{state.yaw=state.pitch=0;fit();};
 $('chart-axis').onchange=drawChart;
-chart.addEventListener('pointerdown',event=>{if(!chartBounds)return;const x=event.clientX-chart.getBoundingClientRect().left;setPower(P_MIN+(x-chartBounds.left)/(chartBounds.right-chartBounds.left)*(LIMITS[state.mode]-P_MIN));});
+chart.addEventListener('pointerdown',event=>{if(!chartBounds)return;const x=event.clientX-chart.getBoundingClientRect().left;setPower(minimum()+(x-chartBounds.left)/(chartBounds.right-chartBounds.left)*(LIMITS[state.mode]-minimum()));});
 chart.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();setPower(state.p+(event.key==='ArrowRight'?1:-1)*(event.shiftKey?.5:.05));});
 function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
 $('export-png').onclick=()=>canvas.toBlob(blob=>blob&&download(blob,`power-centers-${state.mode}-p${state.p.toFixed(3)}.png`));
@@ -225,6 +239,44 @@ $('share').onclick=async()=>{
   try{await navigator.clipboard.writeText(url.href);toast('Link copied. It includes your shape and power.');}catch{toast('Your shape is saved in the address bar. Copy the address to share it.');}
 };
 function restore(){
-  if(!location.hash)return false;try{const q=JSON.parse(decodeURIComponent(location.hash.slice(1))),d=q.mode==='triangle'?2:q.mode==='tetrahedron'?3:0;if(!d||!Number.isFinite(q.p)||!Array.isArray(q.vertices)||q.vertices.length!==d+1||q.vertices.some(v=>!Array.isArray(v)||v.length!==d||v.some(n=>!Number.isFinite(n)||Math.abs(n)>10000)))throw Error();state.mode=q.mode;state.vertices=q.vertices;state.p=Math.max(P_MIN,Math.min(q.p,LIMITS[q.mode]));if(Number.isFinite(q.yaw))state.yaw=q.yaw;if(Number.isFinite(q.pitch))state.pitch=Math.max(-1.5,Math.min(1.5,q.pitch));return true;}catch{toast('The shared shape could not be read. Showing the default triangle.');return false;}
+  if(!location.hash)return false;try{const q=JSON.parse(decodeURIComponent(location.hash.slice(1))),d=q.mode==='triangle'?2:q.mode==='tetrahedron'?3:0;if(!d||!Number.isFinite(q.p)||!Array.isArray(q.vertices)||q.vertices.length!==d+1||q.vertices.some(v=>!Array.isArray(v)||v.length!==d||v.some(n=>!Number.isFinite(n)||Math.abs(n)>10000)))throw Error();state.mode=q.mode;state.vertices=q.vertices;state.p=Math.max(RANGE_MIN[q.mode],Math.min(q.p,LIMITS[q.mode]));if(Number.isFinite(q.yaw))state.yaw=q.yaw;if(Number.isFinite(q.pitch))state.pitch=Math.max(-1.5,Math.min(1.5,q.pitch));return true;}catch{toast('The shared shape could not be read. Showing the default triangle.');return false;}
 }
+function etcOverlays(){
+  if(!etcData||state.mode!=='triangle')return [];const row=sampledRanking(etcData,state.p),choice=$('etc-overlay').value;if(!row||choice==='none')return [];
+  return ['atomic','hull'].flatMap(kind=>choice==='both'||choice===kind?row[kind].map((q,rank)=>({...q,kind,rank,color:ETC_COLORS[kind][rank],center:etcCenter(q.X,state.vertices,etcData.formulas)})).filter(q=>q.center):[]);
+}
+function updateETC(){
+  if(!etcData||state.mode!=='triangle')return;
+  const row=sampledRanking(etcData,state.p);$('etc-results').hidden=!row;$('etc-empty').hidden=!!row;
+  if(!row){const nearest=closestSample(etcData,state.p);$('etc-empty').textContent=`No precomputed comparison at p = ${fmt(state.p)}. Choose one of the 33 sampled powers above; the closest is ${fmt(nearest.p)}. Rankings are not interpolated.`;$('etc-power').value='';return;}
+  $('etc-power').value=String(row.p);
+  const D=Math.max(...state.vertices.map((v,i)=>norm(sub(v,state.vertices[(i+1)%3]))));
+  for(const kind of ['atomic','hull']){
+    const tbody=$(kind+'-etc');tbody.replaceChildren();
+    row[kind].forEach((q,rank)=>{const tr=document.createElement('tr'),cell=document.createElement('td'),link=document.createElement('a'),key=document.createElement('span');key.className='key';key.style.background=ETC_COLORS[kind][rank];link.href=etcURL(q.X);link.target='_blank';link.rel='noopener';link.textContent='X('+q.X+')';cell.append(key,link);tr.append(cell);
+      const response=etcData.attractivity.records[q.X],badge=document.createElement('span');badge.className='etc-status '+(response.status==='certified failure'?'failure':response.status==='proved attractive'?'proved':'sampled');badge.textContent=response.status==='certified failure'?'Proved failure':response.status==='proved attractive'?'Proved attractive':'No sampled failure';badge.title=`Independent of p. Minimum sampled symmetric response eigenvalue: ${response.minimum_eigenvalue}. ${response.status==='no sampled failure'?'983 proper triangles; universal attractivity remains unproved.':''}`;cell.append(badge);
+      if(response.witness){const button=document.createElement('button');button.className='etc-witness-button';button.textContent='Show failure';button.type='button';button.onclick=()=>showETCWitness(q.X,kind,response.witness);cell.append(button);}
+      const point=etcCenter(q.X,state.vertices,etcData.formulas),center=state.pair?.[kind],here=point&&center?.converged&&D?100*norm(sub(point,center.center))/D:null;
+      for(const value of [100*q.training_rms,q.validation_rms===null?null:100*q.validation_rms,here]){const td=document.createElement('td');td.textContent=value===null?'—':value<1e-9?'0':value.toFixed(3);tr.append(td);}tr.title=`Training maximum ${100*q.training_max}% of diameter; validation maximum ${q.validation_max===null?'unresolved':100*q.validation_max+'%'}. ${point?'':'ETC formula is undefined on this shape.'}`;tbody.append(tr);
+    });
+  }
+  $('etc-identity').hidden=Math.abs(state.p-2)>1e-10;
+  updateETCWitness();
+}
+function showETCWitness(id,kind,witness){
+  stopAnimation();etcWitness={id,kind,...clone(witness),original:clone(witness.vertices)};state.vertices=clone(witness.vertices);state.selected=witness.vertex;$('etc-overlay').value=kind;$('etc-witness').hidden=false;geometryChanged();fit();updateETCWitness();
+}
+function updateETCWitness(){
+  if(!etcWitness)return;const q=etcWitness,current=etcResponse(q.id,state.vertices,etcData.formulas);
+  $('etc-witness-text').textContent=`X(${q.id}) has a certified finite failure: move vertex ${'ABC'[q.vertex]} by ${coords(q.h)}. The exact dot product divided by squared motion is at most ${q.normalized_dot_upper.toPrecision(7)}. ${current?'The minimum local response eigenvalue on this triangle is '+Math.min(...current.minimumEigenvalues).toPrecision(6)+'.':'Its formula is undefined on this triangle.'} The certificate concerns the stored witness; dragging lets you explore other shapes.`;
+}
+$('etc-witness-move').onclick=()=>{if(!etcWitness)return;state.vertices=clone(etcWitness.original);state.vertices[etcWitness.vertex]=state.vertices[etcWitness.vertex].map((x,k)=>x+etcWitness.h[k]);geometryChanged();};
+$('etc-witness-reset').onclick=()=>{if(!etcWitness)return;state.vertices=clone(etcWitness.original);geometryChanged();fit();};
+$('etc-power').onchange=()=>{if($('etc-power').value)setPower(Number($('etc-power').value));};
+$('etc-overlay').onchange=draw;
+fetch(new URL('../data/etc-matches.json',import.meta.url)).then(response=>{if(!response.ok)throw Error('ETC data could not be loaded');return response.json();}).then(data=>{
+  etcData=data;$('etc-power').replaceChildren();const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Choose a sampled power';$('etc-power').append(placeholder);
+  for(const q of data.powers){const option=document.createElement('option');option.value=String(q.p);option.textContent=Math.abs(q.p-P_MIN)<1e-10?'4 − 2√2':q.p===65/64?'65/64 = 1.015625':fmt(q.p);$('etc-power').append(option);}
+  updateETC();draw();
+}).catch(error=>{$('etc-empty').textContent=error.message;$('etc-empty').hidden=false;});
 try{createWorkers();const restored=restore();resize();setMode(state.mode,{reset:!restored});new ResizeObserver(resize).observe(canvas);new ResizeObserver(resize).observe(chart);}catch(error){setStatus('The explorer could not start: '+error.message,true);}

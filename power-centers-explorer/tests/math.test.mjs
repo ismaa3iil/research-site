@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {gauss,P_MIN,centroid,centerPair,powerCenter,verifyPair,norm,sub,powerSamples,LIMITS} from '../src/math.js';
+import {gauss,P_MIN,RANGE_MIN,centroid,centerPair,powerCenter,verifyPair,norm,sub,powerSamples,LIMITS} from '../src/math.js';
 const close=(a,b,tolerance=2e-9)=>assert.ok(norm(sub(a,b))<tolerance,`distance ${norm(sub(a,b))}: ${a} vs ${b}`);
 const triangle=[[-1,0],[1,0],[.58,.92]],tetra=[[-1,0,0],[1,0,0],[-.3,.9,.75],[.25,.5,-.8]];
 test('Gaussian weights integrate moments through degree 2n−1',()=>{
@@ -37,6 +37,6 @@ test('p=4 flat barycentric triangle agrees with its analytic stationarity equati
 });
 test('coincident shapes and endpoint samples are finite and exact',()=>{
   assert.deepEqual(powerCenter([[2,3],[2,3],[2,3]],21.63,{hull:true}).center,[2,3]);
-  for(const mode of ['triangle','tetrahedron']){const powers=powerSamples(mode);assert.equal(powers[0],P_MIN);assert.equal(powers.at(-1),LIMITS[mode]);assert.ok(powers.includes(2));}
+  for(const mode of ['triangle','tetrahedron']){const powers=powerSamples(mode);assert.equal(powers[0],RANGE_MIN[mode]);assert.equal(powers.at(-1),LIMITS[mode]);assert.ok(powers.includes(2));}
   assert.throws(()=>powerCenter(triangle,1));assert.throws(()=>powerCenter([[0,0],[1,0],[0,NaN]],8));
 });
