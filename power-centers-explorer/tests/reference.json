@@ -1,0 +1,268 @@
+[
+  {
+    "vertices": [
+      [
+        -1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        0.58,
+        0.92
+      ]
+    ],
+    "p": 1.1715728752538097,
+    "center": [
+      0.22133111962021507,
+      0.31817415864333093
+    ],
+    "tolerance": 3e-09,
+    "source": "research/hull_power.py, order 48, graded edges"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        0.58,
+        0.92
+      ]
+    ],
+    "p": 1.5,
+    "center": [
+      0.20989958106671205,
+      0.3136766490368343
+    ],
+    "tolerance": 3e-09,
+    "source": "research/hull_power.py, order 48, graded edges"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        0.58,
+        0.92
+      ]
+    ],
+    "p": 4,
+    "center": [
+      0.1407153743882408,
+      0.2785914900428583
+    ],
+    "tolerance": 3e-09,
+    "source": "research/hull_power.py, order 48, graded edges"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        0.58,
+        0.92
+      ]
+    ],
+    "p": 8,
+    "center": [
+      0.08544755030185817,
+      0.23595732865330532
+    ],
+    "tolerance": 3e-09,
+    "source": "research/hull_power.py, order 48, graded edges"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        0.58,
+        0.92
+      ]
+    ],
+    "p": 16,
+    "center": [
+      0.04490599910008411,
+      0.19044761535741883
+    ],
+    "tolerance": 3e-09,
+    "source": "research/hull_power.py, order 48, graded edges"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        0.58,
+        0.92
+      ]
+    ],
+    "p": 21.63,
+    "center": [
+      0.03298051319677742,
+      0.1720896379541054
+    ],
+    "tolerance": 3e-09,
+    "source": "research/hull_power.py, order 48, graded edges"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        -0.3,
+        0.9,
+        0.75
+      ],
+      [
+        0.25,
+        0.5,
+        -0.8
+      ]
+    ],
+    "p": 4,
+    "center": [
+      -0.012145370184570953,
+      0.3389431789669752,
+      -0.0006552784398064712
+    ],
+    "tolerance": 3e-08,
+    "source": "research/simplex_volume.py, independent volume order 30"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        -0.3,
+        0.9,
+        0.75
+      ],
+      [
+        0.25,
+        0.5,
+        -0.8
+      ]
+    ],
+    "p": 8,
+    "center": [
+      -0.007963847227066608,
+      0.30718838638663465,
+      0.021313105357003682
+    ],
+    "tolerance": 3e-08,
+    "source": "research/simplex_volume.py, independent volume order 30"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        -0.3,
+        0.9,
+        0.75
+      ],
+      [
+        0.25,
+        0.5,
+        -0.8
+      ]
+    ],
+    "p": 16,
+    "center": [
+      -0.0034978307559588636,
+      0.260852779181197,
+      0.05056828108765736
+    ],
+    "tolerance": 3e-08,
+    "source": "research/simplex_volume.py, independent volume order 30"
+  },
+  {
+    "vertices": [
+      [
+        -1,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        -0.3,
+        0.9,
+        0.75
+      ],
+      [
+        0.25,
+        0.5,
+        -0.8
+      ]
+    ],
+    "p": 19.95,
+    "center": [
+      -0.002697429422471814,
+      0.24664985747172335,
+      0.059670144242238904
+    ],
+    "tolerance": 3e-08,
+    "source": "research/simplex_volume.py, independent volume order 30"
+  }
+]

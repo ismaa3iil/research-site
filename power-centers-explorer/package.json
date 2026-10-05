@@ -1,0 +1,14 @@
+{
+  "name": "power-centers-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive triangle and tetrahedron power-center explorer by Ismail Hammoudeh",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test --test-isolation=none tests/math.test.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}

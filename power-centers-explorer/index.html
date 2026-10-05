@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore atomic power centers and uniform-solid hull-power centers on draggable triangles and tetrahedra. Research by Ismail Hammoudeh.">
+  <meta name="theme-color" content="#163345">
+  <title>Power Centers Explorer · Ismail Hammoudeh</title>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Power Centers Explorer home"><img src="./icon.svg" alt="" width="36" height="36"><span>Power Centers<span class="brand-sub">EXPLORER</span></span></a>
+    <div class="top-actions"><span class="author">Ismail Hammoudeh</span><button id="share" class="quiet-button">Copy link</button><button id="export-png" class="quiet-button">Save image</button></div>
+  </header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">GEOMETRY IN MOTION</p><h1>One shape. Two kinds of center.</h1><p>Move the vertices and follow the centers as the power changes.</p></div><span class="numerical-badge"><span></span>Numerical explorer</span></div>
+    <div class="workspace">
+      <aside class="controls" aria-label="Explorer controls">
+        <section class="control-section">
+          <h2>Choose your shape</h2>
+          <div class="segmented" role="group" aria-label="Shape"><button id="triangle-mode" class="active" aria-pressed="true">Triangle <span>2D</span></button><button id="tetrahedron-mode" aria-pressed="false">Tetrahedron <span>3D</span></button></div>
+          <label class="field-label" for="preset">Starting configuration</label>
+          <select id="preset"></select>
+        </section>
+        <section class="control-section power-section">
+          <div class="section-heading"><h2>Power <i>p</i></h2><button id="play" class="icon-button" aria-label="Animate power" title="Animate power">▶</button></div>
+          <div class="power-value"><input id="power-number" type="number" min="1.17157287525381" max="21.63" step="0.01" value="8" aria-label="Power p"><span>adjust the exponent</span></div>
+          <input id="power-slider" type="range" min="1.17157287525381" max="21.63" step="0.005" value="8" aria-label="Power p slider">
+          <div class="range-labels"><span title="4 − 2√2">4 − 2√2 <small>≈ 1.1716</small></span><span id="range-max">21.63</span></div>
+          <div class="quick-powers" aria-label="Jump to a power"><button data-power="2">2</button><button data-power="4">4</button><button data-power="8">8</button><button data-power="12">12</button><button data-power="16">16</button><button data-power="20">20</button><button data-power="21">21</button></div>
+        </section>
+        <section class="control-section">
+          <h2>What to show</h2>
+          <label class="toggle-row"><input id="show-atomic" type="checkbox" checked><span class="key atomic"></span><span>Power center <small>Equal mass at the vertices</small></span></label>
+          <label class="toggle-row"><input id="show-hull" type="checkbox" checked><span class="key hull"></span><span>Hull-power center <small>Uniform mass through the solid</small></span></label>
+          <label class="toggle-row simple"><input id="show-curves" type="checkbox" checked><span>Full power curves</span></label>
+          <label class="toggle-row simple"><input id="show-inset" type="checkbox" checked><span>Magnified center view</span></label>
+          <div class="two-fields"><div><label class="field-label" for="quality">Calculation</label><select id="quality"><option value="standard">Standard</option><option value="high">More precise</option></select></div><div id="plane-field" hidden><label class="field-label" for="drag-plane">Drag in</label><select id="drag-plane"><option value="view">View plane</option><option value="xy">XY plane</option><option value="xz">XZ plane</option><option value="yz">YZ plane</option></select></div></div>
+        </section>
+        <details class="control-section vertex-details"><summary>Vertex coordinates <span>edit precisely</span></summary><div id="vertex-editor"></div><p class="small-note">Select a vertex to move it with arrow keys. Hold Shift for larger steps.</p></details>
+        <div class="control-footer"><button id="reset" class="quiet-button">Reset shape</button><button id="export-csv" class="quiet-button">Export curve CSV</button></div>
+      </aside>
+      <section class="visual-panel" aria-label="Interactive geometry">
+        <div class="canvas-toolbar"><div><span id="shape-label">Triangle</span><span id="canvas-hint">Drag a vertex</span></div><div class="view-buttons"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="fit" title="Fit entire shape">Fit shape</button><button id="focus" title="Zoom to the center curves">Focus centers</button><button id="view-front" hidden title="Look along the z axis">Front</button></div></div>
+        <div class="canvas-wrap"><canvas id="geometry" tabindex="0" aria-label="Draggable triangle vertices and center curves. Coordinate controls provide a keyboard alternative."></canvas><div id="calculation-status" role="status" aria-live="polite">Calculating center curves…</div><div class="canvas-help" id="canvas-help">Drag a vertex · Scroll to zoom</div></div>
+        <div class="center-readouts">
+          <div class="readout"><span class="key atomic"></span><div><h3>Power center <span>M<sub>p</sub></span></h3><output id="atomic-coordinates">—</output></div></div>
+          <div class="readout"><span class="key hull"></span><div><h3>Hull-power center <span>U<sub>p</sub></span></h3><output id="hull-coordinates">—</output></div></div>
+          <div class="readout distance"><div><h3>Distance between centers</h3><output id="center-distance">—</output></div></div>
+        </div>
+      </section>
+    </div>
+    <div class="below-grid">
+      <section class="chart-panel"><div class="section-heading"><div><h2>The journey of the centers</h2><p>Coordinate values against power. Click the chart to select <i>p</i>.</p></div><select id="chart-axis" aria-label="Chart coordinate"><option value="0">x coordinate</option><option value="1">y coordinate</option><option value="2" hidden>z coordinate</option></select></div><canvas id="coordinate-chart" tabindex="0" aria-label="Center coordinate versus power chart; arrow keys change power"></canvas></section>
+      <section class="probe-panel"><p class="eyebrow">LAST VERTEX MOTION</p><h2>Attractivity probe</h2><p>After a drag, compare the center displacement with the direction you moved the vertex.</p><div class="probe-row"><span>Power center</span><output id="atomic-probe">Drag a vertex to begin</output></div><div class="probe-row"><span>Hull-power center</span><output id="hull-probe">Drag a vertex to begin</output></div><p class="small-note" id="probe-note">The quantity is h · (center after − center before), evaluated at the current power. A negative value is a numerical indication of failure for that motion.</p></section>
+    </div>
+    <details class="about"><summary>Mathematics, proof status, and how this explorer works <span>+</span></summary><div class="about-grid"><div><h2>The two definitions</h2><p>The power center minimizes the sum of distances to the vertices raised to <i>p</i>. The hull-power center minimizes the average of distance to every point in the solid, raised to <i>p</i>.</p><p class="equation">M<sub>p</sub> = arg min<sub>x</sub> ∑<sub>i</sub> ‖x − v<sub>i</sub>‖<sup>p</sup></p><p class="equation">U<sub>p</sub> = arg min<sub>x</sub> E ‖x − ∑<sub>i</sub> λ<sub>i</sub>v<sub>i</sub>‖<sup>p</sup></p><p>The barycentric weights λ are uniform on the reference simplex. This same measure is retained at flat shapes and coincident vertices. At p = 2 both centers are the vertex centroid.</p></div><div><h2>What has been proved</h2><p>The universal atomic interval is exactly [4 − 2√2, 4 + 2√2]. For triangle hull-power centers, every power in [4 − 2√2, 16], and the separate powers 20 and 21, has an all-shape proof. The interval between 16 and 21 is still open.</p><p>The common hull interval for all simplex dimensions reaches 4 + 2√2 + 1/2,000,000. The displayed triangle limit 21.63 and tetrahedron limit 19.95 approach observed upper failure branches; they are not proved sharp endpoints.</p><p id="accuracy-info">The displayed centers are floating-point approximations. The selected hull center is checked with a second quadrature order. That comparison estimates numerical stability; it is not a rigorous error bound.</p></div></div><p class="credit">Research and authorship: <strong>Ismail Hammoudeh</strong>. Developed with extensive use of <strong>ChatGPT</strong>. The explorer and its numerical tools are free, open-source software under the MIT license. No account, external service, or paid mathematics package is needed.</p></details>
+    <footer><span>© 2026 Ismail Hammoudeh</span><span>Power Centers & Hull-Power Centers</span><a id="source-link" href="https://github.com/ismaa3iil/research-site/tree/main/power-centers-explorer" target="_blank" rel="noopener">Source on GitHub ↗</a></footer>
+  </main>
+  <div id="toast" role="status" hidden></div>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

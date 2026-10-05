@@ -42,3 +42,10 @@ Website: <https://ismaa3iil.fyi/attractive-centers/>
 [Open the explorer](https://ismaa3iil.fyi/attractive-centers/explorer/): movable triangle vertices, four optional planar chest constructions, and a rotatable tetrahedron chest. Independent area/volume percentages and short mathematical explanations are included.
 
 The [explorer source](attractive-centers/explorer/) is MIT-licensed free software. It includes a dependency-free browser implementation and a Julia scientific module with regression tests. This license applies to the explorer only, not to the papers.
+
+
+## Power Centers and Hull-Power Centers
+
+[Open the Power Centers Explorer](https://ismaa3iil.fyi/power-centers-explorer/): draggable triangles and tetrahedra, both power-center curves, a motion attractivity probe, coordinate charts, shareable shapes, and CSV/PNG exports. The power range starts at 4−2√2 and reaches 21.63 for triangles or 19.95 for tetrahedra. Numerical exploration limits are distinguished from proved attractivity intervals.
+
+Research and authorship: **Ismail Hammoudeh**, with **extensive use of ChatGPT** acknowledged. The [software and mathematical tools](power-centers-explorer/) are free under the MIT license and run locally in the browser without a paid package or service. The numerical regression tests and real-browser interaction checks passed before publication.
