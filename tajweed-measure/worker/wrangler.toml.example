@@ -12,6 +12,10 @@ binding = "DB"
 database_name = "tajweed-measure"
 database_id = "REPLACE_WITH_NEW_DATABASE_ID"
 
-[[r2_buckets]]
-binding = "AUDIO"
-bucket_name = "tajweed-measure-audio"
+[assets]
+directory = "../.private/worker-assets"
+binding = "AUDIO_ASSETS"
+# Required: every request must pass through the Worker, including direct asset URLs.
+run_worker_first = true
+html_handling = "none"
+not_found_handling = "none"

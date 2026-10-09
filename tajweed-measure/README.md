@@ -1,6 +1,6 @@
 # Tajweed measurement room
 
-Static measurement interface for GitHub Pages, with a separate Cloudflare Worker, D1 database, and private R2 audio bucket. This is a pilot annotation tool, not a report of measured reciter performance.
+Static measurement interface for GitHub Pages, with a separate Cloudflare Worker, D1 database, and authenticated Worker audio assets. This is a pilot annotation tool, not a report of measured reciter performance. R2 activation is not required.
 
 The new service is independent of the website's existing triangle-preference collector. It never uses that collector's database or changes its configuration.
 
@@ -34,20 +34,23 @@ The preparation script accepts the existing study folder containing `data/pilot-
 python tools/prepare_pilot.py --study-root /path/to/Tajweed --libs /path/to/libraries
 ```
 
-It creates 32 lossless FLACs, 148 tasks, a private provenance manifest, and a D1 seed file under gitignored `.preview/` and `.private/`. It verifies every FLAC against the PCM source. Audio, expert identities, and annotations must never be committed to the public website repository. All generated pilot measurements start empty.
+It creates 32 lossless FLACs, 148 tasks, a private provenance manifest, and a D1 seed file under gitignored `.preview/` and `.private/`. It verifies every FLAC against the PCM source. Audio, expert identities, and annotations must never be committed to the public website repository. All generated pilot measurements start empty. `node tools/stage-assets.mjs` verifies the hashes again and stages audio plus the public sign-in interface for Worker deployment.
 
 ## Connect the existing Cloudflare account
 
 Cloudflare DNS for the website does not by itself create the application's backend. Run these from this directory after signing into the correct account:
 
 ```sh
-npx wrangler login
+npx wrangler login --scopes account:read user:read workers:write workers_scripts:write d1:write
 npx wrangler whoami
 npx wrangler d1 create tajweed-measure
-npx wrangler r2 bucket create tajweed-measure-audio
 ```
 
-If R2 asks to enable a paid account or accept billing terms, the account owner must make that decision. Do not enable a public R2 URL. Copy `worker/wrangler.toml.example` to `worker/wrangler.toml`; set the **new** D1 database ID and, if needed, the account ID. Keep the exact production origin `https://ismaa3iil.fyi` and chosen site URL in the variables. Add other origins deliberately.
+Copy `worker/wrangler.toml.example` to `worker/wrangler.toml`; set the **new** D1 database ID and, if needed, the account ID. Keep the exact production origin `https://ismaa3iil.fyi` and chosen site URL in the variables. Add other origins deliberately. A deployed Worker also accepts its own origin for the review interface at `/room/`.
+
+**Keep `assets.run_worker_first = true`, `html_handling = "none"`, and `not_found_handling = "none"`.** All asset requests must pass through the authentication code. The only public frontend paths are an explicit `/room/` allowlist; raw `/audio/` paths never fall through to asset serving. An authenticated audio request also needs an assigned task using that clip. Tests cover direct URLs and navigation requests. See [Cloudflare's authenticated asset routing documentation](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/).
+
+Assets have a 25 MiB per-file limit; the staging script rejects larger clips. Split long recordings into reviewed excerpts rather than uploading entire long surahs. Asset storage has no additional charge, while requests that run the authentication Worker count toward the account's Worker allowance. No paid plan or R2 service is enabled by this setup. See [Cloudflare's asset billing documentation](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/).
 
 Create a random 32-byte base64url owner secret and store it in a password manager. Set the Worker secret using Wrangler's interactive prompt:
 
@@ -57,10 +60,10 @@ npx wrangler d1 execute tajweed-measure --remote --file worker/schema.sql --conf
 npx wrangler d1 execute tajweed-measure --remote --file .private/seed.sql --config worker/wrangler.toml
 ```
 
-Upload each `.preview/audio/<clip-id>.flac` to the private bucket as `<clip-id>.flac`:
+Stage the reviewed audio and interface, then deploy them with the Worker:
 
 ```sh
-npx wrangler r2 object put tajweed-measure-audio/<clip-id>.flac --file .preview/audio/<clip-id>.flac --content-type audio/flac --remote --config worker/wrangler.toml
+node tools/stage-assets.mjs
 npm run deploy:api
 ```
 
@@ -68,7 +71,7 @@ Set `apiUrl` in `config.json` to the deployed Worker HTTPS URL. That URL is publ
 
 ## Owner operations
 
-Set `TAJWEED_API_URL` and `TAJWEED_ADMIN_SECRET` in your local shell. The secret must be at least 32 URL-safe characters. Do not paste it into GitHub, the frontend, or chat.
+Set `TAJWEED_API_URL` and `TAJWEED_ADMIN_SECRET` in your local shell. Alternatively, the CLI reads the API URL from `config.json` and the secret from local gitignored `.private/owner-secrets.json` (`{"ADMIN_SECRET":"..."}`). The secret must be at least 32 URL-safe characters. Keep that local file private and backed up; never put it in the asset staging folder. Do not paste it into GitHub, the frontend, or chat.
 
 ```sh
 node tools/admin.mjs invite "Expert 01" all
@@ -90,6 +93,6 @@ The pilot comprises Al-Maida 1–2; Fatir 1, 28, 45; Qaf 1, 6, 16, from four of 
 
 ## Validation
 
-`npm test` uses Miniflare's actual Worker/D1/R2 runtime. It exercises invitation/session access, private assignments, audio access, revocation, CORS, source-coordinate arithmetic, independent calibration, invalid/self-overlapping intervals, optimistic write conflicts, history triggers, and private exports. Before inviting experts, browser acceptance checks must cover actual prepared audio, waveform controls, marking, saving, reload recovery, narrow layout, and the production setup gate. These checks do not replace human acoustic validation.
+`npm test` uses Miniflare's actual Worker/D1/Assets runtime. It exercises invitation/session access, private assignments, audio access, direct asset URL protection, navigation requests, revocation, expiry, CORS, source-coordinate arithmetic, independent calibration, invalid/self-overlapping intervals, optimistic write conflicts, history triggers, and private exports. Before inviting experts, browser acceptance checks must cover actual prepared audio, waveform controls, marking, saving, reload recovery, narrow layout, and production invitation login. These checks do not replace human acoustic validation.
 
 The frontend uses WaveSurfer.js under its BSD-3-Clause license, copied to `dist/WAVESURFER-LICENSE.txt` by the build. Source audio and Quran text retain their source rights; inclusion in this local private study package is not a grant of redistribution rights. Provenance remains in the private manifest.

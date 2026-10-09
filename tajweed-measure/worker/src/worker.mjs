@@ -40,6 +40,12 @@ async function admin(req, env) {
 }
 async function route(req, env) {
   const path = new URL(req.url).pathname;
+  // Only this explicit frontend allowlist is public. Never fall through to assets.
+  const roomAssets = new Set(['/room/', '/room/index.html', '/room/style.css', '/room/guide.html', '/room/dist/app.js', '/room/dist/WAVESURFER-LICENSE.txt']);
+  if (req.method === 'GET' && path === '/room/config.json') return json({ apiUrl: new URL(req.url).origin, studyTitle: 'Tajweed timing study' });
+  if (req.method === 'GET' && roomAssets.has(path)) {
+    return env.AUDIO_ASSETS.fetch(new Request(new URL(path === '/room/' ? '/room/index.html' : path, req.url)));
+  }
   if (path === '/v1/health' && req.method === 'GET') return json({ service: 'tajweed-measure', protocolVersion: PROTOCOL_VERSION });
   if (path === '/v1/session' && req.method === 'POST') {
     const { invite } = await body(req);
@@ -126,9 +132,11 @@ async function route(req, env) {
   if (audio && req.method === 'GET') {
     const row = await env.DB.prepare('SELECT c.object_key FROM clips c WHERE c.id=? AND EXISTS(SELECT 1 FROM tasks t JOIN assignments a ON a.task_id=t.id WHERE t.clip_id=c.id AND a.expert_id=?)').bind(audio[1], e.id).first();
     if (!row) throw new HttpError(404, 'Clip not found.');
-    const object = await env.AUDIO.get(row.object_key);
-    if (!object) throw new HttpError(404, 'The study audio has not been uploaded yet.');
-    return new Response(object.body, { headers: { 'Content-Type': 'audio/flac', 'Content-Length': String(object.size) } });
+    const object = await env.AUDIO_ASSETS.fetch(new Request(new URL('/audio/' + row.object_key, req.url)));
+    if (!object.ok) throw new HttpError(404, 'The study audio has not been uploaded yet.');
+    const response = new Response(object.body, object);
+    response.headers.set('Content-Type', 'audio/flac');
+    return response;
   }
   throw new HttpError(404, 'Endpoint not found.');
 }
@@ -137,7 +145,7 @@ export default {
     const origin = req.headers.get('Origin');
     const allowed = (env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim());
     const headers = new Headers({ 'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'Vary': 'Origin' });
-    if (origin && !allowed.includes(origin)) return new Response('Origin not allowed.', { status: 403, headers });
+    if (origin && origin !== new URL(req.url).origin && !allowed.includes(origin)) return new Response('Origin not allowed.', { status: 403, headers });
     if (origin) headers.set('Access-Control-Allow-Origin', origin);
     if (req.method === 'OPTIONS') {
       headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
@@ -146,7 +154,10 @@ export default {
     }
     let response;
     try { response = await route(req, env); }
-    catch (err) { response = json({ error: err.status ? err.message : 'The service could not complete this request.' }, err.status || 500); }
+    catch (err) {
+      if (!err.status) console.error('Tajweed service error:', err.name, err.message);
+      response = json({ error: err.status ? err.message : 'The service could not complete this request.' }, err.status || 500);
+    }
     const result = new Response(response.body, response);
     for (const [key, value] of headers) result.headers.set(key, value);
     return result;

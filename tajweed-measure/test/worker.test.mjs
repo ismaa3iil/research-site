@@ -1,12 +1,14 @@
 import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { fileURLToPath } from 'node:url';
 import { validateMeasurement, summarize } from '../shared/measurement.mjs';
 
 const secret = 'A'.repeat(43), origin = 'https://ismaa3iil.fyi';
-let mf, db, a, b, inviteB;
+let mf, db, a, b, inviteB, assetsDir;
 const clip = { id: 'clip_a', recording: 'Recording A', sampleRate: 1000, samples: 10000, sourceStartSample: 5000, sourceSha256: 'abc' };
 const task = id => ({ id, family: 'qalqala', verseKey: '50:1', wordIndex: 1, verseOrder: 50001 });
 const valid = () => ({ status: 'submitted', applicability: 'yes', actualStop: 'continue', confidence: 'high', alignmentConfirmed: true, samePaceConfirmed: true, subtype: 'ق', notes: '', calibrationNote: '', target: { start: 8500, end: 8800 }, references: Array.from({ length: 10 }, (_, i) => ({ id: 'r' + i, kind: i < 5 ? 'short_vowel' : 'natural_madd', start: i * 300, end: i * 300 + (i < 5 ? 100 : 200), label: 'word / a', eligible: true, exclusion: '' })) });
@@ -15,26 +17,29 @@ async function call(path, { method = 'GET', token, body, from = origin } = {}) {
 }
 async function invite(label, ids) {
   const r = await call('/v1/admin/experts', { method: 'POST', token: secret, body: { label, taskIds: ids } });
-  assert.equal(r.status, 201); const created = await r.json();
+  assert.equal(r.status, 201, await r.clone().text()); const created = await r.json();
   const code = created.invitationUrl.split('#invite=')[1];
   const session = await call('/v1/session', { method: 'POST', body: { invite: code } });
   assert.equal(session.status, 200);
   return { ...await session.json(), code, id: created.id };
 }
 before(async () => {
+  assetsDir = await mkdtemp(join(tmpdir(), 'tajweed-assets-test-'));
+  await mkdir(join(assetsDir, 'audio')); await mkdir(join(assetsDir, 'room'));
+  await writeFile(join(assetsDir, 'audio', 'clip_a.flac'), new Uint8Array([102,76,97,67]));
+  await writeFile(join(assetsDir, 'room', 'index.html'), '<h1>Public sign-in page</h1>');
   mf = new Miniflare(convertV4MiniflareOptions({ modulesRoot: fileURLToPath(new URL('..', import.meta.url)), modules: [
     { type: 'ESModule', path: fileURLToPath(new URL('../worker/src/worker.mjs', import.meta.url)) },
     { type: 'ESModule', path: fileURLToPath(new URL('../shared/measurement.mjs', import.meta.url)) }
-  ], compatibilityDate: '2026-10-01', d1Databases: ['DB'], r2Buckets: ['AUDIO'], bindings: { ADMIN_SECRET: secret, ALLOWED_ORIGINS: origin, SITE_URL: origin + '/tajweed-measure/' } }));
+  ], compatibilityDate: '2026-10-01', d1Databases: ['DB'], assets: { directory: assetsDir, binding: 'AUDIO_ASSETS', run_worker_first: true, routerConfig: { has_user_worker: true }, assetConfig: { html_handling: 'none', not_found_handling: 'none' } }, bindings: { ADMIN_SECRET: secret, ALLOWED_ORIGINS: origin, SITE_URL: origin + '/tajweed-measure/' } }));
   db = await mf.getD1Database('DB');
   const schema = await readFile(new URL('../worker/schema.sql', import.meta.url), 'utf8');
   for (const statement of schema.trim().split(/;\r?\n(?=(?:CREATE|PRAGMA))/)) await db.prepare(statement).run();
   await db.prepare('INSERT INTO clips VALUES(?,?,?,?)').bind('clip_a', JSON.stringify(clip), '{"reciter":"private identity"}', 'clip_a.flac').run();
   for (const id of ['task_a', 'task_b']) await db.prepare('INSERT INTO tasks VALUES(?,?,?)').bind(id, 'clip_a', JSON.stringify(task(id))).run();
-  await (await mf.getR2Bucket('AUDIO')).put('clip_a.flac', new Uint8Array([102,76,97,67]));
   a = await invite('Expert A', ['task_a']); b = await invite('Expert B', ['task_b']); inviteB = b.code;
 });
-after(async () => { await mf?.dispose(); });
+after(async () => { await mf?.dispose(); if (assetsDir) await rm(assetsDir, { recursive: true }); });
 
 test('independent medians and native source coordinates', () => {
   const s = summarize(validateMeasurement(valid(), clip), clip);
@@ -87,6 +92,15 @@ test('protected audio and revocation invalidate invitations and sessions', async
   assert.equal((await call('/v1/tasks', { token: b.token })).status, 401);
   assert.equal((await call('/v1/session', { method: 'POST', body: { invite: inviteB } })).status, 401);
   assert.equal((await call('/v1/tasks', { token: a.token })).status, 200);
+});
+test('direct asset paths and navigation requests cannot bypass authentication', async () => {
+  assert.equal((await call('/audio/clip_a.flac')).status, 401);
+  assert.equal((await call('/audio/clip_a.flac', { token: a.token })).status, 404);
+  const navigation = await mf.dispatchFetch('https://api.example/audio/clip_a.flac', { headers: { 'Sec-Fetch-Mode': 'navigate', Accept: 'text/html' } });
+  assert.equal(navigation.status, 401);
+  assert.equal((await call('/room/')).status, 200);
+  const config = await (await call('/room/config.json')).json(); assert.equal(config.apiUrl, 'https://api.example');
+  assert.equal((await call('/v1/tasks', { token: a.token, from: 'https://api.example' })).status, 200);
 });
 test('expired sessions and invitations cannot be reused', async () => {
   await db.prepare('UPDATE sessions SET expires_at=0 WHERE expert_id=?').bind(a.id).run();
