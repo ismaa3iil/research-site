@@ -2,6 +2,8 @@
 
 Static measurement interface for GitHub Pages, with a separate Cloudflare Worker, D1 database, and authenticated Worker audio assets. This is a pilot annotation tool, not a report of measured reciter performance. R2 activation is not required.
 
+The backend and 32-clip / 148-task pilot were deployed on 9 October 2026. `config.json` contains the live API URL. See [the validation record](VALIDATION.md) for completed checks and remaining manual browser acceptance. The local owner secret and invitation files are gitignored.
+
 The new service is independent of the website's existing triangle-preference collector. It never uses that collector's database or changes its configuration.
 
 ## What experts can do
@@ -41,7 +43,7 @@ It creates 32 lossless FLACs, 148 tasks, a private provenance manifest, and a D1
 Cloudflare DNS for the website does not by itself create the application's backend. Run these from this directory after signing into the correct account:
 
 ```sh
-npx wrangler login --scopes account:read user:read workers:write workers_scripts:write d1:write
+npx wrangler login --device --scopes account:read user:read workers:write workers_scripts:write d1:write
 npx wrangler whoami
 npx wrangler d1 create tajweed-measure
 ```

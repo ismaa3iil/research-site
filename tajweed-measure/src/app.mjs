@@ -8,11 +8,17 @@ const $ = id => document.getElementById(id);
 const preview = ['localhost', '127.0.0.1'].includes(location.hostname) && new URLSearchParams(location.search).get('preview') === '1';
 const invitation = new URLSearchParams(location.hash.slice(1)).get('invite');
 if (invitation) history.replaceState(null, '', location.pathname + location.search);
-let config, tasks = [], current, measurement, baseRevision = 0, dirty = false, ws, regions, spec, selected = 'target', rendering = false, ready = false, clipId, blobUrl, loading = false;
+let config, tasks = [], current, measurement, baseRevision = 0, dirty = false, ws, regions, spec, selected = 'target', rendering = false, ready = false, clipId, loading = false;
 let credentials = JSON.parse(sessionStorage.getItem('tajweed-session') || 'null');
 const blank = () => ({ status: 'draft', applicability: 'pending', actualStop: 'pending', confidence: 'pending', alignmentConfirmed: false, samePaceConfirmed: false, subtype: '', notes: '', calibrationNote: '', target: null, references: [] });
 const notice = (message, error = false) => { $('notice').textContent = message; $('notice').className = error ? 'error' : ''; $('notice').hidden = !message; };
 const error = e => notice(e.message || String(e), true);
+function confirmAction(message, label) {
+  const dialog = $('confirm-dialog');
+  if (dialog.open) return Promise.resolve(false);
+  $('confirm-message').textContent = message; $('confirm-accept').textContent = label; dialog.returnValue = '';
+  return new Promise(resolve => { dialog.addEventListener('close', () => resolve(dialog.returnValue === 'confirm'), { once: true }); dialog.showModal(); });
+}
 const download = (name, data) => { const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
 async function api(path, options = {}) {
   const response = await fetch(config.apiUrl + path, { ...options, headers: { ...(credentials ? { Authorization: `Bearer ${credentials.token}` } : {}), ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...options.headers }, cache: 'no-store', credentials: 'omit' });
@@ -109,7 +115,7 @@ async function loadAudio(clip) {
   if (clipId === clip.id && ready) { drawRegions(); return; }
   ready = false; $('audio-state').textContent = 'Loading lossless audio…';
   for (const id of ['play','selection','mark-start','mark-end']) $(id).disabled = true;
-  ws?.destroy(); spec = null; if (blobUrl) URL.revokeObjectURL(blobUrl);
+  ws?.destroy(); spec = null;
   regions = Regions.create();
   ws = WaveSurfer.create({ container: '#waveform', waveColor: '#8ba9a0', progressColor: '#216e5a', cursorColor: '#b95321', height: 125, sampleRate: clip.sampleRate, minPxPerSec: 0, normalize: false, plugins: [regions, Timeline.create({ height: 20 })] });
   ws.on('timeupdate', time => { $('cursor').textContent = `${time.toFixed(3)} s`; const r = interval(); if ($('loop').checked && r && time >= r.end / clip.sampleRate) ws.setTime(r.start / clip.sampleRate); });
@@ -124,8 +130,7 @@ async function loadAudio(clip) {
   });
   const response = preview ? await fetch(`.preview/audio/${clip.id}.flac`) : await api(`/v1/audio/${clip.id}`);
   if (!response.ok) throw new Error('Preview audio is unavailable. Prepare the private pilot files first.');
-  blobUrl = URL.createObjectURL(await response.blob());
-  await ws.load(blobUrl);
+  await ws.loadBlob(await response.blob());
   if (Math.abs(ws.getDuration() - clip.samples / clip.sampleRate) > 2 / clip.sampleRate) throw new Error('Decoded duration differs from the source manifest. Do not measure this clip.');
   clipId = clip.id; ready = true; $('speed').value = '1'; $('zoom').value = '0'; $('show-spec').checked = false;
   for (const id of ['play','selection','mark-start','mark-end']) $(id).disabled = false;
@@ -134,7 +139,7 @@ async function loadAudio(clip) {
 }
 async function openTask(task, first = false) {
   if (loading) return;
-  if (!first && dirty && !confirm('This measurement has unsaved changes. Keep a local recovery copy and switch events?')) return;
+  if (!first && dirty && !await confirmAction('This measurement has unsaved changes. Keep a local recovery copy and switch events?', 'Switch event')) return;
   loading = true;
   try {
     current = task; baseRevision = task.revision; measurement = structuredClone(task.annotation || blank()); selected = 'target'; dirty = false;
@@ -214,8 +219,8 @@ document.addEventListener('keydown', event => {
   if (event.code === 'Space') { event.preventDefault(); ws.playPause().catch(error); }
 });
 $('save').onclick = () => save('draft').catch(error); $('submit').onclick = () => save('submitted').catch(error);
-$('restore').onclick = () => {
-  if (!confirm('Discard unsaved changes for this event and restore its last saved measurement? Export your local draft first if needed.')) return;
+$('restore').onclick = async () => {
+  if (!await confirmAction('Discard unsaved changes for this event and restore its last saved measurement? Export your local draft first if needed.', 'Restore saved')) return;
   localStorage.removeItem(draftKey()); measurement = structuredClone(current.annotation || blank()); baseRevision = current.revision; dirty = false;
   populate(); $('save-state').textContent = current.annotation ? `Restored saved revision ${current.revision}` : 'Restored empty measurement'; notice('');
 };
@@ -223,7 +228,7 @@ $('next').onclick = () => { const index = tasks.indexOf(current); if (index + 1 
 $('filter').onchange = renderQueue;
 $('export-draft').onclick = () => download('tajweed-local-draft.json', { mode: preview ? 'local-preview' : 'unsaved-recovery', taskId: current.id, baseRevision, clip: current.clip, measurement });
 $('export').onclick = async () => { try { download('tajweed-my-annotations.json', preview ? { mode: 'local-preview', annotations: tasks.filter(t => t.annotation).map(t => ({ taskId: t.id, clip: t.clip, revision: t.revision, ...t.annotation })) } : await (await api('/v1/annotations')).json()); } catch (e) { error(e); } };
-$('signout').onclick = () => { if (dirty && !confirm('Sign out with unsaved changes? A recovery copy stays on this device.')) return; credentials = null; sessionStorage.removeItem('tajweed-session'); location.reload(); };
+$('signout').onclick = async () => { if (dirty && !await confirmAction('Sign out with unsaved changes? A recovery copy stays on this device.', 'Sign out')) return; credentials = null; sessionStorage.removeItem('tajweed-session'); location.reload(); };
 $('invite-form').onsubmit = event => { event.preventDefault(); enter($('invite').value).catch(error); };
 window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
 try {

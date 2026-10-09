@@ -6,8 +6,8 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; media-src 'self' blob:; img-src 'self' data: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Tajweed timing · Measurement room</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="dist/app.js"></script>
+  <link rel="stylesheet" href="style.css?v=0.1.1">
+  <script type="module" src="dist/app.js?v=0.1.1"></script>
 </head>
 <body>
   <header class="topbar"><a href="../">Ismaa3iil <span>/ research</span></a><span class="pill">EXPERT ANNOTATION</span><button id="signout" hidden>Sign out</button></header>
@@ -67,5 +67,9 @@
     </div>
     <footer>Murattal timing study · Pilot protocol 1.0 · <a href="guide.html">Protocol &amp; keyboard controls</a></footer>
   </main>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+    <h2 id="confirm-title">Confirm action</h2><p id="confirm-message"></p>
+    <form method="dialog" class="row"><button value="cancel" autofocus>Keep editing</button><button id="confirm-accept" value="confirm" class="primary">Continue</button></form>
+  </dialog>
 </body>
 </html>
