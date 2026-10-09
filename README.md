@@ -1,6 +1,10 @@
 # research-site
 Mathematical, Physical, Historical & Theological Investigations
 
+## Tajweed timing study
+
+[Measurement room](https://ismaa3iil.fyi/tajweed-measure/) for invited experts studying murattal timing in Al-Maida, Fatir, and Qaf. The pilot supports waveform and spectrogram inspection, independent local timing references, private assignments, and versioned annotations using a separate Cloudflare Worker, D1, and authenticated audio assets. Backend deployment and account setup are documented in [the application README](tajweed-measure/README.md).
+
 ## Triangle Centers Inspired by Physics
 
 The [project page](https://ismaa3iil.fyi/physically-inspired-triangle-centers/) provides freely accessible research and teaching resources:

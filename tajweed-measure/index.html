@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; media-src 'self' blob:; img-src 'self' data: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>Tajweed timing · Measurement room</title>
+  <link rel="stylesheet" href="style.css?v=0.1.1">
+  <script type="module" src="dist/app.js?v=0.1.1"></script>
+</head>
+<body>
+  <header class="topbar"><a href="../">Ismaa3iil <span>/ research</span></a><span class="pill">EXPERT ANNOTATION</span><button id="signout" hidden>Sign out</button></header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">LISTEN · MARK · REVIEW</p><h1>Tajweed timing</h1><p class="muted">A measurement room for careful listening.</p></div><div id="identity" class="identity">Invitation required</div></div>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <section id="login" class="panel login">
+      <p class="eyebrow">PRIVATE STUDY</p><h2>Welcome to the measurement room</h2>
+      <p>Invited experts mark acoustic boundaries and nearby timing references in murattal recordings of Al-Maida, Fatir, and Qaf.</p>
+      <p>Open the private invitation supplied by the study owner. Access is limited to your assigned recordings and your own annotations.</p>
+      <form id="invite-form"><label for="invite">Invitation link or access code</label><div class="row"><input id="invite" type="password" autocomplete="off" spellcheck="false" required><button class="primary">Enter study</button></div></form>
+      <p id="setup" class="muted"></p>
+      <a href="guide.html">Read the measurement guide ↗</a>
+    </section>
+    <div id="workspace" class="layout" hidden>
+      <aside class="panel queue">
+        <div class="queue-top"><p class="eyebrow">YOUR WORKLIST</p><strong id="progress">0 submitted</strong><progress id="progressbar" value="0" max="1"></progress></div>
+        <label for="filter">Show</label><select id="filter"><option value="all">All assigned events</option><option value="pending">Not yet submitted</option><option value="qalqala">Qalqala</option><option value="ghunna_geminate">Ghunna</option><option value="madd_wajib">Madd wajib</option><option value="madd_lazim">Madd lazim</option></select>
+        <nav id="tasks" aria-label="Assigned measurement events"></nav>
+        <button id="export" class="export">Export my saved annotations</button><button id="export-draft" class="export">Export current local draft</button>
+      </aside>
+      <article>
+        <section class="panel event">
+          <div class="row between"><p class="eyebrow" id="event-meta"></p><a href="guide.html" target="_blank" rel="noopener">Measurement guide ↗</a></div>
+          <div class="row between"><h2 id="family"></h2><span id="position" class="pill"></span></div>
+          <div class="word" id="word" lang="ar" dir="rtl"></div>
+          <details><summary>Read the complete ayah</summary><p class="ayah" id="ayah" lang="ar" dir="rtl"></p></details>
+          <p id="boundary-help" class="muted"></p>
+          <p id="alignment-warning" class="warning"></p>
+        </section>
+        <section class="panel audio-panel" aria-label="Recording and waveform">
+          <div class="row between"><strong>Listen &amp; mark</strong><span id="audio-state" class="muted">Loading audio…</span></div>
+          <div id="waveform"></div>
+          <div class="row transport"><button id="play" disabled>▶ Play</button><button id="selection" disabled>Play selection</button><label class="inline"><input type="checkbox" id="loop"> Loop</label><label class="inline">Speed <select id="speed"><option value="1">1×</option><option value="0.75">0.75×</option><option value="0.5">0.5×</option></select></label><label class="inline">Zoom <input id="zoom" type="range" min="0" max="800" step="10" value="0"></label><output id="cursor">0.000 s</output></div>
+          <div class="row"><button id="mark-start" disabled>Mark start <kbd>I</kbd></button><button id="mark-end" disabled>Mark end <kbd>O</kbd></button><label class="inline"><input type="checkbox" id="show-spec"> Spectrogram</label></div>
+          <p class="tiny muted">Click the waveform to seek. Select an interval below, then use I / O or drag its handles. All times are seconds within this clip. Playback speed does not change measurements.</p>
+        </section>
+        <section class="panel boundaries">
+          <div class="row between"><h2>1. Sound boundaries</h2><span class="pill target-color">TARGET</span></div>
+          <div class="fields"><label>Applicability<select id="applicability"><option value="pending">Choose…</option><option value="yes">Realized · measure</option><option value="no">Not realized / inapplicable</option><option value="uncertain">Uncertain</option></select></label><label>Actual stop at the target<select id="actual-stop"><option value="pending">Choose…</option><option value="stop">Stops</option><option value="continue">Continues</option><option value="uncertain">Uncertain</option></select></label><label>Boundary confidence<select id="confidence"><option value="pending">Choose…</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></label></div>
+          <label>Letter / subtype<input id="subtype" placeholder="e.g. د · release; نّ · geminate; kalimi; harfi"></label>
+          <div id="target-controls" class="row"><button id="select-target" class="selected">Edit target</button><label>Start (s)<input id="target-start" type="number" min="0" step="0.001"></label><label>End (s)<input id="target-end" type="number" min="0" step="0.001"></label><strong id="target-duration">No interval marked</strong><button id="clear-target">Clear interval</button></div>
+          <label class="check"><input type="checkbox" id="alignment">I checked that the audio contains the displayed ayah and target word.</label>
+        </section>
+        <section class="panel references">
+          <h2>2. Local timing references</h2><p class="muted">Choose nearby sounds at the same pace. Mark short vowel nuclei and natural madd independently; exclude phrase-final lengthening and secondary madd. Aim for five distinct eligible examples of each kind.</p>
+          <div class="row"><button id="add-sv">+ Short vowel</button><button id="add-nat">+ Natural madd</button><span id="reference-counts" class="muted"></span></div>
+          <div id="references"></div>
+          <label class="check"><input type="checkbox" id="same-pace">Eligible references share the target’s local pace and were selected by context.</label>
+          <label>Insufficient context / calibration notes<textarea id="calibration-note" rows="2" placeholder="If fewer than five references of either kind are available, explain why. The raw measurement can still be submitted; the corresponding haraka estimate stays unavailable."></textarea></label>
+        </section>
+        <section class="panel review">
+          <h2>3. Review &amp; save</h2><label>Notes<textarea id="notes" rows="3" placeholder="Ambiguous boundaries, stopping behavior, recording problems, or reasons for an uncertain / inapplicable judgment…"></textarea></label>
+          <div class="row between"><span id="save-state" role="status" aria-live="polite">No changes</span><div class="row"><button id="restore">Restore last saved</button><button id="save">Save draft</button><button id="submit" class="primary">Submit measurement</button><button id="next">Next →</button></div></div>
+        </section>
+      </article>
+    </div>
+    <footer>Murattal timing study · Pilot protocol 1.0 · <a href="guide.html">Protocol &amp; keyboard controls</a></footer>
+  </main>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+    <h2 id="confirm-title">Confirm action</h2><p id="confirm-message"></p>
+    <form method="dialog" class="row"><button value="cancel" autofocus>Keep editing</button><button id="confirm-accept" value="confirm" class="primary">Continue</button></form>
+  </dialog>
+</body>
+</html>

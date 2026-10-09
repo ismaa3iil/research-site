@@ -1,0 +1,21 @@
+name = "tajweed-measure-api"
+main = "src/worker.mjs"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGINS = "https://ismaa3iil.fyi,http://127.0.0.1:8765,http://localhost:8765"
+SITE_URL = "https://ismaa3iil.fyi/tajweed-measure/"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tajweed-measure"
+database_id = "REPLACE_WITH_NEW_DATABASE_ID"
+
+[assets]
+directory = "../.private/worker-assets"
+binding = "AUDIO_ASSETS"
+# Required: every request must pass through the Worker, including direct asset URLs.
+run_worker_first = true
+html_handling = "none"
+not_found_handling = "none"

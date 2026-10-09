@@ -1,0 +1,16 @@
+# Pilot validation record
+
+9 October 2026. The separate Cloudflare D1 database is initialized with 32 clips and 148 candidate tasks. No expert research measurements have been collected. Synthetic QA records were removed before release.
+
+- Pinned dependency installation and frontend bundle: successful.
+- Worker/D1/Assets integration tests: eight tests passed in the actual local Cloudflare runtime. Assertions cover independent calibration; missing calibration and non-realized targets; invalid/self-overlapping bounds; origin/authentication checks; assignment isolation; audio access; direct asset URL and navigation protection; invitation revocation and expiry; native-source offsets; optimistic concurrency; immutable saved history; owner and expert exports.
+- Worker deployment bundle: Wrangler dry run passed (17.61 KiB before gzip); the dry run did not deploy the Worker or upload assets.
+- Private pilot preparation: 32 clips, 148 tasks, 32,846,399 bytes of lossless FLAC. Every FLAC was decoded and compared sample-for-sample against its PCM16 WAV source. All 32 passed. Original MP3 files remain unchanged.
+- Cloudflare deployment: complete. Device authorization succeeded with the required Worker Scripts scope. D1, private audio assets, and the owner secret are configured. Backend: `https://tajweed-measure-api.ismaa3iil-triangle-beauty.workers.dev`; same-origin review interface: `/room/`. No R2 service or paid plan was activated. The frontend configuration points to this backend.
+- Deployed API checks: production-origin CORS; six-task assignment isolation; browser-created draft persistence; submission; stale revision rejection; expert and owner exports; byte-for-byte audio hash; rejection of unassigned audio, raw asset paths, untrusted origins, and revoked sessions all passed using a disposable QA account. Its generated annotations, history, credentials, and assignments were deleted afterward.
+- Browser acceptance: **partial**. Deployed invitation login, worklist, native-rate FLAC decode, playback, speed selection, numeric 300 ms target boundaries, both reference types, reference exclusion, draft saving/reload, and unsaved recovery were exercised. A narrow layout stacked the controls without horizontal overflow. Audio now uses `loadBlob` to avoid a redundant blob-URL fetch. Restore/navigation/sign-out confirmations use accessible in-page dialogs.
+- Remaining browser checks: dragging, keyboard I/O, zoom/loop behavior, spectrogram rendering detail, browser JSON downloads, and the final confirmation flow need manual acceptance. A native confirmation in an earlier QA tab stalled the available browser's input; later confirmation changes could not be fully exercised. Successful API checks do not replace these UI checks. No security settings were changed.
+
+Use the initial owner/expert pilot review to complete the remaining UI checks. Do not retain synthetic test clicks as research annotations. The current release is a pilot tool, not a completed timing study.
+
+The expert panel must then agree on the acoustic boundary definitions and confirm clip/ayah alignment. Inferred navigation and incomplete context are explicitly flagged in the worklist. Expand short clips when calibration needs more context. Main-study annotations should start only after this pilot review.
