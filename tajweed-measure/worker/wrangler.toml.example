@@ -1,0 +1,17 @@
+name = "tajweed-measure-api"
+main = "src/worker.mjs"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGINS = "https://ismaa3iil.fyi,http://127.0.0.1:8765,http://localhost:8765"
+SITE_URL = "https://ismaa3iil.fyi/tajweed-measure/"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tajweed-measure"
+database_id = "REPLACE_WITH_NEW_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "AUDIO"
+bucket_name = "tajweed-measure-audio"
