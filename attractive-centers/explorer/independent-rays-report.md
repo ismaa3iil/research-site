@@ -1,7 +1,3 @@
----
-render_with_liquid: false
----
-
 # Six nonredundant shape-dependent attractive centers
 
 ## Research continuation, 17 October 2026
@@ -391,10 +387,12 @@ matrix discrepancy about \(2.75\times10^{-10}\).
 
 `independent_ray_centers.py` evaluates the six maps directly. For Mathematica:
 
+{% raw %}
 ```wl
 Get[".../IndependentRays.wl"];
 ACIndependentCenters[{{0, 0}, {3, 0}, {-1/3, 4 Sqrt[14]/3}}]
 ```
+{% endraw %}
 
 `ACIndependentCoefficients` contains the exact rational lower-endpoint
 coefficients. Exact coefficient agreement, normalization, all permutations,
