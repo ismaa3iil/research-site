@@ -1,3 +1,7 @@
+---
+render_with_liquid: false
+---
+
 # Six nonredundant shape-dependent attractive centers
 
 ## Research continuation, 17 October 2026
