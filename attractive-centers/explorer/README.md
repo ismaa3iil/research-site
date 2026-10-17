@@ -1,5 +1,30 @@
 # Attractive Centers — geometry explorer
 
+## Tetrahedron heart enlargement — 17 October 2026
+
+The default tetrahedron layer now combines the prior vertex-power curve,
+fixed barycentric mixtures of the vertex/edge-midpoint/face-centroid orbits,
+and ten globally attractive rational analytic maps. Comparison checkboxes
+preserve the previous curve, reflected face curve, orbit mixtures, ten-map
+subfamily, and the analytic subheart using even powers 2,4,6.
+
+The proofs use geometry-independent nonnegative anchor masses and conservative
+global operator-norm bounds. The larger proposed polynomial endpoints are NOT
+included without certificates. See [full proof and audit](tetra-hearts-proof.html),
+[ten-map catalogue](tetra-heart-catalogue.json), and
+[reproducible bundle](tetra-hearts-proofs.zip).
+
+Default sampling attempts 495 minimizations; refinement attempts 2,835.
+Residual and root-error estimates are checked, failed solves omitted/counted,
+and no generator is clipped into a chest. All curve rendering and hull volumes
+are numerical. Noninteger powers are in the continuous finite-law class;
+the ten rational maps and even-power subheart are analytic for L>0.
+
+Implementation: `tetra-hearts.mjs`; run `node tests-tetra-hearts.mjs` and
+the previous regression suites. The last tetrahedron calculation is cached
+only for the same normalized vertices and sampling setting; layer toggles
+do not recompute the center family or alter the camera.
+
 ## Current publication: enlarged analytic families, 17 October 2026
 
 The default triangle heart now combines B46, the two proved constant-coefficient

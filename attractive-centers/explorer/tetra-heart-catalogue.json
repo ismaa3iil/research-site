@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-17",
+  "scope": "Four points in R^3; globally attractive rational analytic maps for L>0, continuous finite-law extension at total collapse",
+  "status": "Conservative sufficient domains, proved in REVIEW_AND_PROVED_EXTENSIONS.md; not claimed sharp or boundary maps",
+  "basis_order": ["U1", "K1", "K2", "V2", "V3"],
+  "definitions": {
+    "G": "mean(p_i)",
+    "r_i": "p_i-G",
+    "L": "sum_i dot(r_i,r_i)",
+    "delta_i": "dot(r_i,r_i)/L-1/4",
+    "U_m": "sum_i delta_i^m r_i",
+    "S": "sum_i outer(r_i,r_i)/L",
+    "H": "S-I/3",
+    "K1": "(S-I) U1",
+    "K2": "(H^2-tr(H^2) I/3-2I/9) U1",
+    "V2": "U2-U1/3",
+    "V3": "U3-7U1/36"
+  },
+  "global_operator_norm_bounds": [4, 7, 8, 6, 4],
+  "joint_sufficient_domain": "4 abs(c0)+7 abs(c1)+8 abs(c2)+6 abs(d2)+4 abs(d3)<=1/4",
+  "endpoint_maps": [
+    {"name": "safe U1+", "coefficients": ["1/16","0","0","0","0"]},
+    {"name": "safe U1-", "coefficients": ["-1/16","0","0","0","0"]},
+    {"name": "safe K1+", "coefficients": ["0","1/28","0","0","0"]},
+    {"name": "safe K1-", "coefficients": ["0","-1/28","0","0","0"]},
+    {"name": "safe K2+", "coefficients": ["0","0","1/32","0","0"]},
+    {"name": "safe K2-", "coefficients": ["0","0","-1/32","0","0"]},
+    {"name": "safe V2+", "coefficients": ["0","0","0","1/24","0"]},
+    {"name": "safe V2-", "coefficients": ["0","0","0","-1/24","0"]},
+    {"name": "safe V3+", "coefficients": ["0","0","0","0","1/16"]},
+    {"name": "safe V3-", "coefficients": ["0","0","0","0","-1/16"]}
+  ]
+}
