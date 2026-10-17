@@ -53,7 +53,8 @@ assert(response.result.heart.centers.length>=3);
 const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
 assert(html.includes('id="b46-status"'));assert(html.includes('1,142'));
 const app=fs.readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
-assert(app.includes("['b46','B46 heart · 44 rational + 2 power endpoints',true]"));
+assert(app.includes("['b46','B46 heart · 44 rational + 2 power endpoints',false]"));
+assert(app.includes("['expanded','Latest heart · bridge + new rays',true]"));
 assert(app.includes("['b36','Historical B36 comparison',false]"));
 console.log(JSON.stringify({passed:true,checks,defaultMaps:r.centers.length,defaultHullVertices:r.poly.length,
   defaultPercent:100*area(r.poly)/area(q),historicalB36Maps:b36Heart(q).centers.length,

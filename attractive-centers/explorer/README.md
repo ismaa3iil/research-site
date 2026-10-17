@@ -1,5 +1,35 @@
 # Attractive Centers — geometry explorer
 
+## Current publication: enlarged analytic families, 17 October 2026
+
+The default triangle heart now combines B46, the two proved constant-coefficient
+arcs, four earlier shape-dependent maps, R1–R6, the exact endpoints R2*/R5*,
+the repaired continuous conic bridge, R7–R10, and P1–P3 from the six-parameter
+cubic-phase family. The finite rendering has 455 generator samples. The three
+continuous curves each use 129 parameter samples; the drawing approximates
+their continuous-family hull from inside.
+
+Comparison checkboxes preserve every preceding stage, B46, B36, and the earlier
+power-family hull. New presets show the simple exact separation witnesses.
+Exposed generators and all new discrete ray maps have hover labels. Area and
+vertex counts update when the triangle moves; toggling layers leaves its view
+and coordinate scale unchanged.
+
+All incoming global attractivity proofs, the seven new radial brackets, and
+eight new separation witnesses passed exact local replay. A separate direct
+Cartesian derivation and fresh polynomial covers also verified global
+attractivity. The incoming report's 1,389-shape numerical audit was not repeated.
+The maximal Heart and a minimum base for this newest family remain open.
+
+See [verification notes](new-hearts-verification.md),
+[exact data and independent references](analytic-hearts-catalogue.json), and
+[the cumulative proof bundle](analytic-heart-proofs.zip). The implementation
+is in `analytic-hearts.mjs` and `analytic-hearts-data.mjs`. Run
+`node tests-analytic-hearts.mjs` and the existing regression suites.
+
+The following sections preserve earlier development stages and are historical
+where they describe an earlier default heart.
+
 **B36 and higher-arity power-heart revision (21 September 2026).** The public app at https://ismaa3iil.fyi/attractive-centers/explorer/ displays B36 by default for triangles, preserves the earlier power-family hull for comparison, and adds sampled power-center hearts for four planar points and tetrahedra. The in-app guide separates proved constructive hearts from conjectural reductions and outer chest bounds.
 
 ## B36: current status
