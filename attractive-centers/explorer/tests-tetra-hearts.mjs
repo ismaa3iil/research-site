@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {normalize,powerHeart,norm,sub,mean,dot,inside,tetraPlanes,pairPlanes,bisectors} from './geometry.mjs';
 import {edgeSlabs,centroidTransfer} from './revision.mjs';
-import {tetraCovariants,safeTetraCenters,barycentricAnchors,weightedPowerCenter,tetraHearts} from './tetra-hearts.mjs';
+import {tetraCovariants,safeTetraCenters,certifiedTetraCenters,barycentricAnchors,weightedPowerCenter,tetraHearts} from './tetra-hearts.mjs';
 import {compute} from './worker.mjs';
 const ref=JSON.parse(fs.readFileSync(new URL('./tetra-heart-reference.json',import.meta.url),'utf8'));
 const rational=q=>{const [a,b='1']=q.split('/');return Number(a)/Number(b);};
@@ -12,6 +12,8 @@ const near=(a,b,t=1e-10)=>{assert(Math.abs(a-b)<=t,`${a} differs from ${b}`);che
 for(const shape of ref.shapes){
   const v=tetraCovariants(shape.points);
   for(const [key,exact] of Object.entries(shape.exactCovariants))v[key].forEach((x,i)=>near(x,rational(exact[i]),2e-13));
+  const G=mean(shape.points);
+  for(const c of certifiedTetraCenters(shape.points))c.point.forEach((x,i)=>near(x,G[i]+c.numerator/c.denominator*rational(shape.exactCovariants[c.basis][i]),3e-12));
   const {p,g,s}=normalize(shape.points),A=barycentricAnchors(p).all;
   for(const test of shape.roots){
     const W=[...Array(4).fill((1-test.wE-test.wF)/4),...Array(6).fill(test.wE/6),...Array(4).fill(test.wF/4)];
@@ -24,6 +26,8 @@ const quick=tetraHearts(p,old),fine=tetraHearts(p,old,{refine:true});
 assert.equal(quick.polynomial.centers.length,10);assert.equal(quick.diagnostics.attempted,495);assert.equal(fine.diagnostics.attempted,2835);
 assert.equal(quick.diagnostics.failed,0);assert.equal(fine.diagnostics.failed,0);
 assert(quick.expanded.volume>2.4*old.volume);assert(fine.expanded.volume>2.6*old.volume);
+assert(quick.expanded.volume>9*old.volume);assert.equal(quick.sosPolynomial.centers.length,10);
+assert(quick.expanded.volume>=quick.conservativeExpanded.volume-1e-12);
 assert(quick.expanded.volume>=quick.constellation.volume-1e-12);assert(quick.expanded.volume>=quick.analytic.volume-1e-12);
 for(const c of quick.expanded.centers)assert(inside(c.point,tetraPlanes(p),3e-8));
 const regular=ref.shapes[2].points,reg=tetraHearts(regular,powerHeart(regular,41));
@@ -44,6 +48,13 @@ for(let i=0;i<12;i++){
   const h=tetraHearts(pp,powerHeart(pp,21));omitted+=h.diagnostics.failed;
   for(const c of h.expanded.centers)assert(inside(c.point,tetraPlanes(pp),2e-7));
   assert(h.expanded.volume>=h.polynomial.volume-2e-10);
+  const direction=[rand()-.5,rand()-.5,rand()-.5],step=1e-5;
+  for(let vertex=0;vertex<4;vertex++){
+    const plus=pp.map(v=>[...v]),minus=pp.map(v=>[...v]);
+    for(let j=0;j<3;j++){plus[vertex][j]+=step*direction[j];minus[vertex][j]-=step*direction[j];}
+    const a=certifiedTetraCenters(plus),b=certifiedTetraCenters(minus);
+    for(let k=0;k<a.length;k++)assert(dot(direction,sub(a[k].point,b[k].point))/(2*step)>-1e-7,'Numerical Jacobian regression for a proved SOS map.');
+  }
 }
 const on={para:true,bisector:true,orbit:false,edge:true,transfer:true};
 const r=compute({mode:'tetra',points:benchmark,on}),again=compute({mode:'tetra',points:benchmark,on:{...on,polynomial:true}});
@@ -53,8 +64,9 @@ for(const c of r.result.tetraHearts.expanded.centers)assert(inside(c.point,chest
 const app=fs.readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
 assert(app.includes("['tetraExpanded','Enlarged tetrahedron heart',true]"));
 assert(app.includes("['power','Previous vertex-power heart',false]"));
-console.log(JSON.stringify({passed:true,exactScalarChecks:60,rootChecks,checks,randomShapes:12,randomOmissions:omitted,
+console.log(JSON.stringify({passed:true,exactScalarChecks:180,rootChecks,checks,randomShapes:12,randomOmissions:omitted,
   benchmark:{quickVolume:quick.expanded.volume*s**3,fineVolume:fine.expanded.volume*s**3,
   quickRatio:quick.expanded.volume/old.volume,fineRatio:fine.expanded.volume/old.volume,
+  conservativeQuickVolume:quick.conservativeExpanded.volume*s**3,sosOnlyVolume:quick.sosPolynomial.volume*s**3,
   quickAccepted:quick.diagnostics.accepted,fineAccepted:fine.diagnostics.accepted},
   scope:'Numerical implementation checks. Global proofs are separate.'},null,2));

@@ -1,0 +1,94 @@
+// SPDX-License-Identifier: MIT
+// Generated only after exact independent certificate replay.
+export const CERTIFIED_TETRA_RAYS = [
+  {
+    "id": "SOS-U1-",
+    "basis": "U1",
+    "numerator": -3333,
+    "denominator": 10000,
+    "coefficient": "-0.3333",
+    "proofFile": "sos_U1_minus0p3333.json",
+    "sha256": "bc20617d817990f2dfcdea77ab111b5c2422688de2a9cc7f4be93c43b4a60186"
+  },
+  {
+    "id": "SOS-U1+",
+    "basis": "U1",
+    "numerator": 1597,
+    "denominator": 5000,
+    "coefficient": "0.3194",
+    "proofFile": "sos_U1_0p3194.json",
+    "sha256": "7df4881e30a98b46918e2cfd73c321242f6d0250d954c611eea106d1171bb99d"
+  },
+  {
+    "id": "SOS-K1-",
+    "basis": "K1",
+    "numerator": -2169,
+    "denominator": 2500,
+    "coefficient": "-0.8676",
+    "proofFile": "sos_K1_minus0p8676.json",
+    "sha256": "ad89e82932de44ff3b2536258640828fd9d78e759e479d95addcb1e7eab1fa8f"
+  },
+  {
+    "id": "SOS-K1+",
+    "basis": "K1",
+    "numerator": 9029,
+    "denominator": 10000,
+    "coefficient": "0.9029",
+    "proofFile": "sos_K1_0p9029.json",
+    "sha256": "416ddd826da7673552548526d21fe29507a9b62b09a091b92568aa9721eaa201"
+  },
+  {
+    "id": "SOS-K2-",
+    "basis": "K2",
+    "numerator": -9877,
+    "denominator": 5000,
+    "coefficient": "-1.9754",
+    "proofFile": "sos_K2_minus1p9754.json",
+    "sha256": "7275d0a4b649fbea924f6d395328df79a1dc3a6f03be047e3e80390071932b89"
+  },
+  {
+    "id": "SOS-K2+",
+    "basis": "K2",
+    "numerator": 19803,
+    "denominator": 10000,
+    "coefficient": "1.9803",
+    "proofFile": "sos_K2_1p9803.json",
+    "sha256": "8e526daf85a49669a4191ae124264112de05e70d96a1e533c572279b057f90cb"
+  },
+  {
+    "id": "SOS-V2-",
+    "basis": "V2",
+    "numerator": -7261,
+    "denominator": 5000,
+    "coefficient": "-1.4522",
+    "proofFile": "sos_V2_minus1p4522.json",
+    "sha256": "50eeaae5dbdc1f492be6f00985ca71d3451fe8cf56253d9f26e46397870f4116"
+  },
+  {
+    "id": "SOS-V2+",
+    "basis": "V2",
+    "numerator": 21167,
+    "denominator": 10000,
+    "coefficient": "2.1167",
+    "proofFile": "sos_V2_2p1167.json",
+    "sha256": "49784b5f457a30bea18beea82ea327f4b9b74476ac6e72deaedfa20dbefe0535"
+  },
+  {
+    "id": "SOS-V3-",
+    "basis": "V3",
+    "numerator": -7183,
+    "denominator": 2500,
+    "coefficient": "-2.8732",
+    "proofFile": "sos_V3_minus2p8732.json",
+    "sha256": "e0884e3e402f233ccb298f3fe0ea094c018129121a255624a5584f4ff89721ab"
+  },
+  {
+    "id": "SOS-V3+",
+    "basis": "V3",
+    "numerator": 28669,
+    "denominator": 10000,
+    "coefficient": "2.8669",
+    "proofFile": "sos_V3_2p8669.json",
+    "sha256": "b3033ff35eb4a891eb969b8be0364eb87401babf06bee3d66458437b67f34156"
+  }
+];

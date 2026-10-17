@@ -2,6 +2,22 @@
 
 ## Tetrahedron heart enlargement — 17 October 2026
 
+**Second stage, independently replayed exact SOS endpoints.** The current
+default also includes G+cW at both ends of these proved sufficient intervals:
+U1 [-0.3333,0.3194], K1 [-0.8676,0.9029], K2 [-1.9754,1.9803],
+V2 [-1.4522,2.1167], V3 [-2.8732,2.8669]. All decimal coefficients are exact
+rationals. They are inward endpoints, not asserted maximal limits. The
+conservative first-stage heart remains a separate comparison.
+
+[Proof and table](tetra-sharpened-proof.html) ·
+[ten SOS certificates and independent exact verifier](tetra-sharpened-proofs.zip) ·
+[coefficients and proof hashes](tetra-sos-rays-catalogue.json).
+
+The proofs cover all centered R3 configurations by a Hadamard frame and
+rotation/permutation equivariance. The independent verifier checks exact
+polynomial identities and rational Gram positivity with integer arithmetic.
+Numerical solver success alone never promotes a candidate to proved.
+
 The default tetrahedron layer now combines the prior vertex-power curve,
 fixed barycentric mixtures of the vertex/edge-midpoint/face-centroid orbits,
 and ten globally attractive rational analytic maps. Comparison checkboxes

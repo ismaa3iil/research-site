@@ -2,6 +2,7 @@
 // Fixed barycentric-anchor weights, never geometry-dependent masses.
 // Proof and conservative analytic domains: tetra-hearts-proof.html.
 import {add,sub,mul,dot,norm,mean,pointCloudHull3,POWER_MIN,POWER_MAX} from './geometry.mjs?v=b46-20261001';
+import {CERTIFIED_TETRA_RAYS} from './tetra-sos-rays-data.mjs?v=tetra-sos-20261017';
 
 const I=()=>[[1,0,0],[0,1,0],[0,0,1]];
 const matVec=(A,v)=>A.map(r=>dot(r,v));
@@ -43,6 +44,13 @@ export function safeTetraCenters(p){
     for(const sign of [-1,1])out.push({id:`safe-${basis}-${sign}`,name:`G ${sign>0?'+':'−'} ${basis}/${denominator}`,point:add(v.G,mul(v[basis],sign/denominator)),analytic:true,proof:'Conservative global operator-norm certificate; not claimed boundary-sharp.'});
   }
   return out;
+}
+
+export function certifiedTetraCenters(p){
+  const v=tetraCovariants(p);
+  return CERTIFIED_TETRA_RAYS.map(c=>({...c,name:`G ${c.numerator>0?'+':'−'} ${Math.abs(c.numerator)}/${c.denominator} ${c.basis}`,
+    point:add(v.G,mul(v[c.basis],c.numerator/c.denominator)),analytic:true,
+    proof:'Independently replayed exact global SOS certificate; inward endpoint, not claimed maximal.'}));
 }
 
 // Residual-to-root estimate uses a global stiffness lower bound for p>=2,
@@ -98,7 +106,7 @@ export function tetraHearts(p,previousPower,{refine=false}={}){
   const exponents=Array.from({length:pCount},(_,i)=>POWER_MIN+(POWER_MAX-POWER_MIN)*i/(pCount-1));
   for(const v of [2,4,6])if(!exponents.some(p=>Math.abs(p-v)<1e-12))exponents.push(v);
   exponents.sort((a,b)=>a-b);
-  const polynomial=safeTetraCenters(p),faces=previousPower.centers.map(c=>({name:`Face-only ${c.name}`,point:add(G,mul(sub(c.point,G),-1/3)),p:c.p,analytic:Math.abs(c.p-2)<1e-12||c.p===4||c.p===6}));
+  const polynomial=safeTetraCenters(p),sos=certifiedTetraCenters(p),faces=previousPower.centers.map(c=>({name:`Face-only ${c.name}`,point:add(G,mul(sub(c.point,G),-1/3)),p:c.p,analytic:Math.abs(c.p-2)<1e-12||c.p===4||c.p===6}));
   const samples=[],even=[],failures=[];let maxResidual=0,maxErrorEstimate=0;
   for(const exponent of exponents)for(let i=0;i<=steps;i++)for(let j=0;j<=steps-i;j++){
     const wE=i/steps,wF=j/steps,wV=1-wE-wF;
@@ -113,8 +121,9 @@ export function tetraHearts(p,previousPower,{refine=false}={}){
     samples.push(c);if(analytic)even.push(c);
   }
   const all=[...previousPower.centers,...faces,...samples,...polynomial];
-  return {expanded:region(all),constellation:region([...previousPower.centers,...faces,...samples]),
-    polynomial:region(polynomial),analytic:region([...even,...polynomial]),face:region([...previousPower.centers,...faces]),
+  return {expanded:region([...all,...sos]),conservativeExpanded:region(all),sosPolynomial:region(sos),
+    constellation:region([...previousPower.centers,...faces,...samples]),
+    polynomial:region(polynomial),analytic:region([...even,...polynomial,...sos]),face:region([...previousPower.centers,...faces]),
     diagnostics:{attempted:exponents.length*(steps+1)*(steps+2)/2,accepted:samples.length,failed:failures.length,
       failures,maxResidual,maxErrorEstimate,exponentSamples:exponents.length,weightSubdivisions:steps,
       numerical:'Finite parameter samples; residual/error estimates use double precision, not directed interval bounds.'}};

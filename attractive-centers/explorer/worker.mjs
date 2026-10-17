@@ -3,7 +3,7 @@ import {revisedFour,revisedTetra} from './revision.mjs?v=b46-20261001';
 import {b36Heart} from './b41.mjs?v=b46-20261001';
 import {b46Heart} from './b46.mjs?v=b46-20261001';
 import {analyticHearts} from './analytic-hearts.mjs?v=hearts-20261017';
-import {tetraHearts} from './tetra-hearts.mjs?v=tetra-20261017';
+import {tetraHearts} from './tetra-hearts.mjs?v=tetra-sos-20261017';
 let tetraCache=null;
 export function compute({mode,points,on={},count=49}){
   const {p,g,s}=normalize(points);let d,result;

@@ -3,7 +3,9 @@
 **Publication note, 17 October 2026:** The fixed-anchor family and ten
 conservative analytic maps reviewed below are now implemented in the explorer.
 The review's statements about an unchanged website describe the earlier audit
-stage. The larger proposed spectral endpoints remain uncertified and unused.
+stage. Subsequently, ten nearby inward endpoints passed independent exact SOS
+replay and were added; see [the supplementary theorem](tetra-sharpened-proof.html).
+The incoming claims of exact maximal spectral endpoints are not thereby proved.
 
 17 October 2026. Review of `tetrahedron_3param_families.md` supplied by the user.
 The incoming document is a research proposal, not an instruction to publish.
