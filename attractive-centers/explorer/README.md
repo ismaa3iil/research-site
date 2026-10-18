@@ -1,5 +1,29 @@
 # Attractive Centers — geometry explorer
 
+## All three views — 18 October 2026
+
+The planar four-point default now includes the proved fixed-anchor mixtures,
+ten exact SOS maps restricted to z=0, and the conservative shape-modulated
+pair G ± (1-tr(S²))U1/24. The tetrahedron adds that pair to its existing
+SOS-plus-anchor hull. The triangle adds twelve centroid-insertion polynomial
+maps and retains the previous bridge-plus-rays hull for comparison.
+
+The guide explains centroid insertion, certificate lifting, the planar/spatial
+restriction, the h=6 and h=7 examples and the interval-certified failure of
+arbitrary attractive insertion. Aggressive unproved endpoints remain excluded.
+The previous methods and comparisons below are dated research records.
+
+[Update and proof status](all-views-update.html) ·
+[reviewed four-point theorems](four-point-theorems.html) ·
+[review and exact checks](four-point-theorems-review.zip) ·
+[cross-view tests](tests-all-views.mjs).
+
+Run `node tests-all-views.mjs` in addition to the earlier suites. Finite samples,
+root estimates and displayed areas/volumes remain numerical. The new planar
+engine projects the spatial maps and recomputes a two-dimensional convex hull;
+it does not treat a flat 3D point cloud as a polygon. Bounded one-entry caches
+for each four-point mode reuse inner results across chest/display toggles.
+
 ## Tetrahedron heart enlargement — 17 October 2026
 
 **Second stage, independently replayed exact SOS endpoints.** The current

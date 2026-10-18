@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Fixed barycentric-anchor weights, never geometry-dependent masses.
 // Proof and conservative analytic domains: tetra-hearts-proof.html.
-import {add,sub,mul,dot,norm,mean,pointCloudHull3,POWER_MIN,POWER_MAX} from './geometry.mjs?v=b46-20261001';
+import {add,sub,mul,dot,norm,mean,hull,pointCloudHull3,POWER_MIN,POWER_MAX} from './geometry.mjs?v=b46-20261001';
 import {CERTIFIED_TETRA_RAYS} from './tetra-sos-rays-data.mjs?v=tetra-sos-20261017';
 
 const I=()=>[[1,0,0],[0,1,0],[0,0,1]];
@@ -51,6 +51,24 @@ export function certifiedTetraCenters(p){
   return CERTIFIED_TETRA_RAYS.map(c=>({...c,name:`G ${c.numerator>0?'+':'−'} ${Math.abs(c.numerator)}/${c.denominator} ${c.basis}`,
     point:add(v.G,mul(v[c.basis],c.numerator/c.denominator)),analytic:true,
     proof:'Independently replayed exact global SOS certificate; inward endpoint, not claimed maximal.'}));
+}
+
+// Conservative shape-dependent theorem: |c|<=1/24 for q U1,
+// q=1-tr(S^2). Analytic on L>0, continuous at total collapse.
+export function modulatedTetraCenters(p){
+  const v=tetraCovariants(p),r=p.map(x=>sub(x,v.G)),L=r.reduce((s,x)=>s+dot(x,x),0);
+  const trS2=L>0?r.reduce((sum,a)=>sum+r.reduce((s,b)=>s+dot(a,b)**2,0),0)/(L*L):1;
+  const q=1-trS2;
+  return [-1,1].map(sign=>({id:`modulated-U1-${sign}`,name:`G ${sign>0?'+':'−'} (1−tr S²) U₁/24`,
+    point:add(v.G,mul(v.U1,sign*q/24)),analytic:true,
+    proof:'Global derivative-norm proof: (2/3)·4 + 2√3/√2 < 6, |c|≤1/24. Conservative, not maximal.'}));
+}
+
+export function trianglePullbackCenters(p){
+  const G=mean(p),p3=[...p,G].map(x=>[x[0],x[1],0]);
+  return [...certifiedTetraCenters(p3),...modulatedTetraCenters(p3)].map(c=>({...c,
+    id:`pullback-${c.id}`,name:`Centroid insertion: ${c.name}`,point:c.point.slice(0,2),
+    proof:`Y(ABC)=Z(ABC,G); D_iY=D_iZ+D_4Z/3. ${c.proof}`}));
 }
 
 // Residual-to-root estimate uses a global stiffness lower bound for p>=2,
@@ -120,11 +138,24 @@ export function tetraHearts(p,previousPower,{refine=false}={}){
     const c={id:`anchor-${exponent}-${i}-${j}`,name:`Anchors p=${exponent.toFixed(5)}; edge mass=${wE}; face mass=${wF}`,point:r.point,p:exponent,wE,wF,analytic,residual:r.residual,errorEstimate:r.errorEstimate};
     samples.push(c);if(analytic)even.push(c);
   }
-  const all=[...previousPower.centers,...faces,...samples,...polynomial];
-  return {expanded:region([...all,...sos]),conservativeExpanded:region(all),sosPolynomial:region(sos),
+  const all=[...previousPower.centers,...faces,...samples,...polynomial],modulated=modulatedTetraCenters(p);
+  return {expanded:region([...all,...sos,...modulated]),previousEnhanced:region([...all,...sos]),
+    modulated:region(modulated),conservativeExpanded:region(all),sosPolynomial:region(sos),
     constellation:region([...previousPower.centers,...faces,...samples]),
-    polynomial:region(polynomial),analytic:region([...even,...polynomial,...sos]),face:region([...previousPower.centers,...faces]),
+    polynomial:region(polynomial),analytic:region([...even,...polynomial,...sos,...modulated]),face:region([...previousPower.centers,...faces]),
     diagnostics:{attempted:exponents.length*(steps+1)*(steps+2)/2,accepted:samples.length,failed:failures.length,
       failures,maxResidual,maxErrorEstimate,exponentSamples:exponents.length,weightSubdivisions:steps,
       numerical:'Finite parameter samples; residual/error estimates use double precision, not directed interval bounds.'}};
+}
+
+// Spatial formulas restricted to z=0 preserve the finite law in the plane.
+// Recompute a 2D convex hull: a flat 3D hull is not a planar polygon.
+export function planarFourHearts(p,previousPower,options={}){
+  const p3=p.map(v=>[...v,0]),old={...previousPower,centers:previousPower.centers.map(c=>({...c,point:[...c.point,0]}))};
+  const spatial=tetraHearts(p3,old,options),out={diagnostics:spatial.diagnostics};
+  for(const key of ['expanded','previousEnhanced','modulated','conservativeExpanded','sosPolynomial','constellation','polynomial','analytic','face']){
+    const centers=spatial[key].centers.map(c=>({...c,point:c.point.slice(0,2)})),poly=hull(centers.map(c=>c.point));
+    out[key]={centers,poly,boundary:centers.filter(c=>poly.some(v=>norm(sub(v,c.point))<2e-8))};
+  }
+  return out;
 }

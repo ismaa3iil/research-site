@@ -70,7 +70,9 @@ for(const [a,b,c]of [[6,5,3],[9,8,7],[9,6,5],[12,8,6],[14,11,5]]){
   witnesses.push({sides:[a,b,c],latestGainOverSixPercent:100*(area(d.expanded.poly)/area(d.six.poly)-1)});
 }
 const worker=compute({mode:'triangle',points:pts,on:{expanded:true}});
-assert.equal(worker.result.analytic.expanded.centers.length,455);
+assert.equal(worker.result.analytic.previousExpanded.centers.length,455);
+assert.equal(worker.result.analytic.pullback.centers.length,12);
+assert.equal(worker.result.analytic.expanded.centers.length,467);
 const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
 for(const text of ['id="new-hearts"','id="conic-bridge"','analytic-heart-proofs.zip','P1–P3'])assert(html.includes(text));
 const app=fs.readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
