@@ -34,11 +34,15 @@ presets.tetra['Scalene 2 · polynomial directions']=[[0,0,0],[4,0,0],[1,3,0],[.5
 theory.triangle+=' The default now also includes twelve proved centroid-insertion maps: the ten SOS polynomial maps and two conservative shape-modulated maps evaluated at (A,B,C,G). Moving an original vertex moves its own slot by h and the centroid slot by h/3, which proves attractivity. Their comparison layer shows whether they add any exposed positions for the current shape.';
 theory.four='The default green heart now includes the proved barycentric-anchor power family, ten exact SOS-certified polynomial maps restricted from space to the plane, and G±(1−tr S²)U₁/24. The previous vertex-power heart remains available. Fixed anchor weights preserve attractivity because each anchor moves by a nonnegative multiple of the moved vertex. Reflection in the input plane keeps these spatial rules in that plane. Continuous families are sampled; failed numerical solves are omitted and counted. The seven outer methods retain their distinct hypotheses. Centroid insertion transfers the entire ABC chest when D=G(ABC); for arbitrary D it transfers a directional support bound. Try h=6 and h=7 to distinguish stricter chest bounds from strict attainable-Heart inclusion. Diameter-ball bounds concern only the original vertex-power family; absorption requires an extra axiom. Neither is a bound for every new inner map.';
 theory.tetra+=' The latest hull also includes the conservative shape-dependent pair G±(1−tr S²)U₁/24. The previous SOS-plus-anchor hull is a separate comparison. The new coefficient is proved by a global derivative-norm bound; the larger proposed modulated endpoints and T1–T8 maps remain research candidates and are not drawn as proved hearts.';
+colors.steiner='#c2410c';colors.beforeSteiner='#3185a2';
+optionSets.triangle.splice(2,0,['beforeSteiner','Previous heart · before Steiner maps',false],['steiner','Certified Steiner-frame maps alone',false]);
+optionSets.triangle[1][1]='Latest heart · with certified Steiner maps';
+theory.triangle+=' The latest heart also includes interval-certified Steiner-frame maps Z=G+X·cos3θ·GP+Y·sin3θ·GQ, where GP and GQ are the semi-axes of the Steiner inellipse, θ is the eccentric angle of a vertex, and X, Y are explicit polynomials in the axis ratio and cos6θ. Each map has a computer-assisted certificate that all vertex responses are positive definite for every triangle. Compare the previous heart and the Steiner maps alone.';
 let mode='triangle',points=structuredClone(diagnostic),on={},data=null,error='',busy=false,seq=0,pending=false,view={center:[10.5,6],scale:25},yaw=.55,pitch=.4,drag=null,hover=[],width=900,height=550;
-const worker=new Worker(new URL('./worker.mjs?v=all-hearts-20261018',import.meta.url),{type:'module'});
+const worker=new Worker(new URL('./worker.mjs?v=steiner-20261118',import.meta.url),{type:'module'});
 function request(){seq++;pending=true;data=null;error='';$('metrics').textContent='Recomputing for the current vertices…';$('measure-note').textContent='';$('status').textContent='Calculating…';draw();dispatch();}
 function dispatch(){if(busy||!pending)return;busy=true;pending=false;$('status').textContent='Calculating…';worker.postMessage({id:seq,mode,points,on});}
-worker.onmessage=({data:r})=>{busy=false;if(r.id===seq){error=r.error||'';data=r.error?null:r;draw();metrics();$('status').textContent=error||(mode==='tetra'?tetraStatus(r.result):mode==='triangle'?`Latest heart: ${r.result.analytic.expanded.poly.length} hull vertices · bridge, new rays and centroid insertion · B46: ${r.result.b46.centers.length}/46${r.result.b46.failed?' · '+r.result.b46.failed+' unresolved power endpoints omitted':''}`:`Enlarged planar heart: ${r.result.fourHearts.expanded.poly.length} hull vertices · ${r.result.fourHearts.diagnostics.accepted}/${r.result.fourHearts.diagnostics.attempted} anchor solves · 10 SOS + 2 modulation maps · ${r.result.transferNote}`);}dispatch();};
+worker.onmessage=({data:r})=>{busy=false;if(r.id===seq){error=r.error||'';data=r.error?null:r;draw();metrics();$('status').textContent=error||(mode==='tetra'?tetraStatus(r.result):mode==='triangle'?`Latest heart: ${r.result.analytic.expanded.poly.length} hull vertices · bridge, rays, centroid insertion and certified Steiner maps · B46: ${r.result.b46.centers.length}/46${r.result.b46.failed?' · '+r.result.b46.failed+' unresolved power endpoints omitted':''}`:`Enlarged planar heart: ${r.result.fourHearts.expanded.poly.length} hull vertices · ${r.result.fourHearts.diagnostics.accepted}/${r.result.fourHearts.diagnostics.attempted} anchor solves · 10 SOS + 2 modulation maps · ${r.result.transferNote}`);}dispatch();};
 function tetraStatus(d){const h=d.tetraHearts;return `Enlarged heart: ${h.expanded.vertices.length} hull vertices · ${h.diagnostics.accepted}/${h.diagnostics.attempted} anchor solves · 10 exact SOS ray maps${h.diagnostics.failed?' · '+h.diagnostics.failed+' failed anchor samples omitted':''}${d.power.failed?' · '+d.power.failed+' old power samples omitted':''}. Drag empty space to rotate.`;}
 worker.onerror=e=>{$('status').textContent='Calculation error. Reload the page to retry.';busy=false;};
 function options(){
@@ -84,7 +88,8 @@ function triangleLayers(d){return [
   ['expanded',d.analytic.expanded,'Latest expanded heart'],['newrays',d.analytic.extensionRays,'R7–R10 and P1–P3 alone'],
   ['rays',d.analytic.rays,'Six new maps R1–R6 alone'],
   ['previousEnhanced',d.analytic.previousExpanded,'Previous bridge + rays heart'],
-  ['pullback',d.analytic.pullback,'Centroid-insertion polynomial maps']
+  ['pullback',d.analytic.pullback,'Centroid-insertion polynomial maps'],
+  ['beforeSteiner',d.analytic.beforeSteiner,'Previous heart (before Steiner maps)'],['steiner',d.analytic.steiner,'Certified Steiner-frame maps alone']
 ];}
 function drawTriangle(d,legend){
   for(const [key,poly,label] of [['cp',d.cp,'Strips clipped to triangle'],['cnt',d.cnt,'Internal Napoleon'],['chest',d.poly,'Standard chest']]){
@@ -176,9 +181,9 @@ function draw(){ctx.clearRect(0,0,width,height);hover=[];grid();let legend=[];if
   points.forEach((p,i)=>{let [x,y]=project(p);ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fillStyle=i===3?'#bd5275':'#243849';ctx.fill();ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.stroke();ctx.font='bold 15px system-ui';ctx.fillStyle='#243849';ctx.fillText('ABCD'[i],x+11,y-10);});$('legend').innerHTML=legend.map(([c,l])=>`<span><span class="swatch" style="color:${c}"></span>${l}</span>`).join('');}
 function metrics(){if(!data){$('metrics').textContent=error;return;}let d=data.result,rows=[],base=mode==='tetra'?d.base.volume:d.baseArea;const pct=q=>(q>0&&q<.00005?q.toExponential(3):q.toFixed(4))+'%';const row=(label,m,n)=>{let ratio=100*m/base;rows.push(`<tr><td>${label}</td><td>${n}</td><td>${pct(ratio)}</td><td>${pct(100-ratio)}</td></tr>`);};if(mode==='triangle'){
   row('Standard chest',area(d.poly),d.poly.length);
-  const layers=triangleLayers(d),order=['expanded','previousEnhanced','conic','six','shape','constant','b46','b36','heart','rays','newrays','pullback'];
+  const layers=triangleLayers(d),order=['expanded','beforeSteiner','steiner','previousEnhanced','conic','six','shape','constant','b46','b36','heart','rays','newrays','pullback'];
   for(const [key,region,label] of order.map(key=>layers.find(row=>row[0]===key))){
-    if(['rays','newrays','pullback'].includes(key)&&!on[key])continue;
+    if(['rays','newrays','pullback','steiner'].includes(key)&&!on[key])continue;
     row(label+(on[key]?'':' (hidden)'),area(region.poly),region.poly.length);
   }
   const oldArea=area(d.analytic.six.poly),increase=oldArea>1e-14?100*(area(d.analytic.expanded.poly)/oldArea-1):0;

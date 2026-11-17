@@ -4,6 +4,7 @@ import {b36Heart} from './b41.mjs?v=b46-20261001';
 import {b46Heart} from './b46.mjs?v=b46-20261001';
 import {analyticHearts} from './analytic-hearts.mjs?v=hearts-20261017';
 import {tetraHearts,planarFourHearts,trianglePullbackCenters} from './tetra-hearts.mjs?v=all-hearts-20261018';
+import {steinerHearts} from './steiner-hearts.mjs?v=steiner-20261118';
 let tetraCache=null,fourCache=null;
 export function compute({mode,points,on={},count=49}){
   const {p,g,s}=normalize(points);let d,result;
@@ -13,7 +14,10 @@ export function compute({mode,points,on={},count=49}){
     const analytic=analyticHearts(p,b46),centers=trianglePullbackCenters(p),poly=hull(centers.map(c=>c.point));
     analytic.pullback={centers,poly,boundary:centers.filter(c=>poly.some(v=>norm(sub(v,c.point))<2e-8))};
     analytic.previousExpanded=analytic.expanded;
-    const all=[...analytic.expanded.centers,...centers],allPoly=hull(all.map(c=>c.point));
+    const steiner=steinerHearts(p);analytic.steiner=steiner;
+    const beforeSteiner=[...analytic.expanded.centers,...centers],beforePoly=hull(beforeSteiner.map(c=>c.point));
+    analytic.beforeSteiner={centers:beforeSteiner,poly:beforePoly,boundary:beforeSteiner.filter(c=>beforePoly.some(v=>norm(sub(v,c.point))<2e-8))};
+    const all=[...beforeSteiner,...steiner.centers.filter(c=>c.id!=='G')],allPoly=hull(all.map(c=>c.point));
     analytic.expanded={...analytic.expanded,centers:all,poly:allPoly,boundary:all.filter(c=>allPoly.some(v=>norm(sub(v,c.point))<2e-8))};
     result={...d,heart:inner,b36:b36Heart(p),b46,analytic,hull:hull(p),baseArea:area(p)};
   }else if(mode==='four'){

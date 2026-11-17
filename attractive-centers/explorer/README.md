@@ -1,5 +1,33 @@
 # Attractive Centers — geometry explorer
 
+## Certified Steiner-frame maps — 17 November 2026
+
+The triangle default heart now also includes 300 explicit Steiner-frame maps
+
+    Z = G + X·cos3θ·GP + Y·sin3θ·GQ,   X = −κ(f + gκ),   Y = −κ(f − gκ),
+
+where GP, GQ are the semi-axes of the Steiner inellipse, k = |GQ|/|GP|,
+κ = (1−k²)/(1+k²), θ is the eccentric angle of a vertex, and f, g are
+polynomials in q = κ²/4 and p = −κ³cos6θ (degree 4 in q, degree 1 in q for the
+p-terms; coefficients are integers over 1024). In side lengths the vertex
+weights are 1/3 − f·u_i − 6g(u_i² − mean u²), u_i = 1/3 − a_i²/(a²+b²+c²).
+
+Each map has a computer-assisted interval-arithmetic certificate (outward
+rounding, mean-value form, adaptive bisection over the whole shape space) that
+the symmetric vertex response has a positive (1,1) entry and a positive
+determinant for every triangle and vertex. The certificate assumes the system
+cosine and sine are accurate to 1e-12; it is not an exact polynomial
+certificate like those of R1–R10. Replay it with `python verify_all.py` from
+[steiner-certify.zip](steiner-certify.zip); summaries are in
+[steiner-certified.json](steiner-certified.json).
+
+Heart areas (percent of the triangle): 13-20-21 previous 2.81 → latest 3.66
+(chest 5.93); 6-5-3 previous 12.95 → 17.07 (chest 31.95). Two optional layers
+show the previous heart and the Steiner maps alone. The earlier
+constant-coefficient "Steiner local region" was removed: it depends on the
+triangle and is not a heart. Tests: `node tests-steiner-hearts.mjs` and
+`node tests-steiner-dictionary.mjs`.
+
 ## All three views — 18 October 2026
 
 The planar four-point default now includes the proved fixed-anchor mixtures,
