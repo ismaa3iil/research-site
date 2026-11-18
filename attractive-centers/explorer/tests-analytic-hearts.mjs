@@ -72,9 +72,9 @@ for(const [a,b,c]of [[6,5,3],[9,8,7],[9,6,5],[12,8,6],[14,11,5]]){
 const worker=compute({mode:'triangle',points:pts,on:{expanded:true}});
 assert.equal(worker.result.analytic.previousExpanded.centers.length,455);
 assert.equal(worker.result.analytic.pullback.centers.length,12);
-// 467 earlier centers plus the 300 interval-certified Steiner-frame maps.
+// 467 earlier centers plus the 709 interval-certified Steiner-frame maps (two batches).
 assert.equal(worker.result.analytic.beforeSteiner.centers.length,467);
-assert.equal(worker.result.analytic.expanded.centers.length,767);
+assert.equal(worker.result.analytic.expanded.centers.length,1176);
 const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
 for(const text of ['id="new-hearts"','id="conic-bridge"','analytic-heart-proofs.zip','P1–P3'])assert(html.includes(text));
 const app=fs.readFileSync(new URL('./app.mjs',import.meta.url),'utf8');

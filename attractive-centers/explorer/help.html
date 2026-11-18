@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A guide to every picture, switch, number and algorithm of the Attractive Centers Explorer."><title>Attractive Centers Explorer · Help</title><link rel="stylesheet" href="style.css?v=hearts-20261017">
+<style>
+.help{max-width:860px;margin:0 auto;padding:20px 20px 10px}
+.help h1{font-size:2.1rem;margin-bottom:4px}
+.help .subtitle{font-family:Georgia,serif;font-size:1.25rem;color:var(--muted);margin:0 0 6px}
+.help .byline{color:var(--muted);margin:0 0 14px}
+.help h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:400;margin:38px 0 12px;padding-top:6px;border-top:1px solid var(--line)}
+.help h3{font-size:1.12rem;font-weight:650;margin:26px 0 8px}
+.help h4{font-size:1rem;font-weight:650;margin:18px 0 4px}
+.help p{margin:0 0 12px}
+.help ul,.help ol{margin:0 0 14px;padding-left:1.4em}
+.help li{margin:3px 0}
+.help .formula{text-align:center;margin:14px 0;font-size:1.05rem}
+.help figure{margin:22px auto;text-align:center}
+.help figure img{width:min(100%,640px);height:auto;display:inline-block}
+.help figure img[src*="fig-face-mean"],.help figure img[src*="fig-two-step"],.help figure img[src*="fig-mirror"],.help figure img[src*="fig-boxes"],.help figure img[src*="fig-steiner"]{width:min(100%,430px)}
+.help .vec{font-style:italic;text-decoration:overline}
+.help figcaption{font-size:.9rem;color:var(--muted);text-align:left;margin-top:8px}
+.help figcaption b,.help .tcap b{color:var(--ink)}
+.help .tcap{font-size:.9rem;color:var(--muted);margin:18px 0 6px;text-align:left}
+.help .tablewrap{overflow-x:auto;margin:0 0 18px;border:1px solid var(--line);border-radius:4px}
+.help .tablewrap table{min-width:560px;font-size:.9rem;margin:0}
+.help .tablewrap th,.help .tablewrap td{text-align:left;vertical-align:top;border:1px solid var(--line);padding:6px 9px}
+.help .tablewrap th{background:var(--panel);color:var(--ink);font-weight:650}
+.help .note{background:#eef2f6;border:1px solid #b9c6d2;border-radius:5px;padding:10px 14px;margin:16px 0}
+.help .note p:last-child{margin-bottom:0}
+.help .download{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:10px 14px;margin:16px 0}
+.help .download strong{display:block;margin-bottom:4px}
+.help .download ul{margin:0;padding-left:1.2em}
+.help .toc{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:10px 14px;margin:16px 0}
+.help .toc strong{display:block;margin-bottom:4px}
+.help .toc ol{margin:0;padding-left:1.4em}
+.help .toc ul{margin:2px 0 4px;padding-left:1.3em;list-style:none}
+.help .chest{color:#A87819;font-weight:650}
+.help .heart{color:#087E67;font-weight:650}
+.help dl{margin:0 0 14px}
+.help dt{font-weight:650;margin-top:10px}
+.help dd{margin:0 0 0 1.2em}
+.help .url{text-align:center;font-size:.9rem;margin:0 0 10px;word-break:break-all}
+@media(max-width:650px){.help{padding:14px 14px 6px}.help h1{font-size:1.7rem}}
+</style></head>
+<body><header><a href="../">Ismail Hammoudeh / Attractive Centers</a><span>Explorer help · 18 November 2026</span><a href="./">Back to the explorer</a></header>
+<main class="help">
+<h1>The Attractive Centers Explorer</h1>
+<p class="subtitle">A guide to every picture, switch, number and algorithm</p>
+<p class="byline">Ismail Hammoudeh · Explorer version of 18 November 2026</p>
+<p class="url"><a href="https://ismaa3iil.fyi/attractive-centers/explorer/">https://ismaa3iil.fyi/attractive-centers/explorer/</a></p>
+
+<div class="download"><strong>Download</strong>
+<ul>
+<li><a href="docs/explorer-guide.pdf" download>This guide as PDF</a></li>
+<li><a href="docs/chests-and-hearts.pdf" download>Chests and Hearts of Attractive Triangle Centers — formal framework, roadmap, worked computations</a></li>
+<li><a href="docs/calculus-of-chests-and-hearts.pdf" download>A Calculus of Chests and Hearts — the general operations with proofs</a></li>
+</ul></div>
+
+<div class="note"><p><b>How to use this guide.</b> Section <a href="#idea">1</a> explains the idea in one page.
+Section <a href="#using">2</a> explains the controls. Sections <a href="#triangle">4</a>–<a href="#tetrahedron">6</a> go through the three
+tabs, checkbox by checkbox. Section <a href="#algorithms">7</a> explains the algorithms. Section <a href="#status">8</a>
+says what is proved and what is only computed. A glossary and a list of frequent questions are at the
+end. Formulas can be skipped on a first reading; every section starts in plain words.</p></div>
+
+<nav class="toc" aria-label="Contents"><strong>Contents</strong>
+<ol>
+<li><a href="#idea">The idea in one page</a></li>
+<li><a href="#using">Using the explorer</a></li>
+<li><a href="#concepts">Concepts and definitions</a>
+<ul><li><a href="#centers">3.1 Centers</a></li><li><a href="#monotone">3.2 Attractive and monotone</a></li><li><a href="#heart-chest">3.3 Heart, chest, and the two extreme objects</a></li><li><a href="#transport">3.4 How a chest inequality is obtained</a></li></ul></li>
+<li><a href="#triangle">The Triangle tab</a>
+<ul><li><a href="#standard-chest">4.1 The standard chest (gold)</a></li><li><a href="#hearts">4.2 The hearts (green and comparison layers)</a></li><li><a href="#steinermaps">4.3 The Steiner-frame maps</a></li></ul></li>
+<li><a href="#four">The Four planar points tab</a>
+<ul><li><a href="#four-hearts">5.1 Hearts</a></li><li><a href="#four-chests">5.2 Chests</a></li></ul></li>
+<li><a href="#tetrahedron">The Tetrahedron tab</a></li>
+<li><a href="#algorithms">The algorithms</a>
+<ul><li><a href="#dragging">7.1 What happens while you drag</a></li><li><a href="#scans">7.2 Two-step scans</a></li><li><a href="#design">7.3 How a new rule is designed</a></li><li><a href="#cert">7.4 How a rule is certified</a></li><li><a href="#offline">7.5 Sharper chests outside the app</a></li></ul></li>
+<li><a href="#status">What is proved and what is computed</a></li>
+<li><a href="#glossary">Glossary</a></li>
+<li><a href="#faq">Frequent questions</a></li>
+<li><a href="#downloads">Further reading and downloads</a></li>
+</ol></nav>
+
+<h2 id="idea">1. The idea in one page</h2>
+
+<p>A <i>center</i> is a rule that assigns one point to every triangle (or to every four points), in a way
+that does not depend on where the figure is, how large it is, how it is turned, or how its points are
+named. The centroid is a center. So is the incenter.</p>
+
+<p>A center is <b>attractive</b> if it never moves against a push: when one vertex is moved in some
+direction, the center may follow, may move sideways, or may stay, but it never moves backwards
+(<a href="#fig-attr">Figure 1</a>).</p>
+
+<figure id="fig-attr"><img src="docs/figs/fig-attractive.svg" alt="A triangle whose vertex C is pushed to C' by a vector d, with the center moving from X to X', next to a diagram of allowed and forbidden directions of motion relative to the push." loading="lazy">
+<figcaption><b>Figure 1.</b> Attractivity. Vertex <i>C</i> is pushed by <i>d</i>; the center moves from <i>X</i> to <i>X</i>′. The rule is
+attractive if <i>d</i> · (<i>X</i>′ − <i>X</i>) ≥ 0 for every push of every vertex of every triangle: the motion of the
+center makes an angle of at most 90° with the push.</figcaption></figure>
+
+<p>Now fix one triangle and ask: <i>where can the center of an attractive rule be?</i> The explorer draws
+two answers.</p>
+<ul>
+<li>The <span class="chest">chest</span> (gold): a region that is <i>proved to contain</i> the center
+of every attractive rule. Nothing outside the chest is possible.</li>
+<li>The <span class="heart">heart</span> (green): a region <i>every point of which is the center of
+some attractive rule that has been constructed and verified</i>. Everything inside the heart is possible.</li>
+</ul>
+<p>The truth lies in between (<a href="#fig-hc">Figure 2</a>). The research aim is to make the chest smaller and the
+heart larger until they meet.</p>
+
+<figure id="fig-hc"><img src="docs/figs/fig-heart-chest.svg" alt="The gold quadrilateral standard chest of the 13-20-21 triangle containing the smaller green certified heart, with the centroid G marked." loading="lazy">
+<figcaption><b>Figure 2.</b> The standard chest and the certified heart of the triangle <i>A</i> = (0, 0), <i>B</i> = (21, 0), <i>C</i> = (5, 12)
+(sides 13, 20, 21), true to scale. <i>G</i> is the centroid. The white band between them is the region not
+yet decided.</figcaption></figure>
+
+<div class="note"><p><b>Three numbers to remember for the 13–20–21 triangle</b> (percent of the triangle's area):
+standard chest 5.93; best chest computed so far about 4.9; certified heart 3.99.</p></div>
+
+<h2 id="using">2. Using the explorer</h2>
+
+<h4>Tabs.</h4>
+<p><i>Triangle</i>, <i>Four planar points</i>, <i>Tetrahedron</i>. Each has its own
+examples, checkboxes and table.</p>
+
+<h4>Moving points.</h4>
+<p>Drag a vertex with the mouse. Scroll to zoom; drag empty space to pan (in
+the tetrahedron tab, to rotate). Exact coordinates can be typed under <i>Vertex coordinates</i>.
+<i>Example</i> loads a prepared configuration, <i>Reset</i> restores the default, <i>Fit view</i> shows
+the whole figure, <i>Focus hearts</i> zooms to the small inner regions.</p>
+
+<h4>Checkboxes.</h4>
+<p>Each checkbox is one <i>layer</i>: a region or a set of points. Green layers are
+hearts, the others are chests or comparison layers. Switching a layer on or off never moves the
+vertices. Hovering over a displayed center shows its name.</p>
+
+<h4>The table.</h4>
+<p>For each visible layer: the number of corners (vertices) of the region and its
+size as a percentage of the triangle (area) or of the tetrahedron (volume). A smaller chest is a
+stronger statement. A larger heart is a stronger statement. The two percentages answer opposite
+questions and are never added.</p>
+
+<h4>The status line</h4>
+<p>under the picture says how many corners the latest heart has and reports
+numerical failures (for instance a power center that did not converge is left out and counted).</p>
+
+<h4>Symmetric examples.</h4>
+<p>For an equilateral triangle, a parallelogram or a regular tetrahedron
+every center is forced onto the centre of symmetry, so both regions shrink to a point. For an isosceles
+triangle they shrink to a segment on the axis. Zero area does not mean “empty”.</p>
+
+<h2 id="concepts">3. Concepts and definitions</h2>
+
+<h3 id="centers">3.1 Centers</h3>
+<p>A triangle center can always be written as a weighted mean of the vertices,</p>
+<p class="formula"><i>Z</i> = <i>w<sub>A</sub></i><i>A</i> + <i>w<sub>B</sub></i><i>B</i> + <i>w<sub>C</sub></i><i>C</i>,  <i>w<sub>A</sub></i> + <i>w<sub>B</sub></i> + <i>w<sub>C</sub></i> = 1,</p>
+<p>where the weights depend only on the shape of the triangle (for instance on the side lengths
+<i>a</i> = |<i>BC</i>|, <i>b</i> = |<i>CA</i>|, <i>c</i> = |<i>AB</i>|).</p>
+
+<div class="tablewrap"><table>
+<thead><tr><th>center</th><th>weights (<i>w<sub>A</sub></i> : <i>w<sub>B</sub></i> : <i>w<sub>C</sub></i>)</th><th>attractive?</th></tr></thead>
+<tbody>
+<tr><td>centroid <i>G</i> = <i>X</i>(2)</td><td>1 : 1 : 1</td><td>yes; a push <i>d</i> moves it by <i>d</i>/3</td></tr>
+<tr><td>incenter <i>X</i>(1)</td><td><i>a</i> : <i>b</i> : <i>c</i></td><td>yes</td></tr>
+<tr><td>Spieker center <i>X</i>(10)</td><td><i>b</i> + <i>c</i> : <i>c</i> + <i>a</i> : <i>a</i> + <i>b</i></td><td>yes</td></tr>
+<tr><td>orthocenter <i>X</i>(4)</td><td>tan <i>A</i> : tan <i>B</i> : tan <i>C</i></td><td>no</td></tr>
+</tbody></table></div>
+<p>The codes <i>X</i>(<i>n</i>) are those of the <i>Encyclopedia of Triangle Centers</i>.</p>
+
+<div class="note"><p><b>Example: the orthocenter is not attractive.</b> Take <i>B</i> = (−1, 0), <i>C</i> = (1, 0), <i>A</i> = (<i>x</i>, <i>h</i>). The
+orthocenter is <i>H</i> = (<i>x</i>, (1 − <i>x</i>²)/<i>h</i>). Push <i>A</i> straight up (increase <i>h</i>): <i>H</i> moves straight
+<i>down</i>. The push and the response point in opposite directions.</p></div>
+
+<h3 id="monotone">3.2 Attractive and monotone</h3>
+<p>Two versions of the definition are used.</p>
+<ul>
+<li><b>Finite version (monotone).</b> For every move of one point by a vector <i>d</i>, with the center
+going from <i>X</i> to <i>X</i>′: <i>d</i> · (<i>X</i>′ − <i>X</i>) ≥ 0. This compares two configurations and needs no smoothness.</li>
+<li><b>Local version (attractive).</b> The rule is smooth and, for each vertex, the 2 × 2
+matrix <i>J</i> of partial derivatives of the center with respect to that vertex satisfies
+Sym <i>J</i> = ½(<i>J</i> + <i>J</i><sup>T</sup>) ⪰ 0 (no negative eigenvalue).</li>
+</ul>
+<p>For smooth rules the two are equivalent: the finite version is the integral of the local one along the
+path of the vertex. Chests are derived from the finite version. Hearts are built by checking the local
+version.</p>
+
+<h3 id="heart-chest">3.3 Heart, chest, and the two extreme objects</h3>
+<ul>
+<li>A <b>chest</b> of a configuration is a region proved to contain the center of every attractive
+rule. The intersection of two chests is a chest.</li>
+<li>A <b>heart</b> is a region every point of which is the center of some verified attractive rule.
+If <i>Z</i><sub>1</sub> and <i>Z</i><sub>2</sub> are attractive, so is every fixed mixture <i>tZ</i><sub>1</sub> + (1 − <i>t</i>)<i>Z</i><sub>2</sub>, 0 ≤ <i>t</i> ≤ 1. Therefore
+the <i>convex hull</i> of the centers of finitely many verified rules is a heart. This is how every green
+region of the explorer is produced.</li>
+<li>The <b>maximal heart</b> is the set of all centers of attractive rules. The <b>minimal
+chest</b> is the intersection of all chests obtainable from finitely many inequalities. The maximal heart
+lies inside the minimal chest. Whether they coincide is the main open question.</li>
+</ul>
+
+<h3 id="transport">3.4 How a chest inequality is obtained</h3>
+<p>Every chest comes from one principle, used over and over.</p>
+
+<div class="note"><p><b>Transport.</b> If a point is moved by <i>d</i> and the center of the starting configuration is
+known to lie in a region <i>K</i>, then the center <i>X</i>′ of the final configuration satisfies
+<i>d</i> · <i>X</i>′ ≥ min<sub><i>z</i> ∈ <i>K</i></sub> <i>d</i> · <i>z</i>.</p></div>
+
+<p>It is useful when the starting configuration is <i>symmetric</i>, because symmetry tells where its
+center is: on the axis of an isosceles triangle, at the centre of an equilateral triangle or of a
+parallelogram. Several points may be moved one after another along the <i>same</i> direction; the
+inequalities then add up. This is called a <b>pin with parallel displacement</b>.</p>
+
+<h2 id="triangle">4. The Triangle tab</h2>
+
+<h3 id="standard-chest">4.1 The standard chest (gold)</h3>
+<p>It is the intersection of three things: the triangle itself, three <i>strips</i>, and the
+<i>Napoleon triangle</i>.</p>
+
+<figure id="fig-std"><img src="docs/figs/fig-standard-chest.svg" alt="Left, a triangle with a pushed vertex and the gold strip bounded by the bisector of AB and the altitude; right, the Napoleon half-plane built from an equilateral triangle on side AC." loading="lazy">
+<figcaption><b>Figure 3.</b> Left: a strip. Slide <i>C</i> horizontally to <i>C</i>′ above the midpoint of <i>AB</i>. The triangle <i>ABC</i>′
+is isosceles, so its center is on the bisector of <i>AB</i>. Moving <i>C</i>′ back to <i>C</i> is a push to the left,
+so the center of <i>ABC</i> is on the left of the bisector. A similar move gives the altitude through <i>C</i> as
+the other border of the strip. Right: a Napoleon half-plane. The triangle <i>ACE</i> is equilateral, so its
+center is its centre <i>N</i>. Moving <i>E</i> to <i>B</i> puts the center of <i>ABC</i> on the side of the line through
+<i>N</i> perpendicular to <i>EB</i> that faces <i>B</i>.</figcaption></figure>
+
+<h4>Strips</h4>
+<p>(checkbox <i>Characteristic strips</i>). For each side there is one strip, bounded by
+the perpendicular bisector of the side and the parallel line through the opposite vertex (the altitude).
+Three sides give three strips.</p>
+
+<h4>Napoleon triangle</h4>
+<p>(checkbox <i>Internal Napoleon triangle</i>). On each side build the
+equilateral triangle that lies on the same side as the opposite vertex; take the three centres
+<i>N<sub>A</sub></i>, <i>N<sub>B</sub></i>, <i>N<sub>C</sub></i>. Each gives one half-plane as in <a href="#fig-std">Figure 3</a>; the three half-planes form a
+triangle whose side midpoints are <i>N<sub>A</sub></i>, <i>N<sub>B</sub></i>, <i>N<sub>C</sub></i>.</p>
+
+<div class="note"><p><b>Example (13–20–21).</b> The nine inequalities are
+5 ≤ <i>x</i> ≤ 21/2, 0 ≤ 4<i>x</i> − 3<i>y</i> ≤ 34, 169/2 ≤ 5<i>x</i> + 12<i>y</i> ≤ 105 and three Napoleon
+half-planes. Only four of them matter. The chest is the quadrilateral with corners
+(10.5, 2.667) (the circumcenter), (10.5, 4.375), (6.288, 6.130), (5.964, 4.557) and area
+5.930% of the triangle.</p></div>
+
+<h3 id="hearts">4.2 The hearts (green and comparison layers)</h3>
+<p>Each heart layer is the convex hull of the centers of a list of verified attractive rules. Later layers
+contain the earlier ones. <a href="#tab-tri">Table 1</a> lists them in the order of the checkboxes.</p>
+
+<p class="tcap" id="tab-tri"><b>Table 1.</b> Layers of the Triangle tab.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>checkbox</th><th>what it shows</th><th>status</th></tr></thead>
+<tbody>
+<tr><td>Standard chest</td><td>the outer bound of Section <a href="#standard-chest">4.1</a></td><td>proved</td></tr>
+<tr><td>Latest heart</td><td>hull of all rules below, 1176 in total</td><td>see rows below</td></tr>
+<tr><td>Previous heart · before Steiner maps</td><td>the heart as of October 2026 (467 rules)</td><td>certified</td></tr>
+<tr><td>Certified Steiner-frame maps alone</td><td>709 polynomial rules built on the Steiner inellipse (Section <a href="#steinermaps">4.3</a>)</td><td>interval certificate</td></tr>
+<tr><td>Previous bridge + rays heart</td><td>B46, constant families, shape maps, rays, bridge</td><td>exact certificates</td></tr>
+<tr><td>Centroid-insertion polynomial maps</td><td>12 rules obtained from four-point rules by inserting the centroid</td><td>proved</td></tr>
+<tr><td>Repaired conic-bridge enlargement</td><td>adds a continuous one-parameter family between two exact endpoints (129 samples)</td><td>exact</td></tr>
+<tr><td>Previous six-ray heart (R1–R6)</td><td>adds six rules found on six rays from <i>G</i></td><td>exact</td></tr>
+<tr><td>New maps R7–R10 and P1–P3 alone</td><td>seven further rules</td><td>exact</td></tr>
+<tr><td>First shape-dependent enlargement</td><td>four rules whose weights depend on the shape number <i>q</i></td><td>exact</td></tr>
+<tr><td>B46 + constant families</td><td>adds all rules <i>G</i> + <i>fK</i> + <i>gHK</i> with constant <i>f</i>, <i>g</i></td><td>exact</td></tr>
+<tr><td>B46 heart</td><td>44 rational rules <i>G</i> + λ(<i>X</i>(<i>i</i>) − <i>G</i>) and two power centers</td><td>exact</td></tr>
+<tr><td>Six new maps R1–R6 alone</td><td>the six rules by themselves</td><td>exact</td></tr>
+<tr><td>Historical B36 comparison</td><td>an earlier list of 36 rules</td><td>exact</td></tr>
+<tr><td>Earlier sampled power-family hull</td><td>incenter, Spieker center, centroid and 49 power centers</td><td>theorem + sampling</td></tr>
+<tr><td>Characteristic strips</td><td>the three strips alone</td><td>proved</td></tr>
+<tr><td>Internal Napoleon triangle</td><td>the Napoleon triangle alone</td><td>proved</td></tr>
+<tr><td>Show exposed center points</td><td>dots at the rules that are corners of the heart</td><td>display</td></tr>
+</tbody></table></div>
+
+<h4>Power centers.</h4>
+<p><i>M<sub>p</sub></i> is the point that minimises the sum of the <i>p</i>-th powers of the
+distances to the vertices. For <i>p</i> = 2 it is the centroid. A theorem of the project says that <i>M<sub>p</sub></i> is
+attractive for 4 − 2√2 ≤ <i>p</i> ≤ 4 + 2√2 (about 1.17 to 6.83), for any number of points in any
+dimension.</p>
+
+<h4>Rational rules (B46).</h4>
+<p>For a center <i>X</i>(<i>i</i>) and a number λ, the rule
+<i>G</i> + λ (<i>X</i>(<i>i</i>) − <i>G</i>) lies on the line through the centroid and <i>X</i>(<i>i</i>). For 44 choices the rule is
+certified attractive; together with the two extreme power centers they form <i>B46</i>.</p>
+
+<h4>Shape-dependent weighted means.</h4>
+<p>Put <i>s<sub>i</sub></i> = <i>a<sub>i</sub></i>²/(<i>a</i>² + <i>b</i>² + <i>c</i>²) and</p>
+<p class="formula"><i>q</i> = ½(3 ∑ <i>s<sub>i</sub></i>² − 1),  χ = 36 ∑ (<i>s<sub>i</sub></i> − ⅓)³ .</p>
+<p>Both are 0 for an equilateral triangle; <i>q</i> measures how far the triangle is from equilateral and
+χ distinguishes shapes with the same <i>q</i>. The rules of this family have weights</p>
+<p class="formula" id="eq-weights"><i>w<sub>i</sub></i> = ⅓ + (<i>f</i> + 4<i>g</i>)(<i>s<sub>i</sub></i> − ⅓) − 6<i>g</i> (<i>s<sub>i</sub></i>² − ⅓ ∑ <i>s<sub>j</sub></i>²),  (1)</p>
+<p>where <i>f</i> and <i>g</i> are simple functions of <i>q</i> and χ: constants (<i>constant families</i>),
+<i>f</i><sub>0</sub> + <i>f</i><sub>1</sub><i>q</i> (<i>first shape maps</i> and <i>rays</i>), with a term in χ (<i>P1–P3</i>), or
+polynomials of higher degree (<i>Steiner maps</i>). The <i>conic bridge</i> is a curve of such rules.</p>
+
+<h3 id="steinermaps">4.3 The Steiner-frame maps</h3>
+<p>The <i>Steiner inellipse</i> is the ellipse inside the triangle that touches the three sides at their
+midpoints. Its centre is <i>G</i>; let <i>GP</i> and <i>GQ</i> be its longer and shorter semi-axes
+(<a href="#fig-steiner">Figure 4</a>).</p>
+
+<figure id="fig-steiner"><img src="docs/figs/fig-steiner.svg" alt="The 13-20-21 triangle with its Steiner inellipse in green and the two semi-axes GP and GQ drawn from the centroid G." loading="lazy">
+<figcaption><b>Figure 4.</b> The Steiner inellipse of the 13–20–21 triangle and its semi-axes <i>GP</i>, <i>GQ</i>. The axis ratio
+is <i>k</i> = |<i>GQ</i>|/|<i>GP</i>| ≈ 0.58. Each vertex has an angle θ on the larger, similar ellipse through
+the vertices: <span class="vec">GV</span> = 2 cos θ · <span class="vec">GP</span> + 2 sin θ · <span class="vec">GQ</span>.</figcaption></figure>
+
+<p>A first idea is to take <i>Z</i> = <i>G</i> + <i>x</i> · <span class="vec">GP</span> + <i>y</i> · <span class="vec">GQ</span> with fixed numbers <i>x</i>, <i>y</i>.
+This does <i>not</i> give attractive rules: near an equilateral triangle the axes of the ellipse turn
+violently when a vertex moves a little, and the center is thrown backwards. The rules that work are</p>
+<p class="formula"><i>Z</i> = <i>G</i> + <i>X</i> cos 3θ · <span class="vec">GP</span> + <i>Y</i> sin 3θ · <span class="vec">GQ</span>,</p>
+<p>where <i>X</i> and <i>Y</i> depend on the shape and vanish for the equilateral triangle. Written as weighted means
+they are exactly of the form <a href="#eq-weights">(1)</a>, with <i>f</i> and <i>g</i> polynomials in <i>q</i> and χ. The
+explorer contains 709 of them. They were <i>designed</i> by a computer search and then
+<i>certified</i> one by one (Section <a href="#algorithms">7</a>).</p>
+
+<div class="note"><p><b>Example.</b> With the Steiner maps the heart of 13–20–21 grew from 2.81% to 3.99%
+of the triangle, and the heart of the 6–5–3 triangle from 12.95% to 18.42%.</p></div>
+
+<h2 id="four">5. The Four planar points tab</h2>
+
+<p>Here a rule assigns a center to four points <i>A</i>, <i>B</i>, <i>C</i>, <i>D</i> of the plane, in the same symmetric way.</p>
+
+<h3 id="four-hearts">5.1 Hearts</h3>
+<p class="tcap" id="tab-fourh"><b>Table 2.</b> Heart layers of the Four planar points tab.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>checkbox</th><th>what it shows</th><th>status</th></tr></thead>
+<tbody>
+<tr><td>Latest planar four-point heart</td><td>hull of everything below</td><td>see rows</td></tr>
+<tr><td>Previous heart · before face means</td><td>the heart as of October 2026</td><td>certified</td></tr>
+<tr><td>Face means of triangle centers alone</td><td>for each certified triangle rule, the average of its centers in the four triangles <i>BCD</i>, <i>ACD</i>, <i>ABD</i>, <i>ABC</i></td><td>proved; one check numerical</td></tr>
+<tr><td>Previous vertex-power heart</td><td>49 power centers of the four points</td><td>theorem + sampling</td></tr>
+<tr><td>Barycentric-anchor family alone</td><td>power centers of 14 points: the 4 points, 6 midpoints, 4 triangle centroids, with fixed masses</td><td>theorem + sampling</td></tr>
+<tr><td>Ten SOS-certified polynomial maps</td><td>ten explicit polynomial rules</td><td>exact (sums of squares)</td></tr>
+<tr><td>Conservative shape-modulated maps</td><td>two rules <i>G</i> ± <i>q̃U</i><sub>1</sub>/24</td><td>proved (norm bound)</td></tr>
+<tr><td>Analytic subheart</td><td>the even powers <i>p</i> = 2, 4, 6 and the polynomial rules</td><td>as above</td></tr>
+<tr><td>Refine anchor sampling (slower)</td><td>uses 2835 instead of 495 anchor mixtures</td><td>display</td></tr>
+</tbody></table></div>
+
+<h4>Face means.</h4>
+<p>If <i>Z</i> is an attractive triangle rule, then</p>
+<p class="formula"><i>Z</i><sub>4</sub>(<i>A</i>, <i>B</i>, <i>C</i>, <i>D</i>) = ¼ [<i>Z</i>(<i>BCD</i>) + <i>Z</i>(<i>ACD</i>) + <i>Z</i>(<i>ABD</i>) + <i>Z</i>(<i>ABC</i>)]</p>
+<p>is an attractive four-point rule: when <i>A</i> moves, three of the four terms respond, each without going
+backwards, and the fourth does not move (<a href="#fig-face">Figure 5</a>). No new proof is needed for each rule;
+this is why 1176 triangle rules immediately give 1176 four-point rules.</p>
+
+<figure id="fig-face"><img src="docs/figs/fig-face-mean.svg" alt="A quadrilateral ABCD with four green points, the centers of its four triangles, and their average Z4 marked in the middle." loading="lazy">
+<figcaption><b>Figure 5.</b> A face mean. The four green points are the centers of the triangles <i>BCD</i>, <i>ACD</i>, <i>ABD</i>, <i>ABC</i>
+for one triangle rule (here the centroid); their average is a four-point center.</figcaption></figure>
+
+<h3 id="four-chests">5.2 Chests</h3>
+<p>All checked chest layers are intersected; the result is the layer <i>Show intersection</i>.</p>
+
+<p class="tcap" id="tab-fourc"><b>Table 3.</b> Chest layers of the Four planar points tab.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>checkbox</th><th>idea</th><th>status</th></tr></thead>
+<tbody>
+<tr><td>Parallelogram strips</td><td>slide two points until the four form a parallelogram; its center is its centre</td><td>proved</td></tr>
+<tr><td>Useful bisectors</td><td>mirror-symmetric predecessor about the bisector of a pair</td><td>proved</td></tr>
+<tr><td>Two-order network</td><td>start from an equilateral triangle with its centre, move the other points in both orders, keep the intermediate centers as unknowns</td><td>proved</td></tr>
+<tr><td>Involution orbit bounds</td><td>further reflections and point reflections</td><td>proved</td></tr>
+<tr><td>Edge-projection slabs</td><td>make a pair mirror images and put the other two points on the axis</td><td>proved</td></tr>
+<tr><td>Face-centroid transfer</td><td>if <i>D</i> is the centroid of <i>ABC</i>, the triangle chest of <i>ABC</i> applies; otherwise a bound in the direction <i>D</i> − <i>G</i></td><td>proved</td></tr>
+<tr><td>Three-fold pins + moved-vertex transfer</td><td>new, <a href="#fig-pin">Figure 6</a></td><td>proved</td></tr>
+<tr><td>Two-step cuts (fast scan)</td><td>new, <a href="#fig-two">Figure 7</a></td><td>proved rule, numerical scan</td></tr>
+<tr><td>Refine two-step scan (slower)</td><td>a finer scan; it can only shrink the chest</td><td>as above</td></tr>
+<tr><td>Diameter balls (power family)</td><td>valid for power centers only</td><td>conditional</td></tr>
+<tr><td>Absorption (conditional)</td><td>assumes <i>X</i><sub>4</sub>(<i>A</i>, <i>B</i>, <i>C</i>, <i>X</i><sub>3</sub>(<i>ABC</i>)) = <i>X</i><sub>3</sub>(<i>ABC</i>)</td><td>conditional</td></tr>
+<tr><td>Standard chest of <i>A</i>, <i>B</i>, <i>C</i></td><td>shown for comparison only; not a four-point chest in general</td><td>display</td></tr>
+</tbody></table></div>
+
+<figure id="fig-pin"><img src="docs/figs/fig-pins.svg" alt="Left, a quadrilateral with two midpoints and the parallel strip lines; right, a triangle with the line through G and D and three parallel pin lines." loading="lazy">
+<figcaption><b>Figure 6.</b> Left: the midpoints <i>m</i> of <i>AC</i> and <i>q</i> of <i>BD</i>. Sliding one pair until the midpoints coincide
+gives a parallelogram, whose center is its centre; the center of <i>ABCD</i> lies in the strip between the
+two parallel lines. Right: a three-fold pin. All four points are slid along the line <i>GD</i> (<i>G</i> the
+centroid of <i>ABC</i>) until <i>ABC</i> is equilateral with <i>D</i> at its centre. This is possible only along this
+direction, and it confines the center to a strip across that line.</figcaption></figure>
+
+<figure id="fig-two"><img src="docs/figs/fig-two-step.svg" alt="The 13-20-21 triangle with incenter I, a trial position C' on line BC, and a short purple cut segment obtained by transporting the symmetric configuration back." loading="lazy">
+<figcaption><b>Figure 7.</b> A two-step cut for <i>A</i>, <i>B</i>, <i>C</i> and the incenter <i>I</i> of 13–20–21. Put <i>C</i> at the trial position
+<i>C</i>′ on line <i>BC</i> with |<i>BC</i>′| = |<i>BA</i>|. The configuration <i>A</i>, <i>B</i>, <i>C</i>′, <i>I</i> is mirror-symmetric about the line
+<i>BI</i>, so its center lies on a short segment of that line (thick). Moving <i>C</i>′ back to <i>C</i> transports
+the lower end of the segment into a cut for the center of <i>A</i>, <i>B</i>, <i>C</i>, <i>I</i>.</figcaption></figure>
+
+<div class="note"><p><b>Example.</b> For <i>A</i>, <i>B</i>, <i>C</i> of 13–20–21 and <i>D</i> its incenter, the chest intersection was
+7.37% of the triangle before the new rules, 6.10% with the pins, and 5.69% with the two-step
+cuts. The heart grew from 0.57% to 0.92%.</p></div>
+
+<h2 id="tetrahedron">6. The Tetrahedron tab</h2>
+
+<p>The same questions for four points in space. Regions are polyhedra and percentages are volumes.</p>
+
+<h4>Hearts.</h4>
+<p>The layers are those of the four-point tab, in space: vertex-power centers,
+barycentric anchors, ten SOS-certified polynomial rules, two modulated rules, and <b>face means</b>.
+For a face mean, a triangle rule is evaluated in the plane of each of the four faces and the four
+points are averaged. Why this is attractive in space: if a vertex moves <i>inside</i> the plane of a
+face, the face center responds as in the plane; if it moves <i>perpendicular</i> to the face, no side
+length changes at first order, so the face center simply follows with the factor <i>w<sub>i</sub></i>, its barycentric
+weight, which is not negative.</p>
+
+<h4>Chests.</h4>
+<p><a href="#tab-tetc">Table 4</a> lists the chest layers; the checked ones are intersected.</p>
+<p class="tcap" id="tab-tetc"><b>Table 4.</b> Chest layers of the Tetrahedron tab.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>checkbox</th><th>idea</th><th>status</th></tr></thead>
+<tbody>
+<tr><td>Opposite-edge slabs</td><td>slide two opposite edges until their midpoints coincide (a flat parallelogram)</td><td>proved</td></tr>
+<tr><td>Useful bisector planes</td><td>mirror-symmetric predecessor</td><td>proved</td></tr>
+<tr><td>Involution orbit bounds</td><td>further reflections</td><td>proved</td></tr>
+<tr><td>Edge-projection slabs</td><td>two vertices mirror images, the other two in the mirror plane</td><td>proved</td></tr>
+<tr><td>Face-centroid transfer</td><td>bound in the direction from a face centroid to the opposite vertex</td><td>proved</td></tr>
+<tr><td>Axis pins</td><td>a face is slid in its plane to an equilateral triangle whose axis passes through the fourth vertex; the center is then on that axis</td><td>proved</td></tr>
+<tr><td>Median pins</td><td>all vertices are slid along a median to a flat equilateral triangle with its centre</td><td>proved</td></tr>
+<tr><td>Moved-vertex transfer</td><td>as in the plane, along a median</td><td>proved</td></tr>
+<tr><td>Two-step cuts</td><td>a vertex is first put at a position that makes the tetrahedron mirror-symmetric (<a href="#fig-mirror">Figure 8</a>)</td><td>proved rule, numerical scan</td></tr>
+<tr><td>Diameter balls (power family)</td><td>valid for power centers only</td><td>conditional</td></tr>
+</tbody></table></div>
+
+<figure id="fig-mirror"><img src="docs/figs/fig-mirror.svg" alt="A tetrahedron with base P_j P_k P_l, a trial vertex v, the true vertex P_i, and a shaded purple mirror plane through the edge P_j P_k." loading="lazy">
+<figcaption><b>Figure 8.</b> A two-step cut in space. The trial position <i>v</i> is a rotation of <i>P<sub>l</sub></i> about the edge
+<i>P<sub>j</sub>P<sub>k</sub></i>. The tetrahedron <i>P<sub>j</sub></i>, <i>P<sub>k</sub></i>, <i>P<sub>l</sub></i>, <i>v</i> is then symmetric in the plane through that edge and the
+midpoint of <i>P<sub>l</sub>v</i>, so its center lies in this plane, inside a polygon. Moving the vertex from <i>v</i> to
+its true place <i>P<sub>i</sub></i> transports the border of the polygon into a cut.</figcaption></figure>
+
+<div class="note"><p><b>Example.</b> For the <i>Bundle tetrahedron</i> preset the chest was 10.26% of the
+tetrahedron before the new rules and is 7.11% with the two-step cuts (6.59% refined); the heart
+grew from 0.024% to 0.099%. In space the heart and the chest are still very far apart.</p></div>
+
+<h4>Reading the 3D picture.</h4>
+<p>Drag empty space to rotate; <i>Focus hearts</i> zooms to the small
+green polyhedron; <i>Show selected 3D chest</i> can be switched off to see the heart alone.</p>
+
+<h2 id="algorithms">7. The algorithms</h2>
+
+<h3 id="dragging">7.1 What happens while you drag</h3>
+<p>For every new position the browser recomputes, on your own computer:</p>
+<ol>
+<li>the centers of all rules of the active tab (weighted means are evaluated by formula; power
+centers by Newton's method with a convergence check);</li>
+<li>the convex hull of these centers (the heart);</li>
+<li>the chest: every rule produces straight cuts (half-planes or half-spaces); the hull of the input
+points is clipped by each cut in turn;</li>
+<li>the areas or volumes for the table.</li>
+</ol>
+<p>Nothing is proved while you drag. The browser evaluates rules and inequalities whose validity was
+established beforehand; Section <a href="#status">8</a> says how.</p>
+
+<h3 id="scans">7.2 Two-step scans</h3>
+<p>For each of the four points the scan tries a list of trial positions: special points (mirror images,
+apexes and centres of equilateral triangles, positions that make a point a centroid), points on the
+curves where three points form an isosceles triangle, and a grid. For each trial position it builds the
+one-step chest of the intermediate configuration, computes the cut, and keeps it if it removes
+something. Two facts keep this fast and safe.</p>
+<ul>
+<li><i>Every cut is valid</i>, so a coarse scan gives a correct chest that is merely a little larger.</li>
+<li><i>A quick test discards hopeless positions</i>: the centroid of the four points lies in every
+chest; if even the centroid of the intermediate configuration would not produce a cut, nothing will.</li>
+</ul>
+<p>In space the trial positions make the intermediate tetrahedron mirror-symmetric, so its chest is a
+polygon in the mirror plane and the computation is two-dimensional.</p>
+
+<h3 id="design">7.3 How a new rule is designed</h3>
+<p>For the weighted means <a href="#eq-weights">(1)</a> the matrix Sym <i>J</i> depends <i>linearly</i> on the
+coefficients of <i>f</i> and <i>g</i>. Therefore the question “which coefficients push the center of this
+triangle farthest in this direction, while Sym <i>J</i> stays positive at these ten thousand sample
+shapes?” is a <i>linear programme</i>, a standard optimisation problem. It is solved for many target
+triangles and directions. The answers are candidates only: the positivity was imposed at sample shapes,
+not everywhere.</p>
+
+<h3 id="cert">7.4 How a rule is certified</h3>
+<p>Three kinds of proof are used.</p>
+<ul>
+<li><b>Exact polynomial certificates.</b> After clearing denominators, positivity of Sym <i>J</i>
+becomes the statement that a polynomial is a sum of squares. The identity is checked with exact
+rational arithmetic. Used for B46, the rays, the bridge and the ten four-point polynomial rules.</li>
+<li><b>Norm bounds.</b> The rule is <i>G</i> plus a small perturbation whose derivative is bounded by an
+explicit estimate smaller than the response 1/<i>n</i> of the centroid. Used for the modulated rules.</li>
+<li><b>Interval certificates.</b> All triangle shapes are described by two numbers (ψ, δ)
+in a rectangle. The rectangle is cut into boxes (<a href="#fig-boxes">Figure 9</a>). On each box the computer
+evaluates Sym <i>J</i> with <i>interval arithmetic</i>: every operation returns an interval guaranteed to
+contain the true result, rounding outwards. If the lower bounds of the first entry and of the
+determinant are positive, the box is done; otherwise it is split in four. When every box is done, the
+rule is attractive for every triangle. Used for the 709 Steiner maps: about 100 million boxes in all.</li>
+</ul>
+
+<figure id="fig-boxes"><img src="docs/figs/fig-boxes.svg" alt="A rectangle divided into a grid of boxes, most shaded green as certified, with a few red-crossed boxes that are split into four and tested again." loading="lazy">
+<figcaption><b>Figure 9.</b> The interval certificate. Boxes where positivity is guaranteed are finished (green); the
+others are split into four smaller boxes and tested again.</figcaption></figure>
+
+<h3 id="offline">7.5 Sharper chests outside the app</h3>
+<p>The chest drawn for triangles is the standard one. Offline computations give smaller chests for the
+13–20–21 triangle (<a href="#fig-levels">Figure 10</a>).</p>
+<ul>
+<li><b>Two steps.</b> Using an isosceles triangle as an intermediate stop gives further cuts. One
+of them, 4<i>x</i> − 3<i>y</i> ≥ (21/2)(√3 − 1), is proved exactly and already shows that the standard chest
+is not best possible. All two-step cuts together give about 5.04%.</li>
+<li><b>Nets.</b> A <i>net</i> is a finite collection of triangle shapes with one unknown center for
+each, tied together by all transport inequalities between them. Solving this system (a linear programme)
+gives 4.89% with 311 shapes. These values are numerical.</li>
+</ul>
+
+<figure id="fig-levels"><img src="docs/figs/fig-chest-levels.svg" alt="Nested regions of the 13-20-21 triangle: the standard chest, two exactly proved cuts, the two-step chest, a net chest and the certified heart." loading="lazy">
+<figcaption><b>Figure 10.</b> Chests and heart of the 13–20–21 triangle: the standard chest, two exactly proved cuts, the
+two-step chest, a net chest, and the certified heart.</figcaption></figure>
+
+<h2 id="status">8. What is proved and what is computed</h2>
+
+<div class="tablewrap"><table>
+<thead><tr><th>statement</th><th>status</th></tr></thead>
+<tbody>
+<tr><td>the standard chest contains every attractive triangle center</td><td>proved</td></tr>
+<tr><td>every listed rule of B46, the rays, the bridge, the four-point polynomial rules</td><td>proved by exact certificates</td></tr>
+<tr><td>the 709 Steiner maps are attractive</td><td>computer-assisted proof (interval arithmetic); assumes the system sine and cosine are accurate to 10<sup>−12</sup></td></tr>
+<tr><td>convex hull of verified centers is a heart</td><td>proved</td></tr>
+<tr><td>face means are attractive (no three points collinear)</td><td>proved</td></tr>
+<tr><td>face means across collinear positions</td><td>needs a limit property of each triangle rule; checked numerically for all 1176</td></tr>
+<tr><td>pins, transfer, two-step cuts are valid</td><td>proved (for rules that are monotone along every straight move without collision)</td></tr>
+<tr><td>positions, areas, volumes shown in the app</td><td>floating-point evaluation</td></tr>
+<tr><td>two-step chest 5.04%, net chest 4.89% (13–20–21)</td><td>numerical</td></tr>
+<tr><td>the heart equals the chest</td><td>open</td></tr>
+</tbody></table></div>
+<p>None of the project's own proofs has been refereed by a journal.</p>
+
+<h2 id="glossary">9. Glossary</h2>
+
+<dl>
+<dt>Absorption</dt><dd>An optional extra assumption linking four-point and triangle rules. Not part of attractivity.</dd>
+<dt>Anchor</dt><dd>A centroid of some of the points (a vertex, an edge midpoint, a face centroid) used as a virtual input.</dd>
+<dt>Attractive</dt><dd>Smooth and never moving against a push: Sym <i>J</i> ⪰ 0 for every vertex.</dd>
+<dt>Barycentric weights</dt><dd>The numbers <i>w<sub>i</sub></i> with <i>Z</i> = ∑ <i>w<sub>i</sub>v<sub>i</sub></i>, ∑ <i>w<sub>i</sub></i> = 1.</dd>
+<dt>Center</dt><dd>A rule assigning a point to every configuration, independent of position, size, orientation and labelling.</dd>
+<dt>Certificate</dt><dd>A finite, checkable record proving that a rule is attractive.</dd>
+<dt>Chest</dt><dd>A region proved to contain the center of every attractive rule.</dd>
+<dt>Conditional layer</dt><dd>A bound that holds only under an extra assumption or only for one family.</dd>
+<dt>Convex hull</dt><dd>The smallest convex region containing given points.</dd>
+<dt>Cut</dt><dd>One straight inequality removing part of a chest.</dd>
+<dt>Face mean</dt><dd>The average of a triangle rule over the four triangles formed by four points.</dd>
+<dt>Heart</dt><dd>A region each point of which is the center of a verified attractive rule.</dd>
+<dt>Level</dt><dd>Level 1 uses one move from a symmetric configuration; level 2 uses a further move; and so on.</dd>
+<dt>Maximal heart, minimal chest</dt><dd>The largest heart and the smallest chest; whether they are equal is open.</dd>
+<dt>Monotone</dt><dd>The finite form of attractivity, <i>d</i> · (<i>X</i>′ − <i>X</i>) ≥ 0; needs no smoothness.</dd>
+<dt>Net</dt><dd>A finite set of configurations with unknown centers, tied by all transport inequalities.</dd>
+<dt>Pin</dt><dd>A chest rule that slides points along one direction from a symmetric configuration.</dd>
+<dt>Power center <i>M<sub>p</sub></i></dt><dd>The minimiser of the sum of <i>p</i>-th powers of distances to the points.</dd>
+<dt>Slab, strip</dt><dd>The region between two parallel planes or lines.</dd>
+<dt>Steiner inellipse</dt><dd>The ellipse touching the three sides of a triangle at their midpoints.</dd>
+<dt>Transport</dt><dd>The basic inequality of Section <a href="#transport">3.4</a>.</dd>
+</dl>
+
+<h2 id="faq">10. Frequent questions</h2>
+
+<h4>Why is the heart so much smaller than the chest for four points?</h4>
+<p>The chest rules for four
+points are still weak, and so are the known four-point rules. For triangles the two are much closer.</p>
+
+<h4>Is a point of the white band possible or not?</h4>
+<p>Unknown. That is exactly the open region.</p>
+
+<h4>Why does a layer sometimes have zero area?</h4>
+<p>The configuration is symmetric and the region
+has collapsed to a segment or a point.</p>
+
+<h4>Can the heart ever leave the chest?</h4>
+<p>No. A regression test checks, for many configurations,
+that every certified center lies in every chest.</p>
+
+<h4>Why are some chest options labelled “conditional”?</h4>
+<p>They hold only under an extra
+assumption (absorption) or only for one family (power centers). The intersection is called
+“unconditional” only when they are off.</p>
+
+<h4>Does the refined scan change the mathematics?</h4>
+<p>No. It tries more trial positions, so it finds
+more valid cuts; the chest can only shrink.</p>
+
+<h2 id="downloads">11. Further reading and downloads</h2>
+<ul>
+<li><i>Chests and Hearts of Attractive Triangle Centers</i>: formal framework, roadmap, the chests of
+13–20–21 step by step, and the Steiner method (PDF, in the explorer's <code>docs</code> folder):
+<a href="docs/chests-and-hearts.pdf" download>Chests and Hearts of Attractive Triangle Centers — formal framework, roadmap, worked computations</a>.</li>
+<li><i>A Calculus of Chests and Hearts</i>: the general operations with proofs (PDF, same folder):
+<a href="docs/calculus-of-chests-and-hearts.pdf" download>A Calculus of Chests and Hearts — the general operations with proofs</a>.</li>
+<li>The explorer's in-page guide: formulas, coefficient tables, proof bundles and test files.</li>
+<li>This guide: <a href="docs/explorer-guide.pdf" download>This guide as PDF</a>.</li>
+</ul>
+</main>
+<footer>Attractive Centers Explorer · help page · 18 November 2026 · <a href="./">Back to the explorer</a></footer>
+</body></html>

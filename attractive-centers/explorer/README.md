@@ -1,5 +1,23 @@
 # Attractive Centers — geometry explorer
 
+## Documentation and second batch of Steiner maps — 18 November 2026
+
+**Help.** `help.html` is an illustrated guide to every picture, checkbox, number and
+algorithm (ten diagrams, worked examples, glossary, no scripts). The same text
+is `docs/explorer-guide.pdf`. Two research documents are also downloadable:
+`docs/chests-and-hearts.pdf` (formal framework, roadmap, chests of 13-20-21,
+the Steiner method) and `docs/calculus-of-chests-and-hearts.pdf` (general
+chest-reducing and heart-extending operations with proofs).
+
+**Second batch.** 409 further Steiner-frame maps, with f and g of degree 6 in q
+and p-terms of degree 2, all interval-certified (71.3 million boxes). They were
+aimed at the upper edge of the 13-20-21 heart. With all 709 maps the triangle
+heart is 3.99% on 13-20-21 (was 3.66%), 18.42% on 6-5-3 (17.07%), 32.85% on the
+scalene obtuse preset (29.31%) and 15.26% on 12-8-6 (14.64%). The face means of
+the four-point and tetrahedron tabs use all 1176 triangle centers. The data
+file stores every map in the degree-(6,2) layout; first-batch maps are padded
+with zeros. `python verify_all.py` in `steiner-certify.zip` replays both batches.
+
 ## Four planar points: face means and new chest rules — 18 November 2026
 
 **Heart.** For an attractive triangle center Z, the mean of Z over the four

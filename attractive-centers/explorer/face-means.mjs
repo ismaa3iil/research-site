@@ -9,8 +9,8 @@ import {add,sub,mul,norm,normalize,hull} from './geometry.mjs?v=b46-20261001';
 import {b46Heart} from './b46.mjs?v=b46-20261001';
 import {analyticRows,shapeWeights} from './analytic-hearts.mjs?v=four-20261118';
 import {trianglePullbackCenters} from './tetra-hearts.mjs?v=all-hearts-20261018';
-import {steinerCenter} from './steiner-hearts.mjs?v=steiner-20261118';
-import {STEINER_MAPS} from './steiner-hearts-data.mjs?v=steiner-20261118';
+import {steinerCenter} from './steiner-hearts.mjs?v=batch2-20261118';
+import {STEINER_MAPS} from './steiner-hearts-data.mjs?v=batch2-20261118';
 let rows=null;
 
 // All certified triangle centers of the explorer at one triangle, in the coordinates of the input.

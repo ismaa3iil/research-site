@@ -6,7 +6,7 @@
 // Equivalently the vertex weights are 1/3 − f·u_i − 6g(u_i² − mean u²), u_i = 1/3 − a_i²/(a²+b²+c²).
 // Each coefficient vector passed an interval-arithmetic certificate of positive definite vertex responses.
 import {add,sub,mul,dot,mean,norm,hull} from './geometry.mjs?v=b46-20261001';
-import {STEINER_DEGREE,STEINER_P_DEGREE,STEINER_MAPS} from './steiner-hearts-data.mjs?v=steiner-20261118';
+import {STEINER_DEGREE,STEINER_P_DEGREE,STEINER_MAPS} from './steiner-hearts-data.mjs?v=batch2-20261118';
 
 export function steinerFrame(p){
   const g=mean(p),w=p.map(v=>sub(v,g));
