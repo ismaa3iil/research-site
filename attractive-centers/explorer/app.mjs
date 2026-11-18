@@ -26,6 +26,14 @@ optionSets.triangle.splice(2,0,['previousEnhanced','Previous bridge + rays heart
 optionSets.triangle[1][1]='Latest heart · bridge, rays + insertion';
 optionSets.four=[['fourExpanded','Enlarged planar four-point heart',true],['power','Previous vertex-power heart',false],['anchors','Barycentric-anchor family alone',false],['sosTetra','Ten SOS-certified polynomial maps',false],['modulated','Conservative shape-modulated maps',false],['analyticTetra','Analytic subheart · even powers + polynomials',false],['refineAnchors','Refine anchor sampling (slower)',false],['centers','Show exposed center points',false],...optionSets.four.filter(([k])=>k!=='power')];
 optionSets.tetra.splice(1,0,['previousEnhanced','Previous SOS + anchors heart',false],['modulated','Conservative shape-modulated maps',false]);
+// 18 November 2026: face means of certified triangle centers; three-fold pins, moved-vertex transfer and two-step cuts.
+Object.assign(colors,{faceMeans:'#7a8f1f',beforeFaceMeans:'#3185a2',pins:'#b0492f',twostep:'#6a4fb3'});
+optionSets.four[0][1]='Latest planar four-point heart · with face means';
+optionSets.four.splice(1,0,['beforeFaceMeans','Previous heart · before face means',false],['faceMeans','Face means of triangle centers alone',false]);
+optionSets.four.splice(optionSets.four.findIndex(([k])=>k==='transfer')+1,0,['pins','Three-fold pins + moved-vertex transfer',true],['twostep','Two-step cuts (fast scan)',true],['refineChest','Refine two-step scan (slower)',false]);
+optionSets.tetra[0][1]='Latest tetrahedron heart · with face means';
+optionSets.tetra.splice(1,0,['beforeFaceMeans','Previous heart · before face means',false],['faceMeans','Face means of triangle centers alone',false]);
+optionSets.tetra.splice(optionSets.tetra.findIndex(([k])=>k==='transfer')+1,0,['pins','Axis pins, median pins + moved-vertex transfer',true],['twostep','Two-step cuts (mirror-symmetric positions)',true],['refineChest','Refine two-step scan (slower)',false]);
 presets.four['Tall h=6 · chest reduction']=[[0,6],[-1,0],[1,0],[0,2]];
 presets.four['Tall h=7 · incenter excluded']=[[0,7],[-1,0],[1,0],[0,7/3]];
 presets.four['Equilateral + centroid']=[[0,Math.sqrt(3)],[-1,0],[1,0],[0,Math.sqrt(3)/3]];
@@ -33,13 +41,15 @@ presets.four['Scalene 2 · planar restriction']=[[0,0],[4,0],[1,3],[.5,.8]];
 presets.tetra['Scalene 2 · polynomial directions']=[[0,0,0],[4,0,0],[1,3,0],[.5,.8,2.5]];
 theory.triangle+=' The default now also includes twelve proved centroid-insertion maps: the ten SOS polynomial maps and two conservative shape-modulated maps evaluated at (A,B,C,G). Moving an original vertex moves its own slot by h and the centroid slot by h/3, which proves attractivity. Their comparison layer shows whether they add any exposed positions for the current shape.';
 theory.four='The default green heart now includes the proved barycentric-anchor power family, ten exact SOS-certified polynomial maps restricted from space to the plane, and G±(1−tr S²)U₁/24. The previous vertex-power heart remains available. Fixed anchor weights preserve attractivity because each anchor moves by a nonnegative multiple of the moved vertex. Reflection in the input plane keeps these spatial rules in that plane. Continuous families are sampled; failed numerical solves are omitted and counted. The seven outer methods retain their distinct hypotheses. Centroid insertion transfers the entire ABC chest when D=G(ABC); for arbitrary D it transfers a directional support bound. Try h=6 and h=7 to distinguish stricter chest bounds from strict attainable-Heart inclusion. Diameter-ball bounds concern only the original vertex-power family; absorption requires an extra axiom. Neither is a bound for every new inner map.';
+theory.four+=' Since 18 November 2026 the heart also contains the face means: for a certified triangle center Z, the mean of Z over the four sub-triangles is an attractive four-point center. The chest has three further unconditional rules. A three-fold pin moves three points to an equilateral triangle and the fourth to its centre, all along one line. Moved-vertex transfer returns the fourth point to the centroid of a triangle one vertex of which has been moved along the same line. A two-step cut moves one point from a trial position and uses the one-step chest of the intermediate configuration; the scan tries special positions, the symmetric loci and a grid.';
 theory.tetra+=' The latest hull also includes the conservative shape-dependent pair G±(1−tr S²)U₁/24. The previous SOS-plus-anchor hull is a separate comparison. The new coefficient is proved by a global derivative-norm bound; the larger proposed modulated endpoints and T1–T8 maps remain research candidates and are not drawn as proved hearts.';
+theory.tetra+=' Since 18 November 2026 the heart also contains the face means: a certified triangle center is evaluated in the plane of each face and the four values are averaged. The chest has new unconditional rules. An axis pin moves a face inside its plane to an equilateral triangle whose axis passes through the fourth vertex. A median pin moves all four vertices along a median to a flat equilateral triangle with the fourth vertex at its centre. A two-step cut moves one vertex from a position that makes the tetrahedron mirror-symmetric; the center of that tetrahedron lies in the mirror plane and in its one-step chest.';
 colors.steiner='#c2410c';colors.beforeSteiner='#3185a2';
 optionSets.triangle.splice(2,0,['beforeSteiner','Previous heart · before Steiner maps',false],['steiner','Certified Steiner-frame maps alone',false]);
 optionSets.triangle[1][1]='Latest heart · with certified Steiner maps';
 theory.triangle+=' The latest heart also includes interval-certified Steiner-frame maps Z=G+X·cos3θ·GP+Y·sin3θ·GQ, where GP and GQ are the semi-axes of the Steiner inellipse, θ is the eccentric angle of a vertex, and X, Y are explicit polynomials in the axis ratio and cos6θ. Each map has a computer-assisted certificate that all vertex responses are positive definite for every triangle. Compare the previous heart and the Steiner maps alone.';
 let mode='triangle',points=structuredClone(diagnostic),on={},data=null,error='',busy=false,seq=0,pending=false,view={center:[10.5,6],scale:25},yaw=.55,pitch=.4,drag=null,hover=[],width=900,height=550;
-const worker=new Worker(new URL('./worker.mjs?v=steiner-20261118',import.meta.url),{type:'module'});
+const worker=new Worker(new URL('./worker.mjs?v=four-20261118',import.meta.url),{type:'module'});
 function request(){seq++;pending=true;data=null;error='';$('metrics').textContent='Recomputing for the current vertices…';$('measure-note').textContent='';$('status').textContent='Calculating…';draw();dispatch();}
 function dispatch(){if(busy||!pending)return;busy=true;pending=false;$('status').textContent='Calculating…';worker.postMessage({id:seq,mode,points,on});}
 worker.onmessage=({data:r})=>{busy=false;if(r.id===seq){error=r.error||'';data=r.error?null:r;draw();metrics();$('status').textContent=error||(mode==='tetra'?tetraStatus(r.result):mode==='triangle'?`Latest heart: ${r.result.analytic.expanded.poly.length} hull vertices · bridge, rays, centroid insertion and certified Steiner maps · B46: ${r.result.b46.centers.length}/46${r.result.b46.failed?' · '+r.result.b46.failed+' unresolved power endpoints omitted':''}`:`Enlarged planar heart: ${r.result.fourHearts.expanded.poly.length} hull vertices · ${r.result.fourHearts.diagnostics.accepted}/${r.result.fourHearts.diagnostics.attempted} anchor solves · 10 SOS + 2 modulation maps · ${r.result.transferNote}`);}dispatch();};
@@ -49,7 +59,7 @@ function options(){
   on=Object.fromEntries(optionSets[mode].map(([k,l,v])=>[k,v]));
   const color=k=>mode==='tetra'&&k==='power'?colors.b46:colors[k]||colors.heart;
   $('options').innerHTML=optionSets[mode].map(([k,l,v])=>`<label><input type="checkbox" data-opt="${k}" ${v?'checked':''}><span><span class="swatch" style="color:${color(k)}"></span>${l}</span></label>`).join('');
-  const displayOnly=['tetraExpanded','fourExpanded','previousEnhanced','modulated','sosTetra','conservativeTetra','power','anchors','polynomial','analyticTetra','facePower','centers','tetraChest'];
+  const displayOnly=['tetraExpanded','fourExpanded','previousEnhanced','modulated','sosTetra','conservativeTetra','power','anchors','polynomial','analyticTetra','facePower','centers','tetraChest','faceMeans','beforeFaceMeans'];
   $('options').querySelectorAll('input').forEach(input=>input.onchange=()=>{
     on[input.dataset.opt]=input.checked;
     if(mode==='triangle'||displayOnly.includes(input.dataset.opt)){draw();metrics();}else request();
@@ -132,7 +142,9 @@ function tetraLayers(d){return [
   ['conservativeTetra',d.tetraHearts.conservativeExpanded,'Earlier conservative enlargement'],
   ['tetraExpanded',d.tetraHearts.expanded,'Enlarged tetrahedron heart'],
   ['previousEnhanced',d.tetraHearts.previousEnhanced,'Previous SOS + anchors heart'],
-  ['modulated',d.tetraHearts.modulated,'Conservative shape-modulated maps']
+  ['modulated',d.tetraHearts.modulated,'Conservative shape-modulated maps'],
+  ['beforeFaceMeans',d.tetraHearts.beforeFaceMeans,'Previous heart (before face means)'],
+  ['faceMeans',d.tetraHearts.faceMeans,'Face means of triangle centers']
 ];}
 function fourLayers(d){return [
   ['power',d.power,'Previous vertex-power heart'],
@@ -140,7 +152,9 @@ function fourLayers(d){return [
   ['sosTetra',d.fourHearts.sosPolynomial,'Ten SOS polynomial maps'],
   ['modulated',d.fourHearts.modulated,'Conservative shape-modulated maps'],
   ['analyticTetra',d.fourHearts.analytic,'Even-power analytic subheart'],
-  ['fourExpanded',d.fourHearts.expanded,'Enlarged planar four-point heart']
+  ['beforeFaceMeans',d.fourHearts.beforeFaceMeans,'Previous heart (before face means)'],
+  ['faceMeans',d.fourHearts.faceMeans,'Face means of triangle centers'],
+  ['fourExpanded',d.fourHearts.expanded,'Latest planar four-point heart']
 ];}
 function drawFourHearts(d,legend){
   const shown=[];
@@ -177,7 +191,7 @@ function drawTetra(d,legend){
   for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)path([points[i],points[j]],colors.hull,false,false,1.2);
   legend.push([colors.hull,'Tetrahedron']);
 }
-function draw(){ctx.clearRect(0,0,width,height);hover=[];grid();let legend=[];if(data&&data.mode===mode){let d=data.result;if(mode==='triangle'){drawTriangle(d,legend);}else if(mode==='four'){for(let [k,poly] of [['para',d.para.poly],['bisector',d.bisector],['network',d.network],['orbit',d.orbit],['edge',d.edge],['transfer',d.transfer],['ball',d.ball],['stable',d.stable],['triangle',d.triangle],['combined',d.combined]])if(on[k]){path(poly.map(world),colors[k],k==='combined',k==='triangle',k==='combined'?3:1.8);legend.push([colors[k],{orbit:'Involution orbit bounds',edge:'Edge slabs',transfer:'Centroid transfer',ball:'Diameter balls (conditional)',para:'Parallelogram',bisector:'Bisectors',network:'Network',stable:'Stability (conditional)',triangle:'ABC chest only',combined:'Selected chest intersection'}[k]]);}drawFourHearts(d,legend);path(d.hull.map(world),colors.hull,false);}else drawTetra(d,legend);}
+function draw(){ctx.clearRect(0,0,width,height);hover=[];grid();let legend=[];if(data&&data.mode===mode){let d=data.result;if(mode==='triangle'){drawTriangle(d,legend);}else if(mode==='four'){for(let [k,poly] of [['para',d.para.poly],['bisector',d.bisector],['network',d.network],['orbit',d.orbit],['edge',d.edge],['transfer',d.transfer],['pins',d.pins],['twostep',d.twostep],['ball',d.ball],['stable',d.stable],['triangle',d.triangle],['combined',d.combined]])if(on[k]){path(poly.map(world),colors[k],k==='combined',k==='triangle',k==='combined'?3:1.8);legend.push([colors[k],{orbit:'Involution orbit bounds',edge:'Edge slabs',transfer:'Centroid transfer',pins:'Three-fold pins + moved-vertex transfer',twostep:'Two-step cuts',ball:'Diameter balls (conditional)',para:'Parallelogram',bisector:'Bisectors',network:'Network',stable:'Stability (conditional)',triangle:'ABC chest only',combined:'Selected chest intersection'}[k]]);}drawFourHearts(d,legend);path(d.hull.map(world),colors.hull,false);}else drawTetra(d,legend);}
   points.forEach((p,i)=>{let [x,y]=project(p);ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fillStyle=i===3?'#bd5275':'#243849';ctx.fill();ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.stroke();ctx.font='bold 15px system-ui';ctx.fillStyle='#243849';ctx.fillText('ABCD'[i],x+11,y-10);});$('legend').innerHTML=legend.map(([c,l])=>`<span><span class="swatch" style="color:${c}"></span>${l}</span>`).join('');}
 function metrics(){if(!data){$('metrics').textContent=error;return;}let d=data.result,rows=[],base=mode==='tetra'?d.base.volume:d.baseArea;const pct=q=>(q>0&&q<.00005?q.toExponential(3):q.toFixed(4))+'%';const row=(label,m,n)=>{let ratio=100*m/base;rows.push(`<tr><td>${label}</td><td>${n}</td><td>${pct(ratio)}</td><td>${pct(100-ratio)}</td></tr>`);};if(mode==='triangle'){
   row('Standard chest',area(d.poly),d.poly.length);
@@ -190,16 +204,17 @@ function metrics(){if(!data){$('metrics').textContent=error;return;}let d=data.r
   $('measure-note').textContent='Areas are percentages of the triangle. Latest extension: '+increase.toFixed(3)+'% more inner-hull area than the six-ray heart. Each generator is globally certified; the three continuous curves and the drawing are numerical. Maximal Heart remains open.';
 }else if(mode==='four'){
   for(const [key,r,label] of fourLayers(d))if(on[key]||['fourExpanded','power'].includes(key))row(label+(on[key]?'':' (hidden)'),area(r.poly),r.poly.length);
-  for(let [k,label,poly] of [['para','Parallelogram',d.para.poly],['bisector','Bisectors alone',d.bisector],['network','Network alone',d.network],['orbit','Orbit bounds alone',d.orbit],['edge','Edge slabs alone',d.edge],['transfer','Centroid transfer alone',d.transfer],['ball','Diameter balls (conditional)',d.ball],['stable','Absorption alone (conditional)',d.stable]])if(on[k])row(label,area(poly),poly.length);
+  for(let [k,label,poly] of [['para','Parallelogram',d.para.poly],['bisector','Bisectors alone',d.bisector],['network','Network alone',d.network],['orbit','Orbit bounds alone',d.orbit],['edge','Edge slabs alone',d.edge],['transfer','Centroid transfer alone',d.transfer],['pins','Three-fold pins + moved-vertex transfer alone',d.pins],['twostep','Two-step cuts alone',d.twostep],['ball','Diameter balls (conditional)',d.ball],['stable','Absorption alone (conditional)',d.stable]])if(on[k])row(label,area(poly),poly.length);
   row(on.ball||on.stable?'Conditional chest intersection':'Unconditional chest intersection',area(d.combined),d.combined.length);rows[rows.length-1]=rows.at(-1).replace('<tr>','<tr class="total">');
   const h=d.fourHearts,old=area(d.power.poly),ratio=old>1e-14?(area(h.expanded.poly)/old).toFixed(3)+'× the old sampled area':'zero-area symmetry limit';
   $('measure-note').textContent=`Enlarged inner heart: ${ratio}; ${h.diagnostics.accepted}/${h.diagnostics.attempted} anchor solves accepted, ${h.diagnostics.failed} omitted. Point coordinates and area are numerical. The chest intersection bounds every attractive map only when both conditional options are off. A conditional bound for the old power family may cut the larger heart.`;
 }else{
-  for(const key of ['tetraExpanded','previousEnhanced','modulated','sosTetra','conservativeTetra','anchors','facePower','power','analyticTetra','polynomial']){
+  for(const key of ['tetraExpanded','beforeFaceMeans','faceMeans','previousEnhanced','modulated','sosTetra','conservativeTetra','anchors','facePower','power','analyticTetra','polynomial']){
     const [_,r,label]=tetraLayers(d).find(row=>row[0]===key);row(label+(on[key]?'':' (hidden)'),r.volume,r.vertices.length);
   }
   if(on.para)row('Opposite-edge slabs',d.para.volume,d.para.vertices.length);if(on.bisector)row('Bisector planes',d.bi.volume,d.bi.vertices.length);
   for(let [k,label] of [['edge','Edge slabs alone'],['transfer','Centroid transfer alone'],['ball','Diameter balls (conditional)']])if(on[k]&&d[k])row(label,d[k].volume,d[k].vertices.length);
+  if(on.pins&&d.pins)row('Pins + moved-vertex transfer alone',d.pins.volume,d.pins.vertices.length);
   row(on.ball?'Conditional 3D chest':'Unconditional 3D chest',d.volume,d.vertices.length);
   const h=d.tetraHearts,ratio=d.power.volume>1e-14?(h.expanded.volume/d.power.volume).toFixed(3)+'× the old sampled volume':'zero-volume symmetry limit';
   $('measure-note').textContent=`Volumes are fractions of the input tetrahedron. Enlarged heart: ${ratio}. ${h.diagnostics.exponentSamples} exponents; weight subdivisions ${h.diagnostics.weightSubdivisions}; ${h.diagnostics.failed} failed anchor solves omitted. Residual and root-error checks use double precision, not interval certification. The ten-map and even-power layers are analytic subhearts. Chest rows are outer bounds; inner and outer percentages have different meanings.`;

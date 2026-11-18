@@ -54,6 +54,12 @@ export function constantSamples(samplesPerArc=129){
   return out;
 }
 
+// Coefficient rows of every analytic map, in the order used by analyticHearts().expanded (after the B46 base).
+export function analyticRows(samplesPerArc=129){
+  const bridge=Array.from({length:129},(_,i)=>({id:`Bridge-${i}`,name:`Repaired conic bridge · t = ${(i/128).toFixed(5)}`,coefficients:bridgeCoefficients(i/128),parameter:i/128}));
+  return [...constantSamples(samplesPerArc),...CERTIFIED_SHAPE_MAPS,...CERTIFIED_RAYS,...EXACT_COLLINEAR_ENDPOINTS.map(endpoint),...bridge,...CERTIFIED_EXTENSION_RAYS];
+}
+
 function region(centers,failed=0){
   const poly=hull(centers.map(c=>c.point));
   const boundary=centers.filter(c=>poly.some(p=>norm(sub(p,c.point))<2e-9));

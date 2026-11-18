@@ -1,5 +1,56 @@
 # Attractive Centers — geometry explorer
 
+## Four planar points: face means and new chest rules — 18 November 2026
+
+**Heart.** For an attractive triangle center Z, the mean of Z over the four
+sub-triangles is an attractive four-point center wherever no three points are
+collinear (its response to a point is a sum of responses of Z). The default
+four-point heart now adds these face means for all 767 certified triangle
+centers (`face-means.mjs`). All 767 tend to a point of the line when a
+triangle flattens (numerical test), which is what the finite attractivity law
+needs for moves through collinear positions.
+
+**Chest.** Three unconditional rules are added (`four-chests.mjs`):
+three-fold pins (three points to an equilateral triangle, the fourth to its
+centre, all along one line), moved-vertex transfer through an inserted
+centroid, and two-step cuts (one point moved from a trial position; the
+intermediate configuration is bounded by its one-step chest). Every cut is a
+valid inequality; the scan selects finitely many, so the fast default scan
+gives a valid, slightly larger chest than the optional refined scan.
+
+Percent of the hull, chest before → after, heart before → after:
+13-20-21 + incenter 7.37 → 5.69, 0.57 → 0.81; convex quadrilateral
+13.78 → 11.32, 0.41 → 1.40; independent bisector 4.55 → 3.91, 1.03 → 1.23;
+scalene 2 11.38 → 11.21, 1.60 → 3.55. The default scan takes about 80–310 ms
+and the face means about 25 ms per configuration.
+
+Tests: `node tests-face-means.mjs` and `node tests-four-chests.mjs` (every
+certified four-point center inside every new chest at presets and random
+configurations).
+
+### Tetrahedron
+
+**Heart.** A certified triangle center is evaluated in the plane of each face
+and the four points are averaged. In space the response of a face center is
+its planar response together with its barycentric weight along the face
+normal, and the weight is non-negative because the center lies in the
+triangle; so the face mean is an attractive tetrahedron center.
+
+**Chest** (`tetra-chests.mjs`). Axis pins (a face moved in its plane to an
+equilateral triangle whose axis passes through the fourth vertex), median pins
+(all vertices moved along a median to a flat equilateral triangle with its
+centre), moved-vertex transfer, and two-step cuts through mirror-symmetric
+intermediate tetrahedra (a vertex rotated about an edge; the center of the
+intermediate tetrahedron lies in the mirror plane, inside a polygon).
+
+Percent of the tetrahedron, chest before → after (refined), heart before →
+after: bundle 10.26 → 7.11 (6.59), 0.024 → 0.084; generic 3.56 → 2.31 (2.14),
+0.003 → 0.021; scalene 2 6.30 → 4.02 (3.86), 0.011 → 0.039; benchmark
+54.95 → 54.94, 2.69 → 6.05. The pins alone cut very little; the gain comes
+from the two-step cuts. A full recompute takes about 65–100 ms.
+
+Tests: `node tests-tetra-chests.mjs`.
+
 ## Certified Steiner-frame maps — 17 November 2026
 
 The triangle default heart now also includes 300 explicit Steiner-frame maps
