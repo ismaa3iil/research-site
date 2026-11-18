@@ -26,7 +26,7 @@ function previewOrbit(n, map) {
     const used = Math.min(completed,256);
     counts.fill(0);
     for (let j=0;j<used;j++) deposit(tail[j*3],tail[j*3+1],tail[j*3+2]);
-    return {pixels:image(), note:`Early path · last ${used} of ${completed} completed steps`};
+    return {pixels:image(), note:`Early pat - last ${used} of ${completed} completed steps`};
   }
   for (let i = 0; i < 54000; ++i) {
     const a = Math.sin(A), b = Math.sin(B), c = Math.sin(C);
