@@ -19,11 +19,49 @@
 
   function thumb(n, map, big) {
     const k = st.thumbs && st.thumbs[n + "_" + map];
-    if (!k) return `<div class="thumb${big ? " big" : ""} none" title="no diagram">${map || ""}</div>`;
+    const key = n + "_" + map;
+    const note = st.previewStatus?.[key];
+    if (!k) {
+      const message = note || (map ? "Preview unavailable" : "Map unrecorded");
+      return `<div class="thumb${big ? " big" : ""} none" title="${esc(message)}" ${big && !note ? `data-preview="${map}"` : ""}>${big && !note ? "Calculating…" : esc(message)}</div>`;
+    }
     const [sheet, i] = k, f = big ? 1.5 : 0.5, x = (i % 10) * 120 * f, y = Math.floor(i / 10) * 104 * f;
-    return `<div class="thumb${big ? " big" : ""}" role="img" aria-label="X(${n}) ${map} diagram" title="X(${n}) ${map}" style="background-image:url(thumbs/sprite_${String(sheet).padStart(2, "0")}.png);background-position:-${x}px -${y}px"></div>`;
+    return `<div class="thumb${big ? " big" : ""}" role="img" aria-label="X(${n}) ${map} ${note?.startsWith("Early path") ? esc(note) : "diagram"}" title="X(${n}) ${map}${note ? ` — ${esc(note)}` : ""}" style="background-image:url(thumbs/sprite_${String(sheet).padStart(2, "0")}.png?v=previews2);background-position:-${x}px -${y}px">${note?.startsWith("Early path") ? '<span class="path-label">early path</span>' : ""}</div>`;
   }
 
+  let previewWorkers = [];
+  function cancelPreviews() {
+    previewWorkers.forEach(worker => worker.terminate());
+    previewWorkers = [];
+  }
+  function loadProfilePreviews(n) {
+    for (const slot of app.querySelectorAll("[data-preview]")) {
+      const map = slot.dataset.preview;
+      const worker = new Worker("preview-worker.js");
+      previewWorkers.push(worker);
+      worker.onmessage = ({data}) => {
+        worker.terminate();
+        if (!slot.isConnected) return;
+        if (!data.pixels) { slot.textContent = data.reason; return; }
+        const canvas = document.createElement("canvas");
+        canvas.width = 120; canvas.height = 104; canvas.className = "thumb big";
+        canvas.setAttribute("role", "img");
+        canvas.setAttribute("aria-label", `X(${n}) ${map} calculated preview`);
+        canvas.title = data.note || "Calculated 50,000-point preview";
+        const ctx = canvas.getContext("2d");
+        const image = ctx.createImageData(120, 104);
+        data.pixels.forEach((v,i) => image.data.set([v,v,v,255], i*4));
+        ctx.putImageData(image,0,0); slot.replaceWith(canvas);
+        if (data.note) {
+          const caption = document.createElement("div");
+          caption.className = "small muted"; caption.textContent = data.note;
+          canvas.after(caption);
+        }
+      };
+      worker.onerror = () => { worker.terminate(); slot.textContent = "Could not load preview"; };
+      worker.postMessage({n,map});
+    }
+  }
   async function loadArray(k) { if (!st.arrays[k]) st.arrays[k] = await getJSON(`data/m_${k}.json`); return st.arrays[k]; }
   function ranksOf(arr, better, n0, n1) { // average ranks among non-null values with index in [n0, n1]
     const idx = []; for (let n = n0; n <= n1; n++) { const v = arr[n - 1]; if (v !== null && v !== undefined) idx.push(n); }
@@ -78,6 +116,7 @@
   }
 
   async function viewCenter() {
+    cancelPreviews();
     const n = st.center;
     app.innerHTML = `<h1>Center profile</h1><div class="row" style="margin-top:12px"><label class="field" for="cin">Center number <input id="cin" type="number" min="1" max="73300" value="${n}" style="width:9em"></label><button class="primary" id="cgo">Show</button><span class="status" id="cst"></span></div><div id="cbody" style="margin-top:16px"></div>`;
     $("#cgo").onclick = () => { const v = parseInt($("#cin").value, 10); if (v >= 1 && v <= 73300) { st.center = v; viewCenter(); } };
@@ -87,6 +126,7 @@
     else {
       $("#cst").textContent = "Loading all measures\u2026";
       const arrs = await Promise.all(ms.map(m => loadArray(m.key)));
+      if (st.view !== "center" || st.center !== n) return;
       vals = ms.map((m, i) => { const v = arrs[i][n - 1]; if (v === null || n > NMAX[st.range]) return [v, null]; const arr = arrs[i]; let better = 0, tie = 0;
         for (let j = 0; j < NMAX[st.range]; j++) { const w = arr[j]; if (w === null) continue; if (m.better === "low" ? w < v : w > v) better++; else if (w === v) tie++; }
         return [v, better + (tie + 1) / 2]; });
@@ -96,9 +136,10 @@
     const byG = {}; ms.forEach((m, i) => (byG[m.group] = byG[m.group] || []).push([m, vals[i]]));
     $("#cbody").innerHTML = `<div class="card"><h2>X(${n})</h2><p class="lede">${nm(n) || "(no name recorded)"}</p>
       <div class="row" style="margin-top:12px;gap:18px"><div><div class="small muted">M1 (cevian map)</div>${thumb(n, "M1", true)}</div><div><div class="small muted">M3 (pedal map)</div>${thumb(n, "M3", true)}</div>
-      <div class="small muted" style="max-width:40ch">Diagrams are shown for X(1)\u2013X(500) and for the leaders of the diagram measures. ${exps.length ? `<br><b>${exps.length} physical experiment${exps.length > 1 ? "s" : ""}</b> select this center (see Physics).` : ""}</div></div></div>
+      <div class="small muted" style="max-width:40ch">Calculated previews start at 42°, 61°, 77°, discard 4,000 steps and plot 50,000 steps in all six angle orders. Archived previews use their recorded trajectories. A dot can represent a fixed point. An “early path” shows up to the last 256 valid steps of an incomplete run. Hover over it for the step count. ${exps.length ? `<br><b>${exps.length} physical experiment${exps.length > 1 ? "s" : ""}</b> select this center (see Physics).` : ""}</div></div></div>
       <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))">${GROUP_ORDER.filter(g => byG[g]).map(g => `<div class="tablebox"><table><thead><tr><th>${g}</th><th class="num">Value</th><th class="num">Rank</th></tr></thead><tbody>
       ${byG[g].map(([m, v]) => `<tr><td title="${esc(m.label)}"><a href="#ranks" data-measure="${m.key}" class="cx" style="font-family:var(--f-body)">${esc(m.label)}</a></td><td class="num">${fmtv(v[0])}</td><td class="num">${fmtr(v[1])}</td></tr>`).join("")}</tbody></table></div>`).join("")}</div>`;
+    loadProfilePreviews(n);
   }
 
   // ---- correlations
@@ -185,6 +226,7 @@
   // ---------------------------------------------------------------- routing
   const VIEWS = { ranks: viewRanks, first500: viewFirst500, center: viewCenter, correlate: viewCorrelate, physics: viewPhysics, help: viewHelp };
   function route() {
+    cancelPreviews();
     const h = (location.hash || "#ranks").slice(1); st.view = VIEWS[h] ? h : "ranks";
     document.querySelectorAll("nav.tabs a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + st.view ? "page" : "false"));
     VIEWS[st.view](); window.scrollTo(0, 0);
@@ -196,8 +238,8 @@
   $("#range").onchange = e => { st.range = e.target.value; try { localStorage.setItem("tcx-range", st.range); } catch (err) {} route(); };
   window.addEventListener("hashchange", route);
 
-  Promise.all([getJSON("data/meta.json"), getJSON("data/top200.json"), getJSON("data/first500.json"), getJSON("data/thumbs.json"), getJSON("data/bestmap.json")])
-    .then(([meta, top, first, thumbs, bestmap]) => { Object.assign(st, { meta, top, first, thumbs, bestmap }); route();
+  Promise.all([getJSON("data/meta.json"), getJSON("data/top200.json"), getJSON("data/first500.json"), getJSON("data/thumbs.json?v=previews2"), getJSON("data/bestmap.json"), getJSON("data/preview-status.json")])
+    .then(([meta, top, first, thumbs, bestmap, previewStatus]) => { Object.assign(st, { meta, top, first, thumbs, bestmap, previewStatus }); route();
       getJSON("data/names.json").then(n => { st.names = n; if (!["correlate", "help"].includes(st.view)) VIEWS[st.view](); }); })
     .catch(err => { app.innerHTML = `<p>The data could not be loaded (${esc(err.message)}). Reload the page to try again.</p>`; });
 })();
