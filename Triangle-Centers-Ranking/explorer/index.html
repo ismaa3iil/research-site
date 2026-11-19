@@ -96,14 +96,19 @@ a.cx { color: var(--accent); font-family: var(--f-mono); font-weight: 500; text-
 .status { font-family: var(--f-mono); font-size: .8rem; color: var(--muted) }
 .mono { font-family: var(--f-mono) }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important } }
-.word-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}.word-gallery figure{margin:0;background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:hidden}.word-gallery img{width:100%;display:block}.word-gallery figcaption{padding:8px 12px}.atlas-links{line-height:1.8}</style>
+.word-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}.word-gallery figure{margin:0;background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:hidden}.word-gallery img{width:100%;display:block}.word-gallery figcaption{padding:8px 12px}.atlas-links{line-height:1.8}.taste-view>details{margin:1rem 0;padding:12px 16px;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+.taste-view summary{font-weight:600;cursor:pointer}.taste-view .row,.taste-actions{margin-block:12px}
+.taste-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.taste-view :is(input,select){max-width:100%}.taste-view .field{min-width:0;max-width:100%}
+.taste-view>details p{max-width:78ch}.taste-view td img{display:block;background:white}
+.taste-view [role=status]{overflow-wrap:anywhere}.taste-view input[type=file]{max-width:100%}
+</style>
 </head>
 <body>
 
 <header class="top"><div class="wrap bar">
   <div class="brand">Triangle Center Rankings <small>ETC · 41 measures · 82 experiments</small></div>
   <nav class="tabs" aria-label="Views">
-    <a href="#ranks">Leaderboards</a><a href="#first500">X(1)–X(500)</a><a href="#center">Center</a><a href="#correlate">Correlations</a><a href="#physics">Physics</a><a href="#atlas57">57-center atlas</a><a href="../taste/">Personal taste ↗</a><a href="#help">Help</a>
+    <a href="#ranks">Leaderboards</a><a href="#first500">X(1)–X(500)</a><a href="#center">Center</a><a href="#correlate">Correlations</a><a href="#physics">Physics</a><a href="#atlas57">57-center atlas</a><a href="#mytaste">My Taste</a><a href="#help">Help</a>
   </nav>
   <label class="range" for="range">Ranked range
     <select id="range"><option value="paper">X(1)–X(63215)</option><option value="all">whole ETC, X(1)–X(73300)</option></select></label>
@@ -111,8 +116,9 @@ a.cx { color: var(--accent); font-family: var(--f-mono); font-weight: 500; text-
 
 <main class="wrap" id="app"><p class="loading">Loading the catalogue…</p></main>
 
-<script src="help.js?v=atlas57" charset="utf-8"></script>
+<script src="../taste/model.js"></script><script src="../taste/library.js?v=1"></script><script src="my-taste.js?v=1"></script>
+<script src="help.js?v=mytaste1" charset="utf-8"></script>
 <script src="physics.js" charset="utf-8"></script>
-<script src="app.js?v=atlas57" charset="utf-8"></script>
+<script src="app.js?v=mytaste1" charset="utf-8"></script>
 </body>
 </html>

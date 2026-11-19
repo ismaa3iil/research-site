@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Personal Taste Studio · Triangle Center Rankings</title><link rel="stylesheet" href="taste.css"></head><body>
-<header><div class="bar"><a href="../explorer/">← Rankings Explorer</a><label>Profile <select id="profiles" aria-label="Taste profile"></select></label><button id="new">New profile</button></div></header>
+<header><div class="bar"><a href="../explorer/#mytaste">My Taste standings ↗</a><label>Profile <select id="profiles" aria-label="Taste profile"></select></label><button id="new">New profile</button></div></header>
 <main><div class="mast"><div><h1>Personal Taste Studio</h1><p>Which triangle pattern would you choose?</p></div><div class="summary" id="summary" aria-live="polite">Loading the image collection…</div></div>
 <div class="tools"><label>Collection <select id="source"><option value="All">All collections</option></select></label><button id="next">Another pair</button><button id="review" disabled>Review a conflict</button><button id="forecast">Ask my model</button></div>
 <p id="context" aria-live="polite"></p>
@@ -9,9 +9,9 @@
 <div class="feedback" id="feedback" role="status"></div>
 <details id="choose"><summary>Choose two pictures</summary><p>Select any two entries from the collection, then ask the model or give your own preference.</p><label>Left <input list="pictures" id="pickA" placeholder="Search by X number or map"></label><label>Right <input list="pictures" id="pickB" placeholder="Search by X number or map"></label><datalist id="pictures"></datalist><button id="compare">Compare these pictures</button></details>
 <details id="model"><summary>My standings and model</summary><p id="modelInfo"></p><div id="standings"></div><h3>What drives my scores?</h3><p>Coefficients apply to standardized feature percentiles. Other measurements are held fixed.</p><div id="weights"></div></details>
-<details><summary>History and saved profiles</summary><p>Your judgments are saved in this browser. Export a profile to keep a backup or continue on another device. Imports create a separate profile.</p><button id="download">Export my profile</button><label class="button">Import profile <input type="file" id="upload" accept=".json,application/json"></label><button id="undo">Undo last judgment</button><ol id="history"></ol></details>
+<details><summary>History and saved profiles</summary><p>Your judgments are saved in this browser. Export a profile to keep a backup or continue on another device. Imports create a separate profile.</p><label>Snapshot name <input id="snapName" maxlength="80" placeholder="e.g. P07, first session"></label> <button id="snapSave">Save snapshot</button> <a href="../explorer/#mytaste">Recall saved tastes in the Explorer</a><p id="snapStatus" role="status"></p><button id="download">Export my profile</button><label class="button">Import profile <input type="file" id="upload" accept=".json,application/json"></label><button id="undo">Undo last judgment</button><ol id="history"></ol></details>
 <details><summary>How comparisons work</summary><div id="methods"></div></details>
 <p class="foot"><a href="../explorer/#atlas57">Explore the 57-center standings</a> · <a href="../../beauty-of-triangle-centers/#publications">Read the atlases</a></p>
 </main><dialog id="zoom"><button id="close">Close image</button><img alt="" id="large"></dialog>
 <dialog id="newDialog"><form method="dialog"><h2>New taste profile</h2><label>Name <input id="newName" maxlength="60" required></label><div><button type="button" id="cancelNew">Cancel</button><button class="primary">Create profile</button></div></form></dialog>
-<script src="model.js"></script><script src="studio.js"></script></body></html>
+<script src="model.js"></script><script src="library.js?v=1"></script><script src="studio.js?v=mytaste1"></script></body></html>

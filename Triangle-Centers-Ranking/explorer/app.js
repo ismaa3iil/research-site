@@ -245,10 +245,10 @@
   }
 
   // ---------------------------------------------------------------- routing
-  const VIEWS = { atlas57:viewAtlas57, ranks: viewRanks, first500: viewFirst500, center: viewCenter, correlate: viewCorrelate, physics: viewPhysics, help: viewHelp };
+  const VIEWS = { mytaste:()=>MyTaste.open(app,NMAX[st.range],location.hash.match(/^#mytaste\/entry\/([1-9]\d{0,8})$/)?.[1]), atlas57:viewAtlas57, ranks: viewRanks, first500: viewFirst500, center: viewCenter, correlate: viewCorrelate, physics: viewPhysics, help: viewHelp };
   function route() {
     cancelPreviews();
-    const h = (location.hash || "#ranks").slice(1); st.view = VIEWS[h] ? h : "ranks";
+    const h = (location.hash || "#ranks").slice(1); st.view = /^mytaste\/entry\/[1-9]\d{0,8}$/.test(h) ? "mytaste" : Object.hasOwn(VIEWS,h) ? h : "ranks";
     document.querySelectorAll("nav.tabs a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + st.view ? "page" : "false"));
     VIEWS[st.view](); window.scrollTo(0, 0);
   }
@@ -259,9 +259,12 @@
   });
   $("#range").onchange = e => { st.range = e.target.value; try { localStorage.setItem("tcx-range", st.range); } catch (err) {} route(); };
   window.addEventListener("hashchange", route);
+  window.addEventListener("storage", e => {
+    if (st.view==="mytaste" && (!e.key || e.key===TasteLibrary.profilesKey || e.key.startsWith(TasteLibrary.prefix))) VIEWS.mytaste();
+  });
 
   Promise.all([getJSON("data/meta.json?edition=41"), getJSON("data/top200.json?edition=41"), getJSON("data/first500.json?edition=41"), getJSON("data/thumbs.json?v=previews2"), getJSON("data/bestmap.json"), getJSON("data/preview-status.json")])
     .then(([meta, top, first, thumbs, bestmap, previewStatus]) => { Object.assign(st, { meta, top, first, thumbs, bestmap, previewStatus }); route();
-      getJSON("data/names.json").then(n => { st.names = n; if (!["correlate", "help"].includes(st.view)) VIEWS[st.view](); }); })
+      getJSON("data/names.json").then(n => { st.names = n; if (!["correlate", "help", "mytaste"].includes(st.view)) VIEWS[st.view](); }); })
     .catch(err => { app.innerHTML = `<p>The data could not be loaded (${esc(err.message)}). Reload the page to try again.</p>`; });
 })();
