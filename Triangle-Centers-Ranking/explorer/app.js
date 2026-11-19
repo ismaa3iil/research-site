@@ -82,20 +82,41 @@
     const lead = st.top[st.range][k][0];
     return `<div class="card def"><div class="k">${esc(m.group)} \u00b7 ${m.better === "low" ? "lower is better" : "higher is better"} \u00b7 ${esc(m.unit)}</div><h3>${esc(m.label)}</h3>
       <p>${esc(h.def || "")}</p>${h.how ? `<p><b>How it is computed.</b> ${esc(h.how)}</p>` : ""}${h.read ? `<p><b>How to read it.</b> ${esc(h.read)}</p>` : ""}
-      <p class="small muted">Defined for ${m.coverage.toLocaleString()} centers in the catalogue, ${m.paper_ranked.toLocaleString()} in X(1)\u2013X(63215). Leader in this range: X(${lead[0]}) with ${fmtv(lead[1])}. Examples: ${ex}.</p></div>`;
+      ${k==="CPI4"?atlasLinks():""}<p class="small muted">Defined for ${m.coverage.toLocaleString()} centers in the catalogue, ${m.paper_ranked.toLocaleString()} in X(1)\u2013X(63215). Leader in this range: X(${lead[0]}) with ${fmtv(lead[1])}. ${k==="CPI4"?'<a href="#atlas57">Browse all 57 plates and standings.</a>':"Examples: "+ex+"."}</p></div>`;
   }
 
+  const atlasBase = "../../beauty-of-triangle-centers/downloads/";
+  const atlasLinks = () => `<p class="atlas-links"><a href="${atlasBase}Combined_Maps_57_Centers.pdf">57-center atlas (PDF)</a> · <a href="${atlasBase}CPI_Atlas_Top120.pdf">CPI Top 120 (PDF)</a> · <a href="../taste/">Personal Taste Studio</a></p>`;
+  function atlasStrip(n) {
+    return `<a href="#atlas57" data-atlas-center="${n}" title="Inspect all eight plots for X(${n})"><img width="224" height="25" loading="lazy" alt="Eight map words for X(${n})" src="thumbs/atlas57/X${n}.webp"></a>`;
+  }
+  async function viewAtlas57(){
+    app.innerHTML = '<h1>Combined maps of 57 centers</h1><p>Loading plates…</p>';
+    const all=st.atlas57||(st.atlas57=await getJSON("data/atlas57.json"));
+    if(st.view!=="atlas57")return;
+    const show=n=>{
+      st.atlasCenter=n;
+      const r=all.find(v=>v.n===n)||all[0];
+      app.innerHTML=`<h1>Combined maps of 57 centers</h1><p class="lede">Both single maps placed in the survey’s top 3,500. The center rank sums its four highest live-word learning-progress scores. This atlas shows the full cohort, including centers beyond the paper range.</p>${atlasLinks()}
+        <label>Atlas plate <select id="plate57">${all.map(v=>`<option value="${v.n}" ${v.n===r.n?"selected":""}>Rank ${v.rank} · X(${v.n}) · ${v.score.toLocaleString()} bits</option>`).join("")}</select></label>
+        <p>${cx(r.n)} · M1 survey rank ${r.m1.toLocaleString()} · M3 survey rank ${r.m3.toLocaleString()}. A star marks a word in the sum.</p>
+        <div class="word-gallery">${r.words.map(v=>`<figure><a href="../taste/media/w57-X${r.n}_${v.w}.webp"><img loading="lazy" src="../taste/media/w57-X${r.n}_${v.w}.webp" alt="X(${r.n}) ${v.w} orbit"></a><figcaption><b>${v.w}${v.star?" ★":""}</b> · ${v.map}<br>${v.status} · ${v.cpi} CPI bits<br>${v.count.toLocaleString()} retained steps</figcaption></figure>`).join("")}</div>
+        <h2>The 57 standings</h2><div class="tablebox"><table><thead><tr><th>Atlas rank</th><th>Center</th><th>Top-four CPI (bits)</th><th>Open plate</th></tr></thead><tbody>${all.map(v=>`<tr><td>${v.rank}</td><td>${cx(v.n)}</td><td>${v.score.toLocaleString()}</td><td>${atlasStrip(v.n)}</td></tr>`).join("")}</tbody></table></div>`;
+      $("#plate57").onchange=e=>show(Number(e.target.value));
+    };
+    show(st.atlasCenter||all[0].n);
+  }
   function viewRanks() {
     const k = st.measure, rows = st.top[st.range][k], diag = isDiag(k), bm = st.bestmap[k] || {};
     app.innerHTML = `<h1>Leaderboards</h1><p class="lede">The first 200 positions of any measure. Ties share average ranks; the range is set in the header.</p>
       <div class="row" style="margin-top:14px"><label class="field" for="msel">Measure ${measureSelect("msel", k)}</label></div>
-      <div class="grid2"><div>${defCard(k)}</div><div class="tablebox"><table><thead><tr><th class="num">Rank</th><th>Center</th>${diag ? "<th>Best diagram</th>" : ""}<th>Name</th><th class="num">Value</th></tr></thead><tbody>
-      ${rows.map(([n, v, r]) => `<tr><td class="num">${fmtr(r)}</td><td>${cx(n)}</td>${diag ? `<td>${thumb(n, bm[n])}</td>` : ""}<td class="name">${nm(n)}</td><td class="num">${fmtv(v)}</td></tr>`).join("")}
+      <div class="grid2"><div>${defCard(k)}</div><div class="tablebox"><table><thead><tr><th class="num">Rank</th><th>Center</th>${k==="CPI4"?"<th>Eight words</th>":diag ? "<th>Best diagram</th>" : ""}<th>Name</th><th class="num">Value</th></tr></thead><tbody>
+      ${rows.map(([n, v, r]) => `<tr><td class="num">${fmtr(r)}</td><td>${cx(n)}</td>${k==="CPI4"?`<td>${atlasStrip(n)}</td>`:diag ? `<td>${thumb(n, bm[n])}</td>` : ""}<td class="name">${nm(n)}</td><td class="num">${fmtv(v)}</td></tr>`).join("")}
       </tbody></table></div></div>`;
     $("#msel").onchange = e => { st.measure = e.target.value; viewRanks(); };
   }
 
-  const GROUP_ORDER = ["Simplicity", "Documentation", "Central lines", "Diagrams", "Phase 1 (X1-X500)", "Physics"];
+  const GROUP_ORDER = ["Simplicity", "Documentation", "Central lines", "Diagrams", "Phase 1 (X1-X500)", "Combined maps", "Physics"];
   function viewFirst500() {
     const groups = st.f500groups || (st.f500groups = new Set(["Simplicity", "Documentation", "Central lines", "Diagrams", "Physics"]));
     const show = st.meta.measures.filter(m => groups.has(m.group));
@@ -224,7 +245,7 @@
   }
 
   // ---------------------------------------------------------------- routing
-  const VIEWS = { ranks: viewRanks, first500: viewFirst500, center: viewCenter, correlate: viewCorrelate, physics: viewPhysics, help: viewHelp };
+  const VIEWS = { atlas57:viewAtlas57, ranks: viewRanks, first500: viewFirst500, center: viewCenter, correlate: viewCorrelate, physics: viewPhysics, help: viewHelp };
   function route() {
     cancelPreviews();
     const h = (location.hash || "#ranks").slice(1); st.view = VIEWS[h] ? h : "ranks";
@@ -232,13 +253,14 @@
     VIEWS[st.view](); window.scrollTo(0, 0);
   }
   document.addEventListener("click", e => {
+    const plate=e.target.closest("[data-atlas-center]"); if(plate){st.atlasCenter=Number(plate.dataset.atlasCenter);if(location.hash==="#atlas57"){e.preventDefault();viewAtlas57();window.scrollTo(0,0);}return;}
     const c = e.target.closest("[data-center]"); if (c) { st.center = +c.dataset.center; if (location.hash === "#center") { e.preventDefault(); viewCenter(); } return; }
     const m = e.target.closest("[data-measure]"); if (m) { st.measure = m.dataset.measure; }
   });
   $("#range").onchange = e => { st.range = e.target.value; try { localStorage.setItem("tcx-range", st.range); } catch (err) {} route(); };
   window.addEventListener("hashchange", route);
 
-  Promise.all([getJSON("data/meta.json"), getJSON("data/top200.json"), getJSON("data/first500.json"), getJSON("data/thumbs.json?v=previews2"), getJSON("data/bestmap.json"), getJSON("data/preview-status.json")])
+  Promise.all([getJSON("data/meta.json?edition=41"), getJSON("data/top200.json?edition=41"), getJSON("data/first500.json?edition=41"), getJSON("data/thumbs.json?v=previews2"), getJSON("data/bestmap.json"), getJSON("data/preview-status.json")])
     .then(([meta, top, first, thumbs, bestmap, previewStatus]) => { Object.assign(st, { meta, top, first, thumbs, bestmap, previewStatus }); route();
       getJSON("data/names.json").then(n => { st.names = n; if (!["correlate", "help"].includes(st.view)) VIEWS[st.view](); }); })
     .catch(err => { app.innerHTML = `<p>The data could not be loaded (${esc(err.message)}). Reload the page to try again.</p>`; });

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Triangle Center Rankings Explorer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Explore triangle-center rankings, compare 40 measures, inspect diagrams and correlations, and browse 82 physical experiments.">
+<meta name="description" content="Explore triangle-center rankings, compare 41 measures, inspect diagrams and correlations, and browse 82 physical experiments.">
 <link rel="canonical" href="https://ismaa3iil.fyi/Triangle-Centers-Ranking/explorer/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -96,14 +96,14 @@ a.cx { color: var(--accent); font-family: var(--f-mono); font-weight: 500; text-
 .status { font-family: var(--f-mono); font-size: .8rem; color: var(--muted) }
 .mono { font-family: var(--f-mono) }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important } }
-</style>
+.word-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}.word-gallery figure{margin:0;background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:hidden}.word-gallery img{width:100%;display:block}.word-gallery figcaption{padding:8px 12px}.atlas-links{line-height:1.8}</style>
 </head>
 <body>
 
 <header class="top"><div class="wrap bar">
-  <div class="brand">Triangle Center Rankings <small>ETC · 40 measures · 82 experiments</small></div>
+  <div class="brand">Triangle Center Rankings <small>ETC · 41 measures · 82 experiments</small></div>
   <nav class="tabs" aria-label="Views">
-    <a href="#ranks">Leaderboards</a><a href="#first500">X(1)–X(500)</a><a href="#center">Center</a><a href="#correlate">Correlations</a><a href="#physics">Physics</a><a href="#help">Help</a>
+    <a href="#ranks">Leaderboards</a><a href="#first500">X(1)–X(500)</a><a href="#center">Center</a><a href="#correlate">Correlations</a><a href="#physics">Physics</a><a href="#atlas57">57-center atlas</a><a href="../taste/">Personal taste ↗</a><a href="#help">Help</a>
   </nav>
   <label class="range" for="range">Ranked range
     <select id="range"><option value="paper">X(1)–X(63215)</option><option value="all">whole ETC, X(1)–X(73300)</option></select></label>
@@ -111,8 +111,8 @@ a.cx { color: var(--accent); font-family: var(--f-mono); font-weight: 500; text-
 
 <main class="wrap" id="app"><p class="loading">Loading the catalogue…</p></main>
 
-<script src="help.js" charset="utf-8"></script>
+<script src="help.js?v=atlas57" charset="utf-8"></script>
 <script src="physics.js" charset="utf-8"></script>
-<script src="app.js?v=previews2" charset="utf-8"></script>
+<script src="app.js?v=atlas57" charset="utf-8"></script>
 </body>
 </html>
