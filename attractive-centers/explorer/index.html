@@ -9,6 +9,15 @@
 <h2 id="guide-title">A guide to attractive centers</h2>
 <p class="guide-intro">Start with an ordinary average, replace numbers by points, and ask a simple question: when one input moves, can the average move against it? This explorer studies centers whose answer is “no”. Their possible positions lie between an inner <em>heart</em> and an outer <em>chest</em>.</p>
 <p class="guide-intro"><strong>Help and documentation.</strong> The <a href="help.html">illustrated help page</a> explains every picture, checkbox, number and algorithm of this explorer, with diagrams, worked examples and a glossary. Three PDF documents can be downloaded: <a href="docs/explorer-guide.pdf" download>the Explorer Guide</a> (the help page as a document), <a href="docs/chests-and-hearts.pdf" download>Chests and Hearts of Attractive Triangle Centers</a> (formal framework, roadmap, the chests of the 13–20–21 triangle step by step, the method behind the Steiner maps), and <a href="docs/calculus-of-chests-and-hearts.pdf" download>A Calculus of Chests and Hearts</a> (the general chest-reducing and heart-extending operations with proofs).</p>
+<section id="current-papers" aria-labelledby="current-papers-title">
+<h2 id="current-papers-title">Current research papers</h2>
+<ol>
+<li><a href="../Attractive_Centers_Pilot.pdf" download>Regular means of points and a sharp window for Fréchet <i>p</i>-means (PDF)</a></li>
+<li><a href="../Attractive_Centers_Where.pdf" download>Where can a regular mean of three points lie? (PDF)</a></li>
+<li><a href="../Attractive_Centers_Common_Boundary.pdf" download>A common boundary for hearts and chests (PDF)</a></li>
+</ol>
+<p>Paper 3 proves equality in the limit for triangles under the wide motion convention. The plotted regions are finite approximations, and the theorem is not asserted for four points.</p>
+</section>
 <nav class="guide-nav" aria-label="Guide topics"><a href="help.html">Illustrated help</a><a href="#start">Getting started</a><a href="#new-hearts">New triangle hearts</a><a href="#tetra-hearts">New tetrahedron hearts</a><a href="#conic-bridge">Continuous conic bridge</a><a href="#definitions">Definitions</a><a href="#b46-status">B46 benchmark</a><a href="#power-hearts">Power hearts</a><a href="#methods">Chest methods</a><a href="#reproduce">Data &amp; proofs</a></nav>
 
 <details open id="start"><summary>Start here: what am I looking at?</summary>
@@ -178,6 +187,6 @@
 <p>This is free, MIT-licensed software. Its calculations run on your device, without a server, account, tracking or external JavaScript dependency. The rational evaluator uses published formulas after exact symbolic normalization, with integer polynomial evaluation to prevent cancellation. Power centers use a dimension-independent Newton method with backtracking. Three-dimensional hull faces are reconstructed from sampled supporting planes. Final drawings remain numerical.</p>
 <p><a href="tests-b46.mjs">B46 regression tests</a> · <a href="B46-proof-handoff.zip" download>Current proof handoff</a> · <a href="B41-catalogue.json" download>Historical source rational formulas</a> · <a href="b41-reference.json" download>Exact reference values</a> · <a href="tests-b41.mjs">B36/B41 regression tests</a> · <a href="B36-redundancy-report.md">B36 research report</a> · <a href="B41-proof-package.zip" download>Rational proof package</a> · <a href="README.md">Methods and usage</a> · <a href="LICENSE">MIT license</a>.</p>
 <p>The <a href="AttractiveCenters.jl" download>Julia geometry module</a> preserves the earlier constructions. Later chest additions are in <code>revision.mjs</code>; current rational B46 evaluation is in <code>b46.mjs</code>; historical B36/B41 evaluation is in <code>b41.mjs</code>; the generic power solver and sampled hulls are in <code>geometry.mjs</code>. Numerical evidence is never presented as a universal proof.</p>
-<p><a href="../">Download the Attractive Centers papers</a> for the definitions, geometric constructions, power-center results and the continuing search for the maximal Heart.</p>
+<p><a href="#current-papers">Download the current research papers</a> · <a href="../older-versions/">Older versions</a></p>
 </details>
 </section></main><footer>Ismail Hammoudeh · Attractive Centers research project · Updated 18 November 2026</footer><script type="module" src="app.mjs?v=batch2-20261118"></script></body></html>

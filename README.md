@@ -21,23 +21,15 @@ The original explorer software is MIT licensed; external ETC material retains it
 
 ## Attractive Centers
 
-PDF-only collection. Version 2, 1 October 2026:
+Current PDF collection, November 2026:
 
-- [Download Attractive Centers I - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_I_v2.pdf)
-- [Download Attractive Centers II - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_II_v2.pdf)
-- [Download Attractive Centers III - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_III_v2.pdf)
-- [Download Attractive Centers IV - Version 2](https://github.com/ismaa3iil/research-site/raw/refs/heads/main/attractive-centers/Attractive_Centers_IV_v2.pdf)
+- [Paper 1: Regular means of points and a sharp window for Fréchet p-means](https://ismaa3iil.fyi/attractive-centers/Attractive_Centers_Pilot.pdf)
+- [Paper 2: Where can a regular mean of three points lie?](https://ismaa3iil.fyi/attractive-centers/Attractive_Centers_Where.pdf)
+- [Paper 3: A common boundary for hearts and chests](https://ismaa3iil.fyi/attractive-centers/Attractive_Centers_Common_Boundary.pdf)
 
-The earlier editions are preserved unchanged:
-[I](attractive-centers/Attractive_Centers_I.pdf),
-[II](attractive-centers/Attractive_Centers_II.pdf),
-[III](attractive-centers/Attractive_Centers_III.pdf),
-[IV](attractive-centers/Attractive_Centers_IV.pdf).
-See the [Version 2 revision record](attractive-centers/VERSION_2_NOTES.md).
-
-The new papers include the certified B46 finite family, all-1,142 native ETC
-containment and rigorous power-endpoint separation. B46 is not asserted
-minimal or equal to the maximal Heart; numerical survivors are not proofs.
+The original four-paper series and its Version 2 revisions are preserved
+unchanged under [Older versions](https://ismaa3iil.fyi/attractive-centers/older-versions/).
+The numbering of the current series is independent of the archived series.
 
 Website: <https://ismaa3iil.fyi/attractive-centers/>
 
