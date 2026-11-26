@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare shadow and fractional prayer-time models, explore solar geometry and count annual days of agreement.">
+  <title>Prayer Time Model Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="ephemeris.js"></script><script defer src="cities.js"></script>
+  <script defer src="engine.js"></script><script defer src="charts.js"></script><script defer src="help.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip">Skip to results</a>
+  <header class="topbar"><a class="brand" href="#" aria-label="Prayer Time Model Explorer home"><span class="brand-mark" aria-hidden="true">◒</span><span>Prayer time <strong>explorer</strong></span></a>
+    <nav aria-label="Main navigation"><button class="nav active" data-view="daily">Explore</button><button class="nav" data-view="compare">Compare <span id="scenario-badge">0</span></button><button class="nav" data-view="latitude">By latitude</button><button class="nav" data-view="help">Guide &amp; formulas</button></nav>
+  </header>
+  <div class="workspace">
+    <aside aria-label="Calculation settings">
+      <div class="aside-title"><h2>Your experiment</h2><button class="small quiet" id="reset">Reset</button></div>
+      <form id="settings">
+        <section class="control-section"><div class="section-label"><h3>Location</h3><button type="button" class="help" data-help="locations" aria-label="Help with locations">?</button></div>
+          <label for="city">Find a city or historic landmark</label><div class="input-action"><input id="city" list="cities" autocomplete="off" value="Makka · Kaaba"><button type="button" id="use-city" class="small" aria-label="Apply selected city">Use</button></div><datalist id="cities"></datalist>
+          <div id="favorite-chips" class="chips" aria-label="Favorite cities"></div><button type="button" class="text-button" id="manage-favorites">Edit favorite cities</button>
+          <div class="two-fields"><div><label for="latitude">Latitude (° N)</label><input id="latitude" type="number" min="-90" max="90" step="any" value="21.4225" required></div><div><label for="longitude">Longitude (° E)</label><input id="longitude" type="number" min="-180" max="180" step="any" value="39.8262" required></div></div>
+          <label for="time-zone">Clock display</label><select id="time-zone"><option value="city">City time zone · includes DST</option><option value="fixed">Fixed UTC offset</option><option value="solar">Local apparent solar time</option></select>
+          <div id="offset-wrap" hidden><label for="offset">UTC offset (hours)</label><input id="offset" type="number" min="-14" max="14" step=".25" value="3"></div><p id="zone-note" class="field-note"></p>
+        </section>
+        <section class="control-section"><div class="section-label"><h3>Calendar &amp; horizon</h3><button type="button" class="help" data-help="horizon" aria-label="Help with horizon and noon">?</button></div>
+          <div class="two-fields"><div><label for="year">Year</label><select id="year"><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select></div><div><label for="date">Selected day</label><input id="date" type="date" value="2026-05-28" min="2026-01-01" max="2026-12-31" required></div></div>
+          <label class="check"><input id="refraction" type="checkbox"><span>Atmospheric refraction <small>34 arcminutes at the horizon</small></span></label>
+          <label class="check"><input id="solar-disk" type="checkbox"><span>Size of the Sun <small>16 arcminutes · upper limb</small></span></label>
+          <p class="field-note">Solar noon stays at the midpoint of sunrise and sunset.</p>
+        </section>
+        <section class="control-section"><div class="section-label"><h3>Fractional rules</h3><button type="button" class="help" data-help="calibration" aria-label="Help with calibration">?</button></div>
+          <label for="night-fraction">Fajr · fraction of the night</label><select id="night-fraction"><option value="6">1/6</option><option value="7">1/7</option><option value="8" selected>1/8</option><option value="9">1/9</option><option value="10">1/10</option></select>
+          <label for="fractions">ʿAṣr · afternoon fractions</label><select id="fractions"><option value="approximate">Approximate · 50% and 70%</option><option value="exact">Exact · calibrated in Makka</option></select>
+        </section>
+        <section class="control-section"><div class="section-label"><h3>Shadow comparison</h3><button type="button" class="help" data-help="shadows" aria-label="Help with shadow coefficients">?</button></div>
+          <label for="shadow-mode">Noon-shadow coefficients (k₁, k₂)</label><select id="shadow-mode"><option value="zero">k₁ = 0 · k₂ = 0</option><option value="one" selected>k₁ = 1 · k₂ = 1</option><option value="mixed">k₁ = 1 · k₂ = 2</option><option value="optimal">Fit k₁ and k₂ for most compatible days</option></select>
+          <div id="fit-wrap" hidden><label for="fit-tolerance">Fit k to a discrepancy below</label><select id="fit-tolerance"><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20" selected>20 minutes</option><option value="25">25 minutes</option><option value="30">30 minutes</option></select></div>
+          <label for="tolerance">Count days with a discrepancy below</label><select id="tolerance"><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20" selected>20 minutes</option><option value="25">25 minutes</option><option value="30">30 minutes</option></select>
+        </section>
+        <button type="submit" class="primary full">Update calculation</button>
+        <button type="button" id="add-scenario" class="full secondary">Save to comparison</button>
+        <p class="field-note bottom-note">Annual counts update as you change the settings.</p>
+      </form>
+    </aside>
+    <main id="main">
+      <div id="error" class="alert" role="alert" hidden></div>
+      <section id="view-daily" class="view">
+        <div class="page-heading"><div><p class="eyebrow" id="position"></p><h1 id="location-heading">Makka · Kaaba</h1><p class="subtitle" id="day-heading"></p></div><button id="export-daily" class="secondary">Export daily CSV</button></div>
+        <div class="calibration-strip"><span class="calibration-symbol" aria-hidden="true">☼</span><div><span id="calibration-summary"></span><button class="text-button" data-help="calibration">View calibration</button></div></div>
+        <section class="panel day-panel"><div class="panel-heading"><h2>Prayer times on the selected day</h2><span id="clock-label" class="meta"></span></div>
+          <p id="day-warning" class="notice" hidden></p><div class="table-scroll"><table id="day-table"><thead><tr><th>Event</th><th>Angular or shadow rule</th><th>Fractional rule</th><th>Difference</th><th>Compatible</th></tr></thead><tbody></tbody></table></div>
+          <div class="geometry-details" id="day-details"></div>
+        </section>
+        <section aria-label="Annual compatibility counts"><div class="section-heading"><h2>Days of agreement in <span id="annual-year">2026</span></h2><span class="meta">Absolute difference &lt; <span id="active-tolerance">20</span> minutes</span></div><div class="metrics" id="metrics"></div></section>
+        <section class="panel"><div class="panel-heading"><h2>How the difference changes through the year</h2><div class="segmented" id="prayer-picker" role="group" aria-label="Prayer shown in annual chart"><button data-prayer="fajr">Fajr</button><button data-prayer="asr1" class="selected">ʿAṣr 1</button><button data-prayer="asr2">ʿAṣr 2</button></div></div>
+          <p class="chart-note">Positive values place the angular or shadow time later than the fractional time.</p><div class="chart-wrap"><canvas id="annual-chart" aria-label="Daily difference in minutes through the year" role="img"></canvas></div><div class="chart-footer"><span><i class="legend-line"></i>Time difference</span><span><i class="legend-band"></i>Selected tolerance</span><span id="hover-day" class="meta">Move over the chart to inspect a day</span></div>
+          <div class="section-heading compact"><h3 id="calendar-heading">Daily compatibility</h3><button id="export-annual" class="text-button">Export annual table</button></div><div id="compatibility-calendar" aria-label="Select a date from the annual compatibility calendar"></div><div class="calendar-legend"><span><i class="day-key yes"></i>Compatible</span><span><i class="day-key no"></i>Outside tolerance</span><span><i class="day-key missing"></i>Event unavailable</span></div>
+        </section>
+        <details class="panel detail-panel"><summary>Selected-day solar geometry</summary><p class="chart-note">Geometric elevation, measured from the centre of the Sun. Click a row above to inspect its solar angles.</p><div class="chart-wrap small-chart"><canvas id="sun-chart" aria-label="Solar elevation versus local clock time on the selected day" role="img"></canvas></div><p id="sun-description" class="meta"></p></details>
+      </section>
+      <section id="view-compare" class="view" hidden>
+        <div class="page-heading"><div><p class="eyebrow">SAVED EXPERIMENTS</p><h1>Compare models and places</h1><p class="subtitle">Each scenario retains its own location, calibration, and fitting target.</p></div><button id="export-comparison" class="secondary">Export comparison</button></div>
+        <section class="panel"><div class="panel-heading"><h2>Add a comparison from your current settings</h2></div><div class="preset-grid"><button data-preset="fractions">All five night fractions</button><button data-preset="shadows">All four shadow options</button><button data-preset="horizon">All four horizon options</button><button data-preset="years">Years 2026–2030</button><button data-preset="favorites">Favorite cities</button><button data-preset="fit">All six k fitting targets</button></div><div class="compare-controls"><label for="compare-prayer">Prayer<select id="compare-prayer"><option value="fajr">Fajr</option><option value="asr1">ʿAṣr 1</option><option value="asr2">ʿAṣr 2</option></select></label><label for="compare-mode">Graph<select id="compare-mode"><option value="errors">Daily time difference</option><option value="cumulative">Cumulative compatible days</option><option value="tolerance">Counts at all six tolerances</option></select></label><label for="compare-tolerance">Common counting tolerance<select id="compare-tolerance"><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20" selected>20 minutes</option><option value="25">25 minutes</option><option value="30">30 minutes</option></select></label><button id="clear-comparison" class="quiet">Clear scenarios</button></div></section>
+        <div id="comparison-empty" class="empty"><h2>Build a comparison</h2><p>Save an experiment from the left, or add one of the groups above.</p></div><div id="comparison-content" hidden><section class="panel"><div class="chart-wrap"><canvas id="comparison-chart" aria-label="Comparison graph for saved scenarios" role="img"></canvas></div><div id="comparison-legend" class="wrap-legend"></div></section><section class="panel"><div class="panel-heading"><h2>Annual results</h2><span class="meta">Compatible / calendar days</span></div><div class="table-scroll"><table id="comparison-table"><thead></thead><tbody></tbody></table></div></section></div>
+      </section>
+      <section id="view-latitude" class="view" hidden>
+        <div class="page-heading"><div><p class="eyebrow">GEOGRAPHICAL COMPARISON</p><h1>Explore the latitude</h1><p class="subtitle">Apply the current rules along the full meridian.</p></div><button id="export-latitude" class="secondary" disabled>Export latitude table</button></div>
+        <section class="panel"><div class="compare-controls"><label for="latitude-prayer">Prayer<select id="latitude-prayer"><option value="fajr">Fajr</option><option value="asr1">ʿAṣr 1</option><option value="asr2">ʿAṣr 2</option></select></label><label for="latitude-step">Latitude spacing<select id="latitude-step"><option value="1">1°</option><option value=".5" selected>0.5°</option><option value=".25">0.25°</option></select></label><button id="run-latitude" class="primary">Calculate latitude sweep</button><button id="cancel-latitude" hidden>Cancel</button></div><p class="chart-note">All six discrepancy cutoffs are counted. The coefficient is fitted at each latitude when the fitted-shadow option is selected.</p><p id="latitude-state" class="meta" aria-live="polite">Choose your settings, then calculate the sweep.</p><progress id="latitude-progress" hidden value="0" max="100"></progress></section>
+        <section id="latitude-output" class="panel" hidden><div class="chart-wrap"><canvas id="latitude-chart" aria-label="Number of compatible days versus latitude" role="img"></canvas></div><div id="latitude-legend" class="wrap-legend"></div><h3>All-year compatibility bands</h3><p class="chart-note">Intervals show sampled latitudes at which every calendar date qualifies. The worldwide average includes all land, sea, and unavailable dates.</p><div class="table-scroll"><table id="latitude-bands"><thead><tr><th>Cutoff</th><th>Latitude bands</th><th>Area-weighted days</th></tr></thead><tbody></tbody></table></div><details><summary>Sampled latitude table</summary><div class="table-scroll latitude-table"><table id="latitude-table"><thead></thead><tbody></tbody></table></div></details></section>
+      </section>
+      <section id="view-help" class="view" hidden><div class="page-heading"><div><p class="eyebrow">METHODS &amp; INTERPRETATION</p><h1>Guide to the explorer</h1><p class="subtitle">The conventions behind every time, coefficient, and compatibility count.</p></div><input type="search" id="help-search" placeholder="Find a topic…" aria-label="Search help topics"></div><div id="help-topics"></div></section>
+      <footer>Shadow Rules research explorer <span>Daily SPA geometry · 2026–2030</span><a href="Prayer_Time_Explorer.zip" download>Offline app &amp; source</a><button data-help="limitations" class="text-button">Model scope</button></footer>
+    </main>
+  </div>
+  <dialog id="help-dialog"><div class="dialog-heading"><h2 id="dialog-title">Help</h2><button id="close-help" class="quiet" aria-label="Close help">Close</button></div><div id="dialog-content"></div></dialog>
+  <dialog id="favorites-dialog"><div class="dialog-heading"><h2>Favorite cities</h2><button id="close-favorites" class="quiet">Close</button></div><p>Save the current coordinates or remove a favorite. Favorites stay in this browser.</p><label for="favorite-name">Name for current location</label><input id="favorite-name"><button id="save-favorite" class="primary">Save current location</button><div id="favorite-list"></div></dialog>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
