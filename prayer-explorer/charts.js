@@ -12,7 +12,7 @@
       canvas.addEventListener("pointerleave", () => { this.tooltip.hidden = true; });
       canvas.addEventListener("click", e => { if (this.onPick && this.layout) this.onPick(this.nearestX(e)); });
     }
-    update(options) { this.options = options; this.draw(); }
+    update(options) { this.options = options; this.tooltip.hidden = true; this.draw(); }
     nearestX(event) {
       const r = this.canvas.getBoundingClientRect(), l = this.layout;
       const x = Math.max(l.left, Math.min(l.right, event.clientX - r.left));
@@ -39,11 +39,14 @@
       const ratio = window.devicePixelRatio || 1;
       c.width = Math.round(w * ratio); c.height = Math.round(h * ratio);
       const ctx = c.getContext("2d"); ctx.scale(ratio, ratio); ctx.clearRect(0, 0, w, h);
-      const {series = [], band, xTicks = [], yLabel = "Minutes", xLabel = "", xRange, yRange, selected} = this.options;
+      const {series = [], band, xTicks = [], yLabel = "Minutes", xLabel = "", xRange, yRange, selected, includeZero = true} = this.options;
       const points = series.flatMap(s => s.points).filter(p => Number.isFinite(p.y));
       const xmin = xRange?.[0] ?? 0, xmax = xRange?.[1] ?? 364;
-      let ymin = yRange?.[0] ?? Math.min(0, band ? -band : 0, ...points.map(p => p.y));
-      let ymax = yRange?.[1] ?? Math.max(0, band || 0, ...points.map(p => p.y));
+      const values = points.map(p => p.y);
+      if (includeZero || !values.length) values.push(0);
+      if (band) values.push(-band, band);
+      let ymin = yRange?.[0] ?? Math.min(...values);
+      let ymax = yRange?.[1] ?? Math.max(...values);
       if (ymin === ymax) { ymin -= 1; ymax += 1; }
       if (!yRange) { const pad = (ymax - ymin) * .08; ymin -= pad; ymax += pad; }
       const left = 55, right = Math.max(left + 1, w - 12), top = 25, bottom = h - (xLabel ? 48 : 31);
@@ -70,11 +73,18 @@
       for (let index = 0; index < series.length; index++) {
         const s = series[index]; ctx.strokeStyle = s.color || colors[index % colors.length]; ctx.lineWidth = s.width || 1.9;
         ctx.setLineDash(s.dash || (index >= colors.length ? [4, 3] : [])); ctx.beginPath(); let open = false;
-        for (const p of s.points) {
+        const isolated = [];
+        for (let i = 0; i < s.points.length; i++) {
+          const p = s.points[i];
           if (!Number.isFinite(p.y)) { open = false; continue; }
+          if (!open && !Number.isFinite(s.points[i+1]?.y)) isolated.push(p);
           if (open) ctx.lineTo(sx(p.x), sy(p.y)); else { ctx.moveTo(sx(p.x), sy(p.y)); open = true; }
         }
         ctx.stroke();
+        ctx.fillStyle = ctx.strokeStyle;
+        for (const p of isolated) {
+          ctx.beginPath(); ctx.arc(sx(p.x), sy(p.y), 3, 0, 2*Math.PI); ctx.fill();
+        }
       }
       ctx.setLineDash([]);
       if (Number.isFinite(selected)) { ctx.strokeStyle = "#527381"; ctx.lineWidth = 1; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(sx(selected), top); ctx.lineTo(sx(selected), bottom); ctx.stroke(); }

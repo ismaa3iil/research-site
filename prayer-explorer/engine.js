@@ -4,6 +4,7 @@
   const R = Math.PI / 180, F = 720 / Math.PI, M = 21.4225;
   const clamp = (x) => Math.max(-1, Math.min(1, x));
   const finite = Number.isFinite;
+  const fields = ["fajr", "duha", "asr1", "asr2", "isha"];
   const calibrationCache = new Map();
   const yearCache = new Map();
   const defaults = {year: 2026, latitude: 21.4225, longitude: 39.8262, city: "Makka · Kaaba",
@@ -159,28 +160,37 @@
       const g = geometries[i], offset = withClock ? offsetMinutes(config, d.date) : 0;
       const transit = config.clock === "solar" ? 720 : 720 - 4 * config.longitude - d.eot + offset;
       const base = {date: d.date, index: i, delta: d.delta, geometry: g, offset, transit, sunrise: null, noon: null, sunset: null,
-        angular: {fajr: null, asr1: null, asr2: null}, fractional: {fajr: null, asr1: null, asr2: null},
-        errors: {fajr: null, asr1: null, asr2: null}};
+        angular: Object.fromEntries(fields.map(name => [name, null])),
+        fractional: Object.fromEntries(fields.map(name => [name, null])),
+        errors: Object.fromEntries(fields.map(name => [name, null]))};
       if (!g.crossing) return base;
       base.sunrise = transit - F * g.hs; base.sunset = transit + F * g.hs;
       base.noon = (base.sunrise + base.sunset) / 2;
       base.night = 1440 - 2 * F * g.hs;
       base.fractional.fajr = base.sunrise - base.night / config.nightDenominator;
+      // Reflect dawn about the midnight preceding sunrise and report the
+      // corresponding evening event on this row's date (one day later).
+      base.fractional.isha = base.sunset + base.night / config.nightDenominator;
       const dawn = angleHour(g, -cal.angle);
-      if (dawn !== null) base.angular.fajr = transit - F * dawn;
+      if (dawn !== null) {
+        base.angular.fajr = transit - F * dawn;
+        base.angular.isha = transit + F * dawn;
+      }
       for (let j = 0; j < 2; j++) {
         const name = j ? "asr2" : "asr1", hour = shadowHour(g, j + 1, ks[j]);
         base.fractional[name] = transit + F * ratios[j] * g.hs;
         if (hour !== null) base.angular[name] = transit + F * hour;
       }
-      for (const name of ["fajr", "asr1", "asr2"]) {
+      base.fractional.duha = 2 * transit - base.fractional.asr1;
+      if (finite(base.angular.asr1)) base.angular.duha = 2 * transit - base.angular.asr1;
+      for (const name of fields) {
         const a = base.angular[name], b = base.fractional[name];
         base.errors[name] = finite(a) && finite(b) ? a - b : null;
       }
       return base;
     });
     const result = {config, calibration: cal, ratios, ks, fits, rows,
-      metrics: Object.fromEntries(["fajr", "asr1", "asr2"].map(name => [name, metric(rows, name, config.tolerance)]))};
+      metrics: Object.fromEntries(fields.map(name => [name, metric(rows, name, config.tolerance)]))};
     if (yearCache.size > 160) yearCache.delete(yearCache.keys().next().value);
     yearCache.set(key, result);
     return result;
@@ -201,6 +211,6 @@
     return {elevation: elevation(row.geometry, h), azimuth: Math.hypot(east, north) < 1e-10 ? null : (Math.atan2(east, north) / R + 360) % 360};
   }
 
-  globalThis.PrayerEngine = {R, F, defaults, validate, dates, geometry, angleHour, elevation, shadowHour,
+  globalThis.PrayerEngine = {R, F, fields, defaults, validate, dates, geometry, angleHour, elevation, shadowHour,
     calibration, calculate, metric, time, horizon, shadowFit, sunPosition};
 })();

@@ -1,8 +1,8 @@
 (() => {
   "use strict";
   const E = PrayerEngine, C = PrayerCharts, $ = id => document.getElementById(id);
-  const LIMITS = [5, 10, 15, 20, 25, 30], FIELDS = ["fajr", "asr1", "asr2"];
-  const NAMES = {fajr: "Fajr", asr1: "ʿAṣr 1", asr2: "ʿAṣr 2"};
+  const LIMITS = [5, 10, 15, 20, 25, 30], FIELDS = E.fields;
+  const NAMES = {fajr: "Fajr", duha: "Ḍuḥā", asr1: "ʿAṣr 1", asr2: "ʿAṣr 2", isha: "ʿIshāʾ"};
   const KEY = "prayer-explorer-v1";
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[c]));
   const fmt = (v, digits = 2) => Number.isFinite(v) ? v.toFixed(digits) : "—";
@@ -15,8 +15,10 @@
   let selectedDate = /^20(26|27|28|29|30)-\d\d-\d\d$/.test(saved.date || "") ? saved.date : "2026-05-28";
   let favoriteCities = Array.isArray(saved.favorites) ? saved.favorites.filter(validLocation).slice(0, 30) : PRAYER_CITIES.slice(0, 9);
   let scenarios = Array.isArray(saved.scenarios) ? saved.scenarios.filter(s => {
-    try { E.validate(s.config); return typeof s.name === "string"; } catch { return false; }
+    try { E.validate(s.config); return typeof s.id === "string" && typeof s.name === "string"; } catch { return false; }
   }).slice(0, 30) : [];
+  const mutedScenarios = new Set(Array.isArray(saved.mutedScenarios) ? saved.mutedScenarios.filter(id => scenarios.some(s => s.id === id)) : []);
+  let graphData = null;
   let annual, prayer = "asr1", activeView = "daily", latitudeResult = null, sweepVersion = 0, debounce, toastTimer;
   const charts = {
     annual: new C.Chart($("annual-chart"), x => selectDay(annual.rows[Math.max(0, Math.min(annual.rows.length - 1, Math.round(x)))].date)),
@@ -24,7 +26,12 @@
   };
 
   function validLocation(c) { return c && typeof c.name === "string" && Number.isFinite(c.latitude) && Math.abs(c.latitude) <= 90 && Number.isFinite(c.longitude) && Math.abs(c.longitude) <= 180; }
-  function persist() { try { localStorage.setItem(KEY, JSON.stringify({config, date:selectedDate, favorites:favoriteCities, scenarios})); } catch { /* Calculation remains usable when browser storage is unavailable. */ } }
+  function persist() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({config, date:selectedDate, favorites:favoriteCities, scenarios, mutedScenarios:[...mutedScenarios]}));
+      return true;
+    } catch { return false; }
+  }
   function toast(text) { $("toast").textContent = text; $("toast").hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $("toast").hidden = true, 3500); }
 
   function populateForm() {
@@ -78,13 +85,49 @@
 
   function chooseLocation(city) {
     config = {...config, city:city.name, latitude:city.latitude, longitude:city.longitude,
-      timeZone:city.timeZone || null, offset:city.offset ?? config.offset, clock:"civil"};
+      timeZone:city.timeZone || null, offset:city.offset ?? config.offset, clock:city.clock || "civil"};
     populateForm(); update();
   }
 
   function renderFavorites() {
     $("favorite-chips").innerHTML = favoriteCities.map((city, i) => `<button type="button" data-favorite="${i}" class="${city.name === config.city ? "current" : ""}">${esc(city.name.split(" · ")[0])}</button>`).join("");
     $("favorite-list").innerHTML = favoriteCities.map((c, i) => `<div><span>${esc(c.name)}<small class="field-note"> ${fmt(c.latitude, 4)}°, ${fmt(c.longitude, 4)}°</small></span><button class="small quiet" data-remove-favorite="${i}" aria-label="Remove ${esc(c.name)}">Remove</button></div>`).join("");
+  }
+
+  function findCity(query) {
+    const name = query.trim().toLowerCase();
+    if (!name) return null;
+    return PRAYER_CITIES.find(c => c.name.toLowerCase() === name)
+      || PRAYER_CITIES.find(c => c.name.toLowerCase().includes(name));
+  }
+
+  function favoriteLocation() {
+    const selected = $("favorite-location").value;
+    return selected === "current" ? {...config, name:config.city} : PRAYER_CITIES[+selected];
+  }
+
+  function previewFavorite() {
+    const city = favoriteLocation();
+    $("favorite-coordinates").textContent = `${fmt(city.latitude, 4)}° latitude · ${fmt(city.longitude, 4)}° longitude · ${city.timeZone || (city.clock === "solar" ? "solar time" : "fixed offset")}`;
+    $("favorite-name").value = city.name;
+  }
+
+  function saveFavorite(city) {
+    const existing = favoriteCities.findIndex(c => c.name.toLowerCase() === city.name.toLowerCase());
+    if (existing < 0 && favoriteCities.length >= 30) return "The list holds 30 favorites. Remove one to add another.";
+    const entry = {name:city.name, latitude:city.latitude, longitude:city.longitude,
+      timeZone:city.timeZone || null, offset:city.offset ?? config.offset, clock:city.clock || "civil"};
+    if (existing < 0) favoriteCities.push(entry);
+    else favoriteCities[existing] = entry;
+    const saved = persist();
+    renderFavorites();
+    return saved ? `${entry.name} saved to favorites.` : `${entry.name} added for this visit. Browser storage is unavailable.`;
+  }
+
+  function dailyTimes(row) {
+    const event = name => [NAMES[name], row.angular[name], row.fractional[name], name];
+    return [event("fajr"), ["Sunrise",row.sunrise,row.sunrise,null], event("duha"),
+      ["Solar noon",row.noon,row.noon,null], event("asr1"), event("asr2"), ["Sunset",row.sunset,row.sunset,null], event("isha")];
   }
 
   function renderDaily() {
@@ -94,10 +137,8 @@
     $("day-heading").textContent = dateLabel(row.date);
     $("clock-label").textContent = config.clock === "solar" ? "Local apparent solar time" : `${config.timeZone || "Fixed offset"} · UTC${row.offset >= 0 ? "+" : ""}${row.offset / 60}`;
     const cal = annual.calibration;
-    $("calibration-summary").textContent = `Makka reference ${cal.date} · Fajr ${cal.angle.toFixed(4)}° · afternoon ${annual.ratios.map(r => (100*r).toFixed(4)+"%").join(" / ")}`;
-    const times = [["Fajr",row.angular.fajr,row.fractional.fajr,"fajr"], ["Sunrise",row.sunrise,row.sunrise,null], ["Solar noon",row.noon,row.noon,null],
-      ...FIELDS.slice(1).map(name => [NAMES[name], row.angular[name], row.fractional[name], name]), ["Sunset",row.sunset,row.sunset,null]];
-    $("day-table").querySelector("tbody").innerHTML = times.map(([name, a, b, field]) => {
+    $("calibration-summary").textContent = `Makka reference ${cal.date} · Fajr and ʿIshāʾ ${cal.angle.toFixed(4)}° · ʿAṣr ${annual.ratios.map(r => (100*r).toFixed(4)+"%").join(" / ")}`;
+    $("day-table").querySelector("tbody").innerHTML = dailyTimes(row).map(([name, a, b, field]) => {
       const error = field ? row.errors[field] : null, valid = Number.isFinite(error);
       return `<tr ${field ? `class="inspectable" data-event="${field}"` : ""}><td class="prayer-name">${name}</td><td class="time">${E.time(a,true)}</td><td class="time">${E.time(b,true)}</td><td class="difference">${field ? signed(error) : "—"}</td><td>${field ? `<span class="pill ${valid ? Math.abs(error) < config.tolerance ? "yes" : "no" : "missing"}">${valid ? Math.abs(error) < config.tolerance ? "Yes" : "No" : "Unavailable"}</span>` : "Shared anchor"}</td></tr>`;
     }).join("");
@@ -138,7 +179,7 @@
     const points = Array.from({length:145},(_,i) => {const t=row.transit-720+i*10;return{x:t,y:E.sunPosition(row,config.latitude,t).elevation,label:E.time(t)}});
     const ticks = Array.from({length:7},(_,i)=>[row.transit-720+i*240,E.time(row.transit-720+i*240)]);
     charts.solar.update({series:[{name:"Solar elevation",points}],xRange:[row.transit-720,row.transit+720],xTicks:ticks,yRange:[-90,90],yLabel:"Elevation (°)",formatValue:v=>`${fmt(v,3)}°`});
-    $("sun-description").textContent = `Noon elevation ${fmt(row.geometry.h0/E.R,4)}°. Select Fajr or an ʿAṣr row to inspect the angles at its two times.`;
+    $("sun-description").textContent = `Noon elevation ${fmt(row.geometry.h0/E.R,4)}°. Select a prayer row to inspect the angles at its two times.`;
   }
 
   function inspectEvent(name) {
@@ -159,9 +200,14 @@
   }
 
   function addScenarios(items) {
-    let added=0;
-    for(const item of items){if(scenarios.length>=30)break;scenarios.push({id:crypto.randomUUID?.()||`${Date.now()}-${scenarios.length}`,name:item.name,config:{...item.config}});added++;}
-    persist();$("scenario-badge").textContent=scenarios.length;renderComparison();toast(`${added} scenario${added===1 ? "" : "s"} saved${added<items.length ? " · limit of 30 reached" : ""}.`);
+    const newScenarios = items.slice(0, 30 - scenarios.length).map((item, i) => ({
+      id:crypto.randomUUID?.() || `${Date.now()}-${scenarios.length + i}`, name:item.name, config:{...item.config}
+    }));
+    scenarios.push(...newScenarios);
+    const stored = persist(), added = newScenarios.length;
+    if (!added) toast("The list holds 30 scenarios. Remove one before saving another.");
+    else toast(`${added === 1 ? newScenarios[0].name : `${added} scenarios`} ${stored ? "saved" : "added for this visit (browser storage unavailable)"}${added < items.length ? " · limit of 30 reached" : ""}.`);
+    setView("compare");
   }
 
   function addPreset(type) {
@@ -175,7 +221,7 @@
       years:()=>[2026,2027,2028,2029,2030].map(year=>item(String(year),{year})),
       favorites:()=>favoriteCities.map(c=>({name:c.name,config:{...base,city:c.name,latitude:c.latitude,longitude:c.longitude,timeZone:c.timeZone||null,offset:c.offset??base.offset}})),
       fit:()=>LIMITS.map(t=>item(`k fitted at ${t} min`,{shadowMode:"optimal",fitTolerance:t}))
-    };addScenarios(groups[type]());setView("compare");
+    };addScenarios(groups[type]());
   }
 
   function shadowLabel(mode){return {zero:"k = 0, 0",one:"k = 1, 1",mixed:"k = 1, 2",optimal:"Fitted k"}[mode];}
@@ -188,22 +234,96 @@
   function renderComparison() {
     $("scenario-badge").textContent=scenarios.length;const empty=!scenarios.length;
     $("comparison-empty").hidden=!empty;$("comparison-content").hidden=empty;$("export-comparison").disabled=empty;if(empty)return;
-    const field=$("compare-prayer").value,tol=+$("compare-tolerance").value,mode=$("compare-mode").value;
     const results=comparisonRows();
     $("comparison-table").querySelector("thead").innerHTML="<tr><th>Scenario</th><th>Year</th><th>Fajr angle</th><th>k₁ / k₂</th><th>Compatible</th><th>Defined</th><th>RMS (min)</th><th>Max (min)</th><th></th></tr>";
     $("comparison-table").querySelector("tbody").innerHTML=results.map((s,i)=>`<tr><td><input class="scenario-name" aria-label="Scenario name" data-name="${i}" value="${esc(s.name)}"><div class="scenario-detail">${esc(s.config.city)} · ${s.config.latitude.toFixed(4)}° · ${s.config.longitude.toFixed(4)}° · ${s.config.fractions} · night 1/${s.config.nightDenominator}<br>horizon ${fmt(E.horizon(s.config),4)}° · ${shadowLabel(s.config.shadowMode)}${s.config.shadowMode==="optimal" ? ` at ${s.config.fitTolerance} min` : ""}</div></td><td>${s.config.year}</td><td>${fmt(s.result.calibration.angle,4)}°</td><td>${s.result.ks.map(k=>fmt(k,5)).join(" / ")}</td><td><b>${s.metric.days}</b> / ${s.metric.total}</td><td>${s.metric.defined}</td><td>${fmt(s.metric.rms)}</td><td>${fmt(s.metric.maximum)}</td><td><button class="small quiet" data-remove-scenario="${i}" aria-label="Remove ${esc(s.name)}">Remove</button></td></tr>`).join("");
-    const series=results.map((s,i)=>{
-      let total=0;
-      const points=mode==="tolerance" ? LIMITS.map(t=>({x:t,y:E.metric(s.result.rows,field,t).days,label:`< ${t} min`})) : s.result.rows.map(d=>{
-        if(Number.isFinite(d.errors[field])&&Math.abs(d.errors[field])<tol)total++;
-        return{x:d.index,y:mode==="cumulative" ? total : d.errors[field],label:d.date};
-      });return{name:s.name,points,color:C.colors[i%C.colors.length]};
+    $("compare-scenarios").innerHTML = scenarios.map(s => `<label class="check"><input type="checkbox" value="${esc(s.id)}" ${mutedScenarios.has(s.id) ? "" : "checked"}><span>${esc(s.name)}</span></label>`).join("");
+    for (const [index, id] of ["compare-a", "compare-b"].entries()) {
+      const select = $(id), previous = select.value;
+      select.innerHTML = scenarios.map(s => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("");
+      select.value = scenarios.some(s => s.id === previous) ? previous : scenarios[(1-index) % scenarios.length].id;
+    }
+    if (scenarios.length > 1 && $("compare-a").value === $("compare-b").value) {
+      $("compare-a").value = scenarios.find(s => s.id !== $("compare-b").value).id;
+    }
+    renderComparisonGraph();
+  }
+
+  const DAY_MS = 86400000;
+  const dateIndex = date => Date.parse(date + "T00:00:00Z") / DAY_MS;
+
+  function renderComparisonGraph(resetDates = false) {
+    const field = $("compare-prayer").value, value = $("compare-value").value;
+    const tolerance = +$("compare-tolerance").value, subtract = $("compare-mode").value === "subtract";
+    const byTolerance = value === "tolerance", cumulative = value === "cumulative";
+    const clockTimes = value === "angular" || value === "fractional";
+    const from = $("compare-from"), through = $("compare-through");
+    const selected = subtract ? ["compare-a", "compare-b"].map(id => scenarios.find(s => s.id === $(id).value)).filter(Boolean)
+      : scenarios.filter(s => !mutedScenarios.has(s.id));
+    $("compare-overlay").hidden = subtract;
+    $("compare-operands").hidden = !subtract;
+    $("compare-dates").hidden = byTolerance || selected.length === 0;
+    function message(note) {
+      $("comparison-note").textContent = note;
+      $("comparison-plot").hidden = true;
+      $("comparison-legend").innerHTML = "";
+      $("export-graph").disabled = true;
+      graphData = null;
+    }
+    if (!selected.length) return message("Select at least one scenario to plot.");
+    if (subtract && (selected.length < 2 || selected[0].id === selected[1].id)) return message("Choose two different scenarios for A and B.");
+    const years = selected.map(s => s.config.year);
+    const min = `${subtract ? Math.max(...years) : Math.min(...years)}-01-01`;
+    const max = `${subtract ? Math.min(...years) : Math.max(...years)}-12-31`;
+    if (!byTolerance && min > max) return message("These scenarios have no common calendar dates. Use scenarios from the same year to subtract daily values.");
+    for (const input of [from, through]) { input.min = min; input.max = max; }
+    if (!byTolerance) {
+      if (resetDates || !from.value || from.value < min || from.value > max) from.value = min;
+      if (resetDates || !through.value || through.value < min || through.value > max) through.value = max;
+      if (from.value > through.value) return message("Choose an end date on or after the start date.");
+    }
+
+    const dailyPoint = (row, y) => ({x:dateIndex(row.date), y, label:row.date});
+    let series = selected.map(s => {
+      const rows = E.calculate(s.config).rows;
+      let total = 0;
+      const points = byTolerance ? LIMITS.map(t => ({x:t, y:E.metric(rows,field,t).days, label:`< ${t} min`}))
+        : rows.map(row => {
+          const error = row.errors[field];
+          if (Number.isFinite(error) && Math.abs(error) < tolerance) total++;
+          return dailyPoint(row, cumulative ? total : clockTimes ? row[value][field] : error);
+        }).filter(p => p.label >= from.value && p.label <= through.value);
+      return {name:s.name, points, color:C.colors[scenarios.indexOf(s) % C.colors.length]};
     });
-    charts.comparison.update({series,xRange:mode==="tolerance"?[5,30]:[0,Math.max(...results.map(s=>s.result.rows.length))-1],
-      xTicks:mode==="tolerance"?LIMITS.map(t=>[t,String(t)]):monthTicks(results[0].config.year),
-      xLabel:mode==="tolerance"?"Tolerance (minutes)":results.some(s=>s.config.year!==results[0].config.year)?"Calendar day of year":"",
-      band:mode==="errors"?tol:undefined,yLabel:mode==="errors"?"Difference (min)":"Qualifying days",
-      formatValue:v=>mode==="errors"?signed(v):`${Math.round(v)} days`});
+    if (subtract) {
+      const [a,b] = series;
+      const byDate = new Map(b.points.map(p => [p.x, p.y]));
+      series = [{name:`${a.name} − ${b.name}`, points:a.points.map(p => {
+        const y = byDate.get(p.x);
+        return {...p, y:Number.isFinite(p.y) && Number.isFinite(y) ? p.y - y : null};
+      })}];
+    }
+    const first = dateIndex(from.value), last = dateIndex(through.value);
+    const ticks = byTolerance ? LIMITS.map(t => [t,String(t)]) : [...new Set(Array.from({length:5}, (_,i) => Math.round(first + i*(last-first)/4)))].map(x =>
+      [x,new Date(x*DAY_MS).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:min.slice(0,4)===max.slice(0,4)?undefined:"2-digit",timeZone:"UTC"})]);
+    const countValue = cumulative || byTolerance;
+    const clockAxis = clockTimes && !subtract;
+    const note = [
+      subtract ? `${selected[0].name} minus ${selected[1].name}. ` : "",
+      clockTimes ? "Times use each scenario’s saved clock settings." : value === "errors" ? "Each scenario’s discrepancy is angular or shadow time minus fractional time." :
+        cumulative ? `Counts begin on 1 January in each scenario’s year and use < ${tolerance} minutes.` : "Counts use the full calendar year.",
+      byTolerance ? "" : " Daily values are matched by calendar date."
+    ].join("");
+    $("comparison-note").textContent = note;
+    $("comparison-plot").hidden = false;
+    $("export-graph").disabled = !series.some(s => s.points.length);
+    graphData = {field, value, series, byTolerance};
+    charts.comparison.update({series, xRange:byTolerance?[5,30]:first===last?[first-.5,last+.5]:[first,last], xTicks:ticks,
+      xLabel:byTolerance?"Tolerance (minutes)":"",
+      band:value==="errors"&&!subtract?tolerance:undefined,
+      includeZero:!clockAxis, yLabel:countValue?"Days":clockAxis?"Scenario clock":"Difference (min)",
+      formatY:clockAxis ? v=>E.time(v) : undefined,
+      formatValue:countValue?v=>`${Math.round(v)} days`:clockAxis?v=>E.time(v,true):signed});
     legend($("comparison-legend"),series);
   }
 
@@ -282,12 +402,39 @@
   });
   $("settings").addEventListener("change",e=>{if(e.target.id!=="city")update();});
   $("city").addEventListener("change",()=>{const c=PRAYER_CITIES.find(c=>c.name===$("city").value);if(c)chooseLocation(c);});
-  $("use-city").addEventListener("click",()=>{const q=$("city").value.toLowerCase(),c=PRAYER_CITIES.find(c=>c.name.toLowerCase()===q)||PRAYER_CITIES.find(c=>c.name.toLowerCase().includes(q));if(c)chooseLocation(c);else toast("Choose a city from the list, or enter its coordinates below.");});
+  $("use-city").addEventListener("click",()=>{const c=findCity($("city").value);if(c)chooseLocation(c);else toast("Choose a city from the list, or enter its coordinates below.");});
   $("favorite-chips").addEventListener("click",e=>{const b=e.target.closest("[data-favorite]");if(b)chooseLocation(favoriteCities[+b.dataset.favorite]);});
-  $("manage-favorites").addEventListener("click",()=>{$("favorite-name").value=config.city;renderFavorites();$("favorites-dialog").showModal();});
+  $("add-favorite").addEventListener("click",()=>{
+    if ($("city").value.trim() !== config.city) {
+      const city = findCity($("city").value);
+      if (!city) return toast("Choose a city or enter its coordinates before saving.");
+      chooseLocation(city);
+    } else update();
+    if ($("error").hidden) toast(saveFavorite({...config, name:config.city}));
+  });
+  $("manage-favorites").addEventListener("click",()=>{
+    update();
+    $("favorite-location").value = "current";
+    previewFavorite();
+    $("favorite-status").textContent = "Favorites stay in this browser.";
+    renderFavorites();
+    $("favorites-dialog").showModal();
+  });
+  $("favorite-location").addEventListener("change",previewFavorite);
   $("close-favorites").addEventListener("click",()=>$("favorites-dialog").close());
-  $("save-favorite").addEventListener("click",()=>{update();const name=$("favorite-name").value.trim().slice(0,100);if(!name||!$("error").hidden)return;const city={name,latitude:config.latitude,longitude:config.longitude,timeZone:config.timeZone,offset:config.offset};const index=favoriteCities.findIndex(c=>c.name===name);if(index<0)favoriteCities.push(city);else favoriteCities[index]=city;persist();renderFavorites();toast("Favorite saved.");});
-  $("favorite-list").addEventListener("click",e=>{const b=e.target.closest("[data-remove-favorite]");if(b){favoriteCities.splice(+b.dataset.removeFavorite,1);persist();renderFavorites();}});
+  $("favorite-form").addEventListener("submit",e=>{
+    e.preventDefault();
+    const name = $("favorite-name").value.trim(), city = favoriteLocation();
+    $("favorite-status").textContent = !name ? "Enter a favorite name."
+      : $("favorite-location").value === "current" && !$("error").hidden ? "Correct the current experiment settings before saving this location."
+      : saveFavorite({...city, name});
+  });
+  $("favorite-list").addEventListener("click",e=>{
+    const b=e.target.closest("[data-remove-favorite]");if(!b)return;
+    const [removed] = favoriteCities.splice(+b.dataset.removeFavorite,1);
+    $("favorite-status").textContent = persist() ? `${removed.name} removed.` : "Removed for this visit. Browser storage is unavailable.";
+    renderFavorites();
+  });
   $("reset").addEventListener("click",()=>{config={...E.defaults};selectedDate="2026-05-28";populateForm();update();});
   $("prayer-picker").addEventListener("click",e=>{const b=e.target.closest("[data-prayer]");if(!b)return;prayer=b.dataset.prayer;document.querySelectorAll("[data-prayer]").forEach(el=>el.classList.toggle("selected",el===b));renderAnnualGraph();renderCalendar();});
   $("compatibility-calendar").addEventListener("click",e=>{const b=e.target.closest("[data-date]");if(b)selectDay(b.dataset.date);});
@@ -295,19 +442,72 @@
   $("sun-chart").closest("details").addEventListener("toggle",()=>charts.solar.draw());
   document.addEventListener("click",e=>{const help=e.target.closest("[data-help]");if(help)openHelp(help.dataset.help);});
   $("close-help").addEventListener("click",()=>$("help-dialog").close());$("help-search").addEventListener("input",renderHelp);
-  $("add-scenario").addEventListener("click",()=>{update();if($("error").hidden)addScenarios([{name:`${config.city?.split(" · ")[0]} · ${config.year} · ${shadowLabel(config.shadowMode)}`,config}]);});
+  let scenarioDraft;
+  $("add-scenario").addEventListener("click",()=>{
+    update();
+    if (!$("error").hidden) return;
+    if (scenarios.length >= 30) return toast("The list holds 30 scenarios. Remove one before saving another.");
+    scenarioDraft = {...config};
+    const city = config.city.split(" · ")[0];
+    let number = 1;
+    while (scenarios.some(s => s.name.toLowerCase() === `${city}${number}`.toLowerCase())) number++;
+    $("new-scenario-name").value = `${city}${number}`.slice(0,120);
+    $("scenario-preview").textContent = `${config.city} · ${config.year} · night 1/${config.nightDenominator} · ${config.fractions} fractions · ${shadowLabel(config.shadowMode)}`;
+    $("scenario-status").textContent = "";
+    $("scenario-dialog").showModal();
+    $("new-scenario-name").select();
+  });
+  $("close-scenario").addEventListener("click",()=>$("scenario-dialog").close());
+  $("scenario-form").addEventListener("submit",e=>{
+    e.preventDefault();
+    const name = $("new-scenario-name").value.trim();
+    if (!name || scenarios.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+      $("scenario-status").textContent = "Enter a unique scenario name.";
+      return;
+    }
+    $("scenario-dialog").close();
+    $("compare-mode").value = "overlay";
+    addScenarios([{name,config:scenarioDraft}]);
+  });
   document.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>addPreset(b.dataset.preset)));
-  ["compare-prayer","compare-mode","compare-tolerance"].forEach(id=>$(id).addEventListener("change",renderComparison));
-  $("clear-comparison").addEventListener("click",()=>{scenarios=[];persist();renderComparison();});
-  $("comparison-table").addEventListener("click",e=>{const b=e.target.closest("[data-remove-scenario]");if(b){scenarios.splice(+b.dataset.removeScenario,1);persist();renderComparison();}});
-  $("comparison-table").addEventListener("change",e=>{if(e.target.dataset.name){scenarios[+e.target.dataset.name].name=e.target.value.slice(0,120);persist();renderComparison();}});
+  ["compare-prayer","compare-tolerance"].forEach(id=>$(id).addEventListener("change",renderComparison));
+  ["compare-mode","compare-value","compare-a","compare-b","compare-from","compare-through"].forEach(id=>$(id).addEventListener("change",()=>renderComparisonGraph()));
+  $("compare-full-range").addEventListener("click",()=>renderComparisonGraph(true));
+  $("compare-scenarios").addEventListener("change",e=>{
+    const box = e.target;
+    if (box.checked) mutedScenarios.delete(box.value);
+    else mutedScenarios.add(box.value);
+    persist();
+    renderComparisonGraph();
+  });
+  $("clear-comparison").addEventListener("click",()=>{scenarios=[];mutedScenarios.clear();persist();renderComparison();});
+  $("comparison-table").addEventListener("click",e=>{const b=e.target.closest("[data-remove-scenario]");if(b){const [removed]=scenarios.splice(+b.dataset.removeScenario,1);mutedScenarios.delete(removed.id);persist();renderComparison();}});
+  $("comparison-table").addEventListener("change",e=>{
+    if (e.target.dataset.name === undefined) return;
+    const scenario = scenarios[+e.target.dataset.name], name = e.target.value.trim().slice(0,120);
+    if (!name || scenarios.some(s=>s!==scenario && s.name.toLowerCase()===name.toLowerCase())) {
+      e.target.value=scenario.name; toast("Enter a unique scenario name."); return;
+    }
+    scenario.name=name; persist(); renderComparison();
+  });
   $("run-latitude").addEventListener("click",sweep);
   $("cancel-latitude").addEventListener("click",()=>{sweepVersion++;$("run-latitude").disabled=false;$("cancel-latitude").hidden=true;$("latitude-progress").hidden=true;$("latitude-state").textContent="Sweep cancelled. Choose settings and calculate again.";});
   $("export-annual").addEventListener("click",annualExport);
-  $("export-daily").addEventListener("click",()=>{const d=annual.rows.find(r=>r.date===selectedDate);download(`prayer-day-${selectedDate}.csv`,["event","angular_or_shadow","fractional","difference_minutes"],[["Sunrise",E.time(d.sunrise,true),E.time(d.sunrise,true),0],["Solar noon",E.time(d.noon,true),E.time(d.noon,true),0],...FIELDS.map(n=>[NAMES[n],E.time(d.angular[n],true),E.time(d.fractional[n],true),d.errors[n]]),["Sunset",E.time(d.sunset,true),E.time(d.sunset,true),0]]);});
+  $("export-daily").addEventListener("click",()=>{const d=annual.rows.find(r=>r.date===selectedDate);download(`prayer-day-${selectedDate}.csv`,["event","angular_or_shadow","fractional","difference_minutes"],dailyTimes(d).map(([name,a,b,field])=>[name,E.time(a,true),E.time(b,true),field?d.errors[field]:Number.isFinite(a)?0:null]));});
+  $("export-graph").addEventListener("click",()=>{
+    if (!graphData) return;
+    const {field,value,series,byTolerance} = graphData;
+    download("prayer-comparison-graph.csv", ["series","prayer","value",byTolerance?"tolerance_min":"date","graph_value"],
+      series.flatMap(s=>s.points.map(p=>[s.name,field,value,byTolerance?p.x:p.label,p.y])));
+  });
   $("export-comparison").addEventListener("click",()=>download("prayer-comparison.csv",["scenario","prayer","city","latitude","longitude","year","horizon_deg","night_denominator","fraction_mode","fajr_angle","k1","k2","fit_tolerance_min","count_tolerance_min","compatible_days","defined_days","total_days","rms_min","max_min"],comparisonRows().map(s=>[s.name,$("compare-prayer").value,s.config.city,s.config.latitude,s.config.longitude,s.config.year,E.horizon(s.config),s.config.nightDenominator,s.config.fractions,s.result.calibration.angle,...s.result.ks,s.config.fitTolerance,+$("compare-tolerance").value,s.metric.days,s.metric.defined,s.metric.total,s.metric.rms,s.metric.maximum])));
   $("export-latitude").addEventListener("click",()=>{if(!latitudeResult)return;const l=latitudeResult;download("latitude-compatibility.csv",["latitude","area_weight","year","prayer","horizon_deg","fajr_angle","asr1_fraction","asr2_fraction","fit_tolerance_min","defined_days",...LIMITS.map(t=>`days_under_${t}min`),"k1","k2"],l.rows.map(r=>[r.latitude,r.weight,l.config.year,l.field,E.horizon(l.config),E.calibration(l.config).angle,...(l.config.fractions==="exact"?[E.calibration(l.config).r1,E.calibration(l.config).r2]:[.5,.7]),l.config.fitTolerance,r.coverage,...r.counts,...r.ks]));});
   $("cities").innerHTML=PRAYER_CITIES.map(c=>`<option value="${esc(c.name)}"></option>`).join("");
+  $("favorite-location").innerHTML = '<option value="current">Current location</option>' + PRAYER_CITIES
+    .map((city,index)=>({city,index})).sort((a,b)=>a.city.name.localeCompare(b.city.name))
+    .map(({city,index})=>`<option value="${index}">${esc(city.name)}</option>`).join("");
+  for (const id of ["compare-prayer","latitude-prayer"]) $(id).innerHTML = FIELDS.map(name=>`<option value="${name}">${NAMES[name]}</option>`).join("");
+  $("prayer-picker").innerHTML = FIELDS.map(name=>`<button data-prayer="${name}" class="${name===prayer?"selected":""}">${NAMES[name]}</button>`).join("");
   populateForm();update();$("scenario-badge").textContent=scenarios.length;
   globalThis.prayerExplorer = {get config(){return {...config}},get result(){return annual},get scenarios(){return scenarios},setView,openHelp};
 })();
